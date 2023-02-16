@@ -1,0 +1,33 @@
+.toolbar-filter__text {
+    background-color: #ffffff;
+    border-radius: 2.5px;
+    border: 1px solid #afafaf;
+    width: 100%;
+    height: 35px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    
+
+}
+
+.input__icon {
+    margin-left: 6px ;
+    background-position: -243px -20px;
+}
+
+.input {
+    font-family: MISA__Italic;
+    height: 14px;
+    width: 100%;
+    outline: none;
+    border: 0px solid #DBDEFF;
+    margin-left: 8px;
+
+
+}
+
+.input:focus {
+    outline: 0px solid #019160;
+
+}

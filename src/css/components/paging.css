@@ -1,0 +1,23 @@
+.the-paging{
+    display: flex;
+    flex-direction: row;
+    padding: 13px 0px;
+    align-items: center;
+}
+.drop__paging{
+    margin-left: 40px;
+}
+.number__page{
+    margin-left: 20px;
+}
+.btn__page{
+background-color: #ffffff;
+border-radius: 2px;
+overflow: hidden;
+text-align: center;
+font-size: 12px;
+text-align: center;
+border: none;
+cursor: pointer;
+margin-left: 5px;
+}

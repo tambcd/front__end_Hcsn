@@ -1,0 +1,22 @@
+
+.input__dailog{
+    box-sizing: border-box;
+    margin-top: 8px;
+    height: 36px;
+    font-family: MISA__Italic;
+    outline: none;
+    border: 1px solid #E0E0E0;
+    width: 100%;
+    padding-left: 16px;
+   
+}
+.content__input{
+    font-family: MISA__Bold;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 14;
+}
+.text__right{
+    text-align: right;
+    padding-right: 10px;
+}

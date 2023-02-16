@@ -1,5 +1,5 @@
 import {router} from './router/router';
-import {requiredComponents} from './globalComponents'
+// import {requiredComponents} from './globalComponents'
 
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -7,14 +7,14 @@ import App from './App.vue'
 const app = createApp(App);
 app.use(router).mount('#app');
 
-registerComponents(app);
+// registerComponents(app);
 
 
- // nhung globalComponents
+//  // nhung globalComponents
 
- function registerComponents(app) {
-    for(let component of requiredComponents){
-      app.component(component.componentName, component.component);
-    }
-}
+//  function registerComponents(app) {
+//     for(let component of requiredComponents){
+//       app.component(component.componentName, component.component);
+//     }
+// }
 

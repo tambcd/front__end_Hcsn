@@ -1,0 +1,12 @@
+.input_checkbox {
+    width: 50px;
+    height: 39px;
+    border: 0px solid #b8b8b8;
+    align-self: center;
+    cursor: pointer;
+    accent-color: #2ca01c;
+}
+.input_checkbox input{
+    width: 16px;
+    height: 16px;
+}

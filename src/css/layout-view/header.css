@@ -1,0 +1,83 @@
+.header {
+    background-color: #ffffff;
+    height: 44px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.header__right {
+    display: flex;
+    align-items: center;
+    flex:1fr
+}
+
+.header-right__text {
+    width: 70px;
+    height: 16px;
+    margin-right: 26px;
+    font-weight: 500;
+    color: #001031;
+}
+
+.header-right__year {
+    background-color: rgba(26, 164, 200, .2);
+    border-radius: 3px;
+    width: 112px;
+    height: 30px;
+    overflow: hidden;
+    margin-right: 26px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.header-right-year__icon{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+.header-right-year__icon div{
+    width: 7px;
+    height: 5px;
+}
+.header-right-year-icon__up{
+    background-position:  -28px -338px;
+    margin-bottom: 2px;
+}
+.header-right-year-icon__down{
+    background-position:  -72px -338px;
+}
+
+.header-right__notify {
+    background-position: -332px -109px;
+    margin-right: 20px;
+
+}
+
+.header-right__select {
+    background-position: -199px -23px;
+    margin-right: 20px;
+
+}
+
+.header-right__QA {
+    background-position: -67px -67px;
+    margin-right: 20px;
+
+}
+
+.header-right__user {
+    background-position: -23px -23px;
+
+}
+
+.header-right__inf {
+    width: 7px;
+    height: 10px;
+    background-position: -72px -338px;
+    margin: 8px 3px;
+
+}
+

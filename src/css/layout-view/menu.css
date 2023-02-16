@@ -1,0 +1,77 @@
+.the__menu {
+    background-color: #1c3048;
+    height: 100vh;
+    width: 66px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.menu-item-home__icon {
+    margin: 11px 15px 4px 15px;
+    width: 36px;
+    height: 36px;
+    background:   -20px -680px;
+}
+
+.menu-item {
+    height: calc(100vh - 50px);
+    padding-top: 15px;
+
+}
+
+.menu-item__all {
+    border: unset;
+    background-color: transparent;
+    width: 44px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+
+}
+.menu-item__all:hover{
+    background-color: #1aa4c8;
+}
+.menu-item-overview:focus{
+    background-color: #1aa4c8;
+}
+.menu-item-assets{
+    background-color: #1aa4c8;
+}
+
+.menu-item-overview__icon {
+    background: -21px -153px;
+
+}
+
+.menu-item-assets__icon {
+
+    background-position: -65px -197px;
+}
+
+.menu-item-assets--HTDB__icon {
+
+    background:   -110px -153px;
+}
+
+.menu-item-tools__icon {
+    background:   -153px -153px;
+}
+
+.menu-item-catagory__icon {
+    background:   -197px -153px;
+}
+
+.menu-item-search__icon {
+    background:   -241px -153px;
+}
+
+.menu-item-repost__icon {
+    background:   -329px -153px;
+
+}

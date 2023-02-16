@@ -1,0 +1,53 @@
+@import url(dataTable.css);
+.table{
+    height: calc(100vh - 123px);
+    width: calc(100vw - 106px);
+    background-color: aliceblue;
+    box-sizing: border-box;
+    overflow: auto;
+    border: 1px solid 
+}
+.table::-webkit-scrollbar{
+    width: 7px;
+    
+}
+.table::-webkit-scrollbar-thumb{
+    background-color: #9E9E9E;
+    border-radius: 4px;
+}
+
+th,
+td {
+  text-align: left;
+  height: 39px;
+
+  
+}
+td{
+  background-color: #ffffff;  
+
+}
+tr {
+    border: 0.5px solid #afafaf;
+
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.first__column {
+  background-color: #FFFFFF;
+  left: 0px;
+  position: sticky;
+}
+
+
+
+
+
+

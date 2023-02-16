@@ -1,0 +1,19 @@
+.btn__action{
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    
+    /* display: none; */
+
+
+}
+.btn__edit{
+    
+ background-position:  -156px -68px;
+ margin-right: 10px;
+}
+.btn__nhanban{
+    background-position: -244px -112px;
+}

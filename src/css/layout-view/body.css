@@ -1,0 +1,46 @@
+.body {
+    height: calc(100% - 44px);
+}
+
+.toolbar {
+    height: 61px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.toolbar__filter {
+    background-color: #ffffff;
+    height: 35px;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.toolbar-filter__text {
+    background-color: #ffffff;
+    border-radius: 2.5px;
+    border: 1px solid #afafaf;
+    width: 179px;
+    height: 35px;
+    overflow: hidden;
+
+}
+.toolbar__action{
+    display: flex;
+    flex-direction: row;
+}
+.btn__export{
+    background-position:  -278px -100px;
+    margin-left: 10px;
+}
+.btn__delete{
+    background-position: -454px -100px;
+    margin-left: 10px;
+}
+.toolbar-filter__dropdown__assets{
+    width: 219px;
+    margin-left: 10px;
+}

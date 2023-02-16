@@ -1,0 +1,13 @@
+@import url(body.css);
+@import url(header.css);
+@import url(menu.css);
+.container{
+    display: flex;
+    flex-direction: row;
+}
+.the__body{
+    background-color: #ffffff;    
+    width: calc(100% - 66px);
+    margin: 0 20px;
+   }
+
