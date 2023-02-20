@@ -3,6 +3,8 @@
     flex-direction: row;
     padding: 13px 0px;
     align-items: center;
+    padding-left: 10px;
+    
 }
 .drop__paging{
     margin-left: 40px;

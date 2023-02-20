@@ -13,7 +13,7 @@
       <th class="right" style="width: 150px">Nguyên giá</th>
       <th class="right" style="width: 150px">HM/KH lũy kế</th>
       <th class="right" style="width: 150px">Giá trị còn lại</th>
-      <th style="min-width: 100px" class="The-actions center">Chức năng</th>
+      <th style="min-width: 100px" class="The-actions center header-actions">Chức năng</th>
     </tr>
     <tbody>
       <item-table  />

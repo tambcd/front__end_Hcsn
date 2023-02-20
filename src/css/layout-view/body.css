@@ -17,17 +17,13 @@
     display: flex;
     flex-direction: row;
 
-}
-
-.toolbar-filter__text {
-    background-color: #ffffff;
-    border-radius: 2.5px;
-    border: 1px solid #afafaf;
-    width: 179px;
-    height: 35px;
-    overflow: hidden;
 
 }
+.toolbar__filter div{
+    margin-right: 10px;
+}
+
+
 .toolbar__action{
     display: flex;
     flex-direction: row;

@@ -1,9 +1,10 @@
 <template>
-  hello
+  hello  
 </template>
 
 <script>
 export default {
+
 
 }
 </script>

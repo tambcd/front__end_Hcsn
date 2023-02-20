@@ -7,7 +7,7 @@
       <the-body />
     </div>
   </div>
-  <dialog-assets/>
+  <dialog-assets />
 </template>
 
 <script>

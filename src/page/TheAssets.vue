@@ -1,86 +1,64 @@
 <template>
-   <div class="toolbar">
-                    <div class="toolbar__filter">
+  <div class="toolbar">
+    <div class="toolbar__filter">
+      <the-input
+        heightInput="35"
+        widthInput="179"
+        :iconLeft="true"
+        contentInput="Tìm kiếm tài sản..."
+        
+      />
 
-                        <div class="toolbar-filter__text" style="width: 179px;">
-                            <div class="input__icon icon24 backgrsvg"></div>
-                            <input type="text" class="input" placeholder="Tìm kiếm tài sản...">
-                        </div>
-                        <div class="toolbar-filter__dropdown__assets dropdown">
-                            <div class="header__dropdown">
-                                <div class="dropdown-left">
-                                    <div class="dropdown-icon__left icon24 backgrsvg">
-                                    </div>
-                                    <div class="dropdown-value">
-                                        Loại tài sản
-                                    </div>
-                                </div>
-                                <button class="dropdown-icon__right backgrsvg">
-                                </button>
-                            </div>
-                            <div class="body__dropdown" hidden>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
+      <the-combobox
+        contentComboxbox="Loại tài sản"
+        :erroCombobox="false"
+        titleCombobox=""
+        marginCombobox="0px"
+        :iconComboboxLeft="true"
+        :iconComboboxRight="true"
+      />
 
-                            </div>
+      <the-combobox
+        contentComboxbox="Bộ phận sử dụng"
+        :erroCombobox="false"
+        titleCombobox=""
+        marginCombobox="0px"
+        :iconComboboxLeft="true"
+        :iconComboboxRight="true"
+      />
+    </div>
 
-                        </div>
-                        <div class="toolbar-filter__dropdown__assets dropdown">
-                            <div class="header__dropdown">
-                                <div class="dropdown-left">
-                                    <div class="dropdown-icon__left icon24 backgrsvg">
-                                    </div>
-                                    <div class="dropdown-value">
-                                        Bộ phận sử dụng
-                                    </div>
-                                </div>
-                                <button class="dropdown-icon__right backgrsvg">
-                                </button>
-                            </div>
-                            <div class="body__dropdown" hidden>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-                                <div class="item__dropdown">hello</div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <div class="toolbar__action">
-                        <button class="btn__add button">
-                            + Thêm tài sản
-
-                        </button>
-                        <button class="btn__export icon36 button__icon backgrsvg ">
-
-                        </button>
-                        <button class="btn__delete icon36 button__icon backgrsvg">
-
-                        </button>
-
-                    </div>
-                </div>
-                <div class="table">
-                    <data-table/>
-                </div>
-                
-                
+    <div class="toolbar__action">
+      <button class="btn__add button" @click="ShowDialog">
+        + Thêm tài sản
+      </button>
+      <button class="btn__export icon36 button__icon backgrsvg"></button>
+      <button class="btn__delete icon36 button__icon backgrsvg"></button>
+    </div>
+  </div>
+  <div class="table">
+    <data-table />
+  </div>
 </template>
 
 <script>
-import DataTable from '@/components/table/DataTable.vue'
+import DataTable from "@/components/table/DataTable.vue";
+import TheInput from "@/components/input/TheInput.vue";
+import TheCombobox from "@/components/combobox/TheCombobox.vue";
 export default {
-  components: { DataTable },
-
-}
+  components: { DataTable, TheInput, TheCombobox },
+  methods: {
+    /**
+     * @ create by : MF1270
+     * @ create day : 19/02/2023
+     * @ hàm : Gửi sự kiên mở dialog btn thêm mới sang component Dialog
+     */
+    ShowDialog() {
+      this.emitter.emit("showDialog");
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

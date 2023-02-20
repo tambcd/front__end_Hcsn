@@ -1,23 +1,41 @@
+.hide-icon input::-webkit-outer-spin-button,
+.hide-icon input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin-right: 10px;
+}
+input[type="text"]
+{
+    font-family: MISA__Regular;
+    font-weight: 400;
+    font-size: 14px;
+}
 .toolbar-filter__text {
     background-color: #ffffff;
     border-radius: 2.5px;
     border: 1px solid #afafaf;
-    width: 100%;
-    height: 35px;
     overflow: hidden;
     display: flex;
     align-items: center;
-    
 
 }
 
-.input__icon {
-    margin-left: 6px ;
+.content__input {
+    font-family: MISA__Bold;
+    font-weight: 500;
+    font-size: 14;
+}
+
+.input__icon__sreach {
+    margin-left: 6px;
     background-position: -243px -20px;
+}
+.input__icon__filter {
+    margin-left: 6px;
+    background-position: -243px -64px;
 }
 
 .input {
-    font-family: MISA__Italic;
+    
     height: 14px;
     width: 100%;
     outline: none;
@@ -27,7 +45,32 @@
 
 }
 
-.input:focus {
-    outline: 0px solid #019160;
+::placeholder{
+    font-family: MISA__Italic;
+    font-weight: 400;
+    font-size: 14px;
+}
+.toolbar-filter__text__focus {
+     border: 1px solid#5DC748;
+
+}
+
+.toolbar-filter__text__erro {
+    border: 1px solid red;
+
+}
+
+.erro {
+    color: red;
+    margin-top: 2px;
+}
+
+.combobox-icon__right {
+    background-position: -72px -338px;
+    width: 7px;
+    height: 5px;
+    margin-right: 12px;
+    border: unset;
+
 
 }

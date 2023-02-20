@@ -1,5 +1,4 @@
 
-@import url(input_dailog.css);
 .dialog__model{
     z-index: 10000;
     position: fixed;
@@ -18,6 +17,7 @@
     left: 50%;
     transform: translate(-50%,-54%);
     border-radius: 4px;
+    
 
 }
 .dialog__main{
@@ -49,7 +49,7 @@
     display: flex;
     justify-content: space-between;
     height: 80px;
-    margin-bottom: 2px;
+    margin-bottom: 8px;
 }
 .item__left{
     width: 260px;
@@ -87,12 +87,7 @@
     border: #E0E0E0 solid 1px;
     margin-right: 10px;
 }
-.erro{
-    color: red;
-    margin-top: 8px;
-    
-    display: none;
-}
+
 .combobox__dialog{
     margin-top: 8px;
 }
