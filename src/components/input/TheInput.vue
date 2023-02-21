@@ -8,6 +8,7 @@
       'toolbar-filter__text__focus': focusInput,
       'toolbar-filter__text__erro': IscheckEmpty && required,
       'hide-icon': iconNumber,
+      'disabledInput':disabledInput
     }"
     :style="{
       width: widthInput,
@@ -21,6 +22,7 @@
       class="input"
       :placeholder="contentInput"
       :style="{ 'text-align': textalignInput }"
+      :disabled = disabledInput
       @focus="InputFocus()"
       @blur="OutFocus()"
       v-model="valueInput"
@@ -45,6 +47,9 @@ export default {
     },
     money: {
       default: false,
+    },
+    disabledInput:{
+      default:false
     },
     typeInput: {
       default: "text",
@@ -103,6 +108,7 @@ export default {
      */
     OutFocus() {
       this.focusInput = false;
+      this.hideBodyCombobox()
       if (this.valueInput === "") {
         this.IscheckEmpty = true;
       } else {
@@ -117,6 +123,14 @@ export default {
      */
     ShowBodyItem() {
       this.$emit("ShowBodyItem");
+    },
+    /**
+     * create by : MF1270
+     * create day : 18/02/2023
+     * ham : ẩn hiện danh sách combobox
+     */
+    hideBodyCombobox(){
+      this.$emit("HideBodyItem");
     },
     isNumberKey(e) {
       var charCode = e.which ? e.which : e.keyCode;

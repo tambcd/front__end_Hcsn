@@ -44,11 +44,10 @@
             </div>
             <div class="item_name item__right">
               <the-input
+                disabledInput="true"
                 heightInput="35px"
                 widthInput="100%"
-                contentInput="Nhập bộ phân sử dụng..."
                 titleInput="Tên bộ phân sử dụng"
-                required="True"
                 marginInput="8px"
               />
             </div>
@@ -65,9 +64,9 @@
             </div>
             <div class="item_name item__right">
               <the-input
+                disabledInput="true"
                 heightInput="35px"
                 widthInput="100%"
-                contentInput="Nhập tên loại sản phẩm..."
                 titleInput="Tên loại tài sản"
                 :required="false"
                 marginInput="8px"
@@ -150,7 +149,7 @@
                 widthInput="100%"
                 titleInput="Năm Theo dõi"
                 contentInput="2021"
-                required="True"
+                disabledInput="true"
                 marginInput="8px"
                 textalignInput="right"
               />

@@ -1,14 +1,10 @@
 <template>
-  hello  
+  <Datepicker v-model="date" />
 </template>
 
 <script>
-export default {
-
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>

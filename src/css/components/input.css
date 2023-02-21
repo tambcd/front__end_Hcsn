@@ -74,3 +74,6 @@ input[type="text"]
 
 
 }
+.disabledInput{
+    background-color: rgb(239,239,239);
+}
