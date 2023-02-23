@@ -31,5 +31,5 @@ export default {
 body {
   margin: 0;
 }
-@import url(./css/main-employee.css);
+@import url(./css/main__css.css);
 </style>

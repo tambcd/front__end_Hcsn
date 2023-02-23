@@ -2,6 +2,8 @@
   border-collapse: collapse;
   width: 100%;
   position: relative;
+  background-color: #FFFFFF;
+
 }
 
 .table__assets td,
@@ -36,7 +38,7 @@
 
 }
 .The-actions button{
-  display: none;
+  display: block;
 }
 
 .Last_row {
@@ -47,4 +49,11 @@
 }
 .drop__paging{
   width: 59px;
+}
+.item__table{
+  cursor: pointer;
+
+}
+.item__table:hover{
+  background-color: #d1edf4;
 }

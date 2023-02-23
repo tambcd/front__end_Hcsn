@@ -18,14 +18,20 @@
       </th>
     </tr>
     <tbody>
-      <item-table v-for="item in listData" :key="item.fixed_asset_id" :dataItem="item" />      
+      <item-table class="item__table"
+        v-for="(item, index) in listData.data"
+        :key="item.fixed_asset_id"
+        :dataItem="item"
+        :indexItemTable="index + 1"
+      />
     </tbody>
 
     <tr class="Last_row">
       <td colspan="5" class="first__column">
         <div class="the-paging">
           <div class="total">
-            Tổng số: <span class="weight700">200</span> bản ghi
+            Tổng số:
+            <span class="weight700">{{ listData.totalRecord }}</span> bản ghi
           </div>
           <div class="drop__paging dropdown">
             <div class="header__dropdown">
@@ -42,12 +48,22 @@
             </div>
           </div>
           <div class="number__page">
-            <button class="btn__page icon20 btn__back">a</button>
-            <button class="btn__page icon20 btn__item">1</button>
-            <button class="btn__page icon20 btn__item">2</button>
-            <button class="btn__page icon20 btn__item">...</button>
-            <button class="btn__page icon20 btn__item">10</button>
-            <button class="btn__page icon20 btn__new">></button>
+            <button class="btn__page icon20 btn__back">{{ "<" }}</button>
+            <button
+              class="btn__page icon20 btn__item"
+              :class="{
+                'btn-paging__active': priorityFilter.pageNumber == itemPage,
+              }"
+              v-for="itemPage in listpageNumber"
+              :key="itemPage"
+              @click="selectNumber(itemPage)"
+            >
+              {{ itemPage }}
+            </button>
+
+            <button class="btn__page icon20 btn__new">
+              {{ ">" }}
+            </button>
           </div>
         </div>
       </td>
@@ -60,55 +76,88 @@
       <td class="The-actions center" style="width: auto"></td>
     </tr>
   </table>
+  <the-loading :hidden = isReloadData />
 </template>
 
 <script>
 import ItemTable from "./ItemTable.vue";
 import { getByFilter } from "@/api/api";
 import Resource from "@/resource/Resource";
+import TheLoading from '../Loading/TheLoading.vue';
 export default {
-  components: { ItemTable },
+  components: { ItemTable, TheLoading },
   async created() {
-    this.LoadDataTable()
+    this.LoadDataTable();
   },
   data() {
     return {
-        listData : [],
-        priorityFilter:{
-        pageNumber:1,
-        pageSize:20,
-        txtSearch:"",
-        DepartmentId:null,
-        AssetCategoryId:null
-      }
-    }
+      listData: [],
+      priorityFilter: {
+        pageNumber: 1,
+        pageSize: 20,
+        txtSearch: "",
+        DepartmentId: null,
+        AssetCategoryId: null,
+      },
+      listpageNumber: [],
+      isReloadData:false,
+    };
   },
   methods: {
-    async LoadDataTable(){
-      /**
+    /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
-     * Lấy dữ tài sản 
+     * Lấy dữ tài sản
      */
-    await getByFilter(
-      "Assets/Filter",{
-        pageNumber:this.priorityFilter.pageNumber,
-        pageSize:this.priorityFilter.pageSize,
-        txtSearch : this.priorityFilter.txtSearch,
-        DepartmentId: this.priorityFilter.DepartmentId,
-        AssetCategoryId : this.priorityFilter.AssetCategoryId
-      },
-      
-      (response) => {
-        // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
-        this.listData = response.data.data;
-      },
-      () => {
-        // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-        console.log(Resource.VN_ErroData);
+    async LoadDataTable() {
+      this.isReloadData = false;
+      await getByFilter(
+        "Assets/Filter",
+        {
+          pageNumber: this.priorityFilter.pageNumber,
+          pageSize: this.priorityFilter.pageSize,
+          txtSearch: this.priorityFilter.txtSearch,
+          DepartmentId: this.priorityFilter.DepartmentId,
+          AssetCategoryId: this.priorityFilter.AssetCategoryId,
+        },
+
+        (response) => {
+          // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
+          this.listData = response.data;
+          this.HideNumberPage();
+          this.isReloadData = true;
+
+        },
+        () => {
+          // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
+          console.log(Resource.VN_ErroData);
+        }
+      );
+    },
+
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * hiển thị số btn của phân trang
+     */
+
+    HideNumberPage() {
+      if (this.listData.totalPage < 3) {
+        this.listpageNumber = ["1", "2", "3"];
       }
-    );
-    }
+      if (this.listData.totalPage > 3) {
+        this.listpageNumber = ["1", "2", "...", 4];
+      }
+    },
+   /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * Chọn lại trang load lại giá trí trên table
+     */
+    selectNumber(numberPage) {
+      this.priorityFilter.pageNumber = numberPage;
+      this.LoadDataTable();
+    },
   },
 };
 </script>

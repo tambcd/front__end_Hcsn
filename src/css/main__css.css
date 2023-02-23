@@ -11,6 +11,7 @@
 @import url(./components/paging.css);
 @import url(./components/dialog/main__dialog.css);
 @import url(./components/combobox.css);
+@import url(./components/loading.css);
 .container{
     height: 100vh;
     width: 100vw;

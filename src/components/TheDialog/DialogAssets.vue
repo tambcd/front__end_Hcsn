@@ -3,7 +3,7 @@
     <div class="dialog__content">
       <div class="dialog__main">
         <div class="dialog__header">
-          <div class="dialog-header__tilte weight700">Sửa tài sản</div>
+          <div class="dialog-header__tilte weight700">Thêm tài sản</div>
           <div
             class="dialog-header__close icon24 backgrsvg"
             @click="() => (ShowHideDialog = false)"
