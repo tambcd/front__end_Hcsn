@@ -16,14 +16,7 @@
 
     <div class="body__combobox" v-if="showHideItem">
       <div class="item__combobox" v-for="item in DataCombobox " :key= item[keyData]>{{item[dataShow]}}</div>
-      <div class="item__combobox">40</div>
-      <div class="item__combobox">50</div>
-      <div class="item__combobox">100</div>
-      <div class="item__combobox">100</div>
-      <div class="item__combobox">100</div>
-      <div class="item__combobox">100</div>
-      <div class="item__combobox">100</div>
-      <div class="item__combobox">100</div>
+    
     </div>
   </div>
 </template>
