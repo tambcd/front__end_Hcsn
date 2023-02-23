@@ -13,22 +13,12 @@
       <th class="right" style="width: 150px">Nguyên giá</th>
       <th class="right" style="width: 150px">HM/KH lũy kế</th>
       <th class="right" style="width: 150px">Giá trị còn lại</th>
-      <th style="min-width: 100px" class="The-actions center header-actions">Chức năng</th>
+      <th style="min-width: 100px" class="The-actions center header-actions">
+        Chức năng
+      </th>
     </tr>
     <tbody>
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
-      <item-table  />
+      <item-table v-for="item in listData" :key="item.fixed_asset_id" :dataItem="item" />      
     </tbody>
 
     <tr class="Last_row">
@@ -52,7 +42,7 @@
             </div>
           </div>
           <div class="number__page">
-            <button class="btn__page icon20 btn__back"> a </button>
+            <button class="btn__page icon20 btn__back">a</button>
             <button class="btn__page icon20 btn__item">1</button>
             <button class="btn__page icon20 btn__item">2</button>
             <button class="btn__page icon20 btn__item">...</button>
@@ -74,8 +64,52 @@
 
 <script>
 import ItemTable from "./ItemTable.vue";
+import { getByFilter } from "@/api/api";
+import Resource from "@/resource/Resource";
 export default {
   components: { ItemTable },
+  async created() {
+    this.LoadDataTable()
+  },
+  data() {
+    return {
+        listData : [],
+        priorityFilter:{
+        pageNumber:1,
+        pageSize:20,
+        txtSearch:"",
+        DepartmentId:null,
+        AssetCategoryId:null
+      }
+    }
+  },
+  methods: {
+    async LoadDataTable(){
+      /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * Lấy dữ tài sản 
+     */
+    await getByFilter(
+      "Assets/Filter",{
+        pageNumber:this.priorityFilter.pageNumber,
+        pageSize:this.priorityFilter.pageSize,
+        txtSearch : this.priorityFilter.txtSearch,
+        DepartmentId: this.priorityFilter.DepartmentId,
+        AssetCategoryId : this.priorityFilter.AssetCategoryId
+      },
+      
+      (response) => {
+        // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
+        this.listData = response.data.data;
+      },
+      () => {
+        // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
+        console.log(Resource.VN_ErroData);
+      }
+    );
+    }
+  },
 };
 </script>
 
