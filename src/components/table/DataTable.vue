@@ -117,6 +117,8 @@ export default {
      */
     async LoadDataTable() {
       this.isReloadData = false;
+      this.stateAll = false;
+      this.ClearData();
       await getByFilter(
         "Assets/Filter",
         {
