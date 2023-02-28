@@ -19,7 +19,7 @@
     </tr>
     <tbody>
       <item-table
-        :stateIsAll="stateAll"
+        :stateIsAll="listIdSelection"
         @changeDataSelect="changeDataId"
         v-for="(item, index) in listData.data"
         :key="item.fixed_asset_id"
@@ -90,6 +90,7 @@ import TheLoading from "../Loading/TheLoading.vue";
 export default {
   components: { ItemTable, TheLoading },
   async created() {
+    this.listIdSelection = new Set()
     this.LoadDataTable();
   },
   data() {
@@ -98,14 +99,14 @@ export default {
       listData: [],
       priorityFilter: {
         pageNumber: 1,
-        pageSize: 20,
+        pageSize: 5,
         txtSearch: "",
         DepartmentId: null,
         AssetCategoryId: null,
       },
       listpageNumber: [],
       isReloadData: false,
-      listIdSelection: [],
+      listIdSelection: null,
     };
   },
   methods: {
@@ -170,13 +171,12 @@ export default {
      */
     changeDataId(id) {
       if (id[1]) {
-        this.listIdSelection.push(id[0]);
+        this.listIdSelection.add(id[0]);
       } else {
-        this.listIdSelection = this.listIdSelection.filter(
-          (item) => item !== id[0]
-        );
+        this.listIdSelection.delete(id[0]);
+        
       }
-      if (this.listIdSelection.length === this.listData.data.length) {
+      if (this.listIdSelection.size === this.listData.data.length) {
         this.stateAll = true;
       } else {
         this.stateAll = false;
@@ -189,7 +189,7 @@ export default {
      * xóa tất cả phần tử được chọn
      */
     ClearData() {
-      this.listIdSelection = [];
+      this.listIdSelection.clear();
     },
 
     /**
@@ -198,10 +198,11 @@ export default {
      * chọn tất cả
      */
     SelectAll() {
-      this.listIdSelection = [];
+      this.listIdSelection.clear();
       this.listData.data.forEach((element) => {
-        this.listIdSelection.push(element.fixed_asset_id);
+        this.listIdSelection.add(element.fixed_asset_id);
       });
+      console.log(this.listIdSelection);
 
     },
 

@@ -1,9 +1,10 @@
 <template>
-  <tr class="item-table" :class="{ row__selected: ischeckItem || stateIsAll }">
+  <tr class="item-table" :class="{ row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id) }">
     <td class="center first-column input-checkbox" style="width: 50px">
       <input
         type="checkbox"
         v-model="ischeckItem"
+        :checked= stateIsAll.has(dataItem.fixed_asset_id)
         @change="sendCheckEmp(ischeckItem, dataItem.fixed_asset_id)"      />
     </td>
     <td class="center" style="width: 50px">{{ this.indexItemTable }}</td>
@@ -37,7 +38,7 @@ import { FormatMoney } from "../../assets/js/Format";
 export default {
   props: {
     indexItemTable: {
-      default: "",
+      default: [],
     },
     dataItem: {},
     stateIsAll: {
@@ -45,7 +46,6 @@ export default {
     },
   },
   created() {
-    this.ischeckItem = this.stateIsAll;
   },
   data() {
     return {
