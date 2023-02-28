@@ -1,6 +1,6 @@
 <template>
-  <tr class="item__table" :class="{ row__selected: ischeckItem || stateIsAll }">
-    <td class="center first__column input_checkbox" style="width: 50px">
+  <tr class="item-table" :class="{ row__selected: ischeckItem || stateIsAll }">
+    <td class="center first-column input-checkbox" style="width: 50px">
       <input
         type="checkbox"
         v-model="ischeckItem"

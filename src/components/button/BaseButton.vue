@@ -1,5 +1,5 @@
 <template>
-    <button class="btn__base weight700" :class="{btn__dark:btnType == 1,btn__color:btnType == 2} ">
+    <button class="btn-base weight700" :class="{btn__dark:btnType == 1,btn__color:btnType == 2} ">
         {{btnName}}
     </button>
 </template>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style scoped>
-.btn__base{
+.btn-base{
     padding: 0 16px;
     border-radius: 4px ;
     height: 36px;

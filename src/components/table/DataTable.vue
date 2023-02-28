@@ -1,7 +1,7 @@
 <template>
-  <table class="table__assets">
-    <tr class="header__table weight700">
-      <th class="first__column center input_checkbox" ref="checkBoxAll">
+  <table class="table-assets">
+    <tr class="header-table weight700">
+      <th class="first-column center input-checkbox" ref="checkBoxAll">
         <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
       </th>
       <th class="center" style="width: 50px">STT</th>
@@ -29,30 +29,30 @@
     </tbody>
 
     <tr class="Last_row">
-      <td colspan="5" class="first__column">
+      <td colspan="5" class="first-column">
         <div class="the-paging">
           <div class="total">
             Tổng số:
             <span class="weight700">{{ listData.totalRecord }}</span> bản ghi
           </div>
-          <div class="drop__paging dropdown">
-            <div class="header__dropdown">
+          <div class="drop-paging dropdown">
+            <div class="header-dropdown">
               <div class="dropdown-left">
                 <div class="dropdown-value">20</div>
               </div>
               <button class="dropdown-icon__right backgrsvg"></button>
             </div>
             <div class="body__dropdown" hidden>
-              <div class="item__dropdown">10</div>
-              <div class="item__dropdown">40</div>
-              <div class="item__dropdown">50</div>
-              <div class="item__dropdown">100</div>
+              <div class="item-dropdown">10</div>
+              <div class="item-dropdown">40</div>
+              <div class="item-dropdown">50</div>
+              <div class="item-dropdown">100</div>
             </div>
           </div>
-          <div class="number__page">
-            <button class="btn__page icon20 btn__back">{{ "<" }}</button>
+          <div class="number-page">
+            <button class="btn-page icon20 btn-back">{{ "<" }}</button>
             <button
-              class="btn__page icon20 btn__item"
+              class="btn-page icon20 btn__item"
               :class="{
                 'btn-paging__active': priorityFilter.pageNumber == itemPage,
               }"
@@ -63,7 +63,7 @@
               {{ itemPage }}
             </button>
 
-            <button class="btn__page icon20 btn__new">
+            <button class="btn-page icon20 btn-new">
               {{ ">" }}
             </button>
           </div>
@@ -98,7 +98,7 @@ export default {
       listData: [],
       priorityFilter: {
         pageNumber: 1,
-        pageSize: 5,
+        pageSize: 20,
         txtSearch: "",
         DepartmentId: null,
         AssetCategoryId: null,

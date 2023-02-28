@@ -1,12 +1,12 @@
 <template>
-  <label for="" class="content__input" v-if="titleInput != ''"
+  <label for="" class="content-input" v-if="titleInput != ''"
     >{{ titleInput }}<span style="color: red" v-if="required">*</span></label
   >
   <div
-    class="toolbar-filter__text"
+    class="toolbar-filter-text"
     :class="{
-      'toolbar-filter__text__focus': focusInput,
-      'toolbar-filter__text__erro': IscheckEmpty && required,
+      'toolbar-filter-text-focus': focusInput,
+      'toolbar-filter-text-erro': IscheckEmpty && required,
       'hide-icon': iconNumber,
       'disabledInput':disabledInput
     }"
@@ -16,7 +16,7 @@
       'margin-top': marginInput,
     }"
   >
-    <div class="input__icon__sreach icon24 backgrsvg" :class="{input__icon__filter : iconLeft && iconRight}" v-if="iconLeft"></div>
+    <div class="input-icon-sreach icon24 backgrsvg" :class="{input__icon__filter : iconLeft && iconRight}" v-if="iconLeft"></div>
     <input
       :type="typeInput"
       class="input"

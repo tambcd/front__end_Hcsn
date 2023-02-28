@@ -6,13 +6,13 @@
     padding-left: 10px;
     
 }
-.drop__paging{
+.drop-paging{
     margin-left: 40px;
 }
-.number__page{
+.number-page{
     margin-left: 20px;
 }
-.btn__page{
+.btn-page{
 background-color: #ffffff;
 border-radius: 2px;
 overflow: hidden;
@@ -23,7 +23,7 @@ border: none;
 cursor: pointer;
 margin-left: 5px;
 }
-.btn__page:hover{
+.btn-page:hover{
     font-weight: 700;
     background-color: #f5f5f5;
     border-radius: 3px;

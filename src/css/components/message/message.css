@@ -17,7 +17,7 @@
     background-color: rgba(0, 0, 0, 0.16);
 }
 
-.messing__content {
+.messing-content {
     position: relative;
     background-color: #FFF;
     min-width: 444px;
@@ -29,17 +29,17 @@
 
 }
 
-.messing__body {
+.messing-body {
     padding: 32px;
 }
 
 /* icon error */
-.icon__message .icon__error {
+.icon-message .icon-error {
     background: url(../../../assets/img/Sprites.64af8f61.svg) no-repeat -598px -463px;
 }
 
 
-.message__title {
+.message-title {
     overflow: auto;
     max-height: 400px;
     margin-bottom: 32px;
@@ -49,12 +49,12 @@
 
 
 /* erro  list btn*/
-.footer__error {
+.footer-error {
     align-items: center;
     justify-content: center;
 }
 
-.footer__error .btnError__close {
+.footer-error .btnError-close {
 
     color: #fff;
     background-color: #2ca01c;
@@ -62,13 +62,13 @@
 }
 
 /* cảnh báo  list btn*/
-.footer__warning {
+.footer-warning {
     align-items: center;
     justify-content: end;
     flex-direction: row-reverse;
 }
 
-.footer__warning .btnWarn__close {
+.footer-warning .btnWarn-close {
 
     color: #000;
     border: 1px solid #000;
@@ -78,30 +78,30 @@
 
 
 /* thông báo  list btn*/
-.footer__mesage {
+.footer-mesage {
     align-items: center;
     justify-content: space-between;
     flex-direction: row-reverse;
 }
 
-.footer__mesage .footer__left {
+.footer-mesage .footer-left {
     width: 60%;
 }
 
-.footer__mesage .footer__left .btnWarn__close {
+.footer-mesage .footer-left .btnWarn-close {
 
     color: #000;
     border: 1px solid #000;
 
 }
 
-.footer__mesage .footer__right {
+.footer-mesage .footer-right {
     flex-direction: row-reverse;
     width: 40%;
     margin-left: 30px;
 }
 
-.footer__mesage .footer__right .btnWarn__Yes {
+.footer-mesage .footer-right .btnWarn-Yes {
 
     color: #fff;
     background-color: #2ca01c;
@@ -109,7 +109,7 @@
 
 }
 
-.footer__mesage .footer__right .btnWarn__close {
+.footer-mesage .footer-right .btnWarn-close {
 
     color: #000;
     border: 1px solid #000;

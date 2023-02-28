@@ -4,7 +4,7 @@
     position: relative;
 }
 
-.body__combobox {
+.body-combobox {
     background-color: #ffffff;
     width: 100%;
     position: absolute;
@@ -15,17 +15,17 @@
 
 }
 
-.body__combobox::-webkit-scrollbar {
+.body-combobox::-webkit-scrollbar {
     width: 7px;
 
 }
 
-.body__combobox::-webkit-scrollbar-thumb {
+.body-combobox::-webkit-scrollbar-thumb {
     background-color: #9E9E9E;
     border-radius: 4px;
 }
 
-.item__combobox {
+.item-combobox {
     font-family: MISA__Regular;
     display: flex;
     border-radius: 4px;
@@ -34,7 +34,7 @@
     padding: 0 7px;
 }
 
-.item__combobox:hover {
+.item-combobox:hover {
     cursor: pointer;
     background-color: rgba(80, 184, 60, 0.1);
 }

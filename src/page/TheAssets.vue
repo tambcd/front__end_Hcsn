@@ -1,6 +1,6 @@
 <template>
   <div class="toolbar">
-    <div class="toolbar__filter">
+    <div class="toolbar-filter">
       <the-input
         heightInput="35"
         widthInput="179"
@@ -33,27 +33,27 @@
       />
     </div>
 
-    <div class="toolbar__action">
-      <button class="btn__add button" @click="ShowDialog">
+    <div class="toolbar-action">
+      <button class="btn-add button" @click="ShowDialog">
         + Thêm tài sản
       </button>
       <button
-        class="btn__export icon36 button__icon backgrsvg"
+        class="btn-export icon36 button-icon backgrsvg"
         @click="Export()"
       ></button>
-      <button class="btn__delete icon36 button__icon backgrsvg"></button>
+      <button class="btn__delete icon36 button-icon backgrsvg"></button>
     </div>
   </div>
   <div class="table">
     <data-table />
   </div>
-  <dialog-message :typeMessage="3" titleMessage="bạn có muốn xóa không ?" />
+  <dialog-message :typeMessage="2" titleMessage="bạn có muốn xóa không ?" hidden />
 </template>
 
 <script>
 import DataTable from "@/components/table/DataTable.vue";
-import TheInput from "@/components/input/TheInput.vue";
-import TheCombobox from "@/components/combobox/TheCombobox.vue";
+import TheInput from "@/components/input/BaseInput.vue";
+import TheCombobox from "@/components/combobox/BaseCombobox.vue";
 import { get } from "@/api/api.js";
 import Resource from "@/resource/Resource";
 import DialogMessage from '@/components/DialogMessage/DialogMessage.vue';

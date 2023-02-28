@@ -1,62 +1,62 @@
 <template>
-  <div class="messing" ref="Close__error">
-    <div class="messing__content">
-      <div class="messing__body">
+  <div class="messing" ref="Close-error">
+    <div class="messing-content">
+      <div class="messing-body">
         <div class="content flex">
-          <div class="icon__message">
-            <div class="icon icon48 icon__error"></div>
+          <div class="icon-message">
+            <div class="icon icon48 icon-error"></div>
           </div>
-          <div class="message__title">
+          <div class="message-title">
             <span>{{ titleMessage }}</span>
           </div>
         </div>
 
         <!-- btn errror -->
-        <div class="footer__error flex" v-if="typeMessage === 1">
+        <div class="footer-error flex" v-if="typeMessage === 1">
           <TheButton
             btnName="Đóng"
-            class="btnError__close"
+            class="btnError-close"
             @click="closeThisMessage()"
             btnType="2"
           />
         </div>
 
         <!-- btn warning -->
-        <div class="footer__warning flex" v-if="typeMessage === 2">
+        <div class="footer-warning flex" v-if="typeMessage === 2">
           <TheButton
             btnName="Có"
-            class="btnWarn__Yes"
+            class="btnWarn-Yes"
             @click="deleteEmployee()"
             btnType="2"
           />
           <TheButton
             btnName="Không"
-            class="btnWarn__close"
+            class="btnWarn-close"
             @click="closeThisMessage()"
             btnType="1"
           />
         </div>
 
         <!-- btn mesage -->
-        <div class="footer__mesage flex" v-if="typeMessage === 3">
-          <div class="footer__right flex">
+        <div class="footer-mesage flex" v-if="typeMessage === 3">
+          <div class="footer-right flex">
             <TheButton
               btnName="Lưu"
-              class="btnWarn__Yes"
+              class="btnWarn-Yes"
               @click="closeThisDialogAndSave()"
               btnType="2"
             />
             <TheButton
               btnName="Không lưu"
-              class="btnWarn__close"
+              class="btnWarn-close"
               @click="closeThisDialog()"
               btnType="1"
             />
           </div>
-          <div class="footer__left">
+          <div class="footer-left">
             <TheButton
               btnName="Hủy bỏ "
-              class="btnWarn__close"
+              class="btnWarn-close"
               @click="closeThisMessage()"
               btnType="1"
             />
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import TheButton from "../button/TheButton.vue";
+import TheButton from "../button/BaseButton.vue";
 import { deleteAssets, deleteMultiAssets } from "@/api/api";
 // import {Resource} from '@/resource/Resource';
 export default {
@@ -95,7 +95,7 @@ export default {
      * Author: TVTam
      * Last Edited: 28/02/2023  *
      */
-    this.$refs["Close__error"].querySelector("button").focus();
+    this.$refs["Close-error"].querySelector("button").focus();
   },
   methods: {
     /**

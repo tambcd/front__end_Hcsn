@@ -8,7 +8,7 @@ input[type="text"]
     font-weight: 400;
     font-size: 14px;
 }
-.toolbar-filter__text {
+.toolbar-filter-text {
     background-color: #ffffff;
     border-radius: 2.5px;
     border: 1px solid #afafaf;
@@ -18,11 +18,11 @@ input[type="text"]
 
 }
 
-.content__input {
+.content-input {
     font-weight: 500;
 }
 
-.input__icon__sreach {
+.input-icon-sreach {
     margin-left: 6px;
     background-position: -243px -20px;
 }
@@ -46,12 +46,12 @@ input[type="text"]
     font-weight: 400;
     font-size: 14px;
 }
-.toolbar-filter__text__focus {
+.toolbar-filter-text-focus {
      border: 1px solid#5DC748;
 
 }
 
-.toolbar-filter__text__erro {
+.toolbar-filter-text-erro {
     border: 1px solid red;
 
 }

@@ -14,15 +14,15 @@
       @HideBodyItem  ="HideItemCombobox"
     />
 
-    <div class="body__combobox" v-if="showHideItem">
-      <div class="item__combobox" v-for="item in DataCombobox " :key= item[keyData]>{{item[dataShow]}}</div>
+    <div class="body-combobox" v-if="showHideItem">
+      <div class="item-combobox" v-for="item in DataCombobox " :key= item[keyData]>{{item[dataShow]}}</div>
     
     </div>
   </div>
 </template>
 
 <script>
-import TheInput from "../input/TheInput.vue";
+import TheInput from "../input/BaseInput.vue";
 export default {
   
   components: { TheInput },

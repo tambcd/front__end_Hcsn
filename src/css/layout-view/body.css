@@ -11,7 +11,7 @@
 
 }
 
-.toolbar__filter {
+.toolbar-filter {
     background-color: #ffffff;
     height: 35px;
     display: flex;
@@ -19,16 +19,16 @@
 
 
 }
-.toolbar__filter div{
+.toolbar-filter div{
     margin-right: 10px;
 }
 
 
-.toolbar__action{
+.toolbar-action{
     display: flex;
     flex-direction: row;
 }
-.btn__export{
+.btn-export{
     background-position:  -278px -100px;
     margin-left: 10px;
 }

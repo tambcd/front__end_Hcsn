@@ -1,17 +1,17 @@
 <template>
-  <div class="dialog__model" v-if="ShowHideDialog">
-    <div class="dialog__content">
-      <div class="dialog__main">
-        <div class="dialog__header">
-          <div class="dialog-header__tilte weight700">Thêm tài sản</div>
+  <div class="dialog-model" v-if="ShowHideDialog">
+    <div class="dialog-content">
+      <div class="dialog-main">
+        <div class="dialog-header">
+          <div class="dialog-header-tilte weight700">Thêm tài sản</div>
           <div
-            class="dialog-header__close icon24 backgrsvg"
+            class="dialog-header-close icon24 backgrsvg"
             @click="() => (ShowHideDialog = false)"
           ></div>
         </div>
-        <div class="dialog__body">
-          <div class="item__multiple">
-            <div class="item_code item__left">
+        <div class="dialog-body">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-input
                 heightInput="35px"
                 widthInput="100%"
@@ -21,7 +21,7 @@
                 marginInput="8px"
               />
             </div>
-            <div class="item_name item__right">
+            <div class="item-name item-right">
               <the-input
                 heightInput="35px"
                 widthInput="100%"
@@ -32,8 +32,8 @@
               />
             </div>
           </div>
-          <div class="item__multiple">
-            <div class="item_code item__left">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-combobox
                 iconCombobox="2"
                 marginCombobox="8px"
@@ -42,7 +42,7 @@
                 requiredCombobox="true"
               />
             </div>
-            <div class="item_name item__right">
+            <div class="item-name item-right">
               <the-input
                 disabledInput="true"
                 heightInput="35px"
@@ -52,8 +52,8 @@
               />
             </div>
           </div>
-          <div class="item__multiple">
-            <div class="item_code item__left">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-combobox
                 iconCombobox="2"
                 marginCombobox="8px"
@@ -62,7 +62,7 @@
                 requiredCombobox="true"
               />
             </div>
-            <div class="item_name item__right">
+            <div class="item-name item-right">
               <the-input
                 disabledInput="true"
                 heightInput="35px"
@@ -73,8 +73,8 @@
               />
             </div>
           </div>
-          <div class="item__multiple">
-            <div class="item_code item__left">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-input
                 iconNumber="false"
                 typeInput="number"
@@ -87,7 +87,7 @@
                 textalignInput="right"
               />
             </div>
-            <div class="item_code item__left">
+            <div class="item-code item-left">
               <the-input
                 :money="true"
                 iconNumber="false"
@@ -100,7 +100,7 @@
                 textalignInput="right"
               />
             </div>
-            <div class="item_code item__left">
+            <div class="item-code item-left">
               <the-input
                 iconNumber="false"
                 typeInput="number"
@@ -114,8 +114,8 @@
               />
             </div>
           </div>
-          <div class="item__multiple">
-            <div class="item_code item__left">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-input
                 iconNumber="false"
                 typeInput="number"
@@ -128,7 +128,7 @@
                 textalignInput="right"
               />
             </div>
-            <div class="item_code item__left">
+            <div class="item-code item-left">
               <the-input
                 iconNumber="false"
                 typeInput="number"
@@ -141,7 +141,7 @@
                 textalignInput="right"
               />
             </div>
-            <div class="item_code item__left">
+            <div class="item-code item-left">
               <the-input
                 iconNumber="false"
                 typeInput="number"
@@ -155,8 +155,8 @@
               />
             </div>
           </div>
-          <div class="item__multiple">
-            <div class="item_code item__left">
+          <div class="item-multiple">
+            <div class="item-code item-left">
               <the-input
                 typeInput="date"
                 heightInput="35px"
@@ -167,7 +167,7 @@
                 marginInput="8px"
               />
             </div>
-            <div class="item_code item__left">
+            <div class="item-code item-left">
               <the-input
                 typeInput="date"
                 heightInput="35px"
@@ -177,11 +177,11 @@
                 marginInput="8px"
               />
             </div>
-            <div class="item_code item__left"></div>
+            <div class="item-code item-left"></div>
           </div>
         </div>
         <div class="dialog__footer">
-          <button class="btn__add btn">Lưu</button>
+          <button class="btn-add btn">Lưu</button>
           <button class="btn__cancel btn">Hủy</button>
         </div>
       </div>
@@ -190,8 +190,8 @@
 </template>
 
 <script>
-import TheCombobox from "../combobox/TheCombobox.vue";
-import TheInput from "../input/TheInput.vue";
+import TheCombobox from "../combobox/BaseCombobox.vue";
+import TheInput from "../input/BaseInput.vue";
 export default {
   created() {
     this.emitter.on("showDialog", () => {
