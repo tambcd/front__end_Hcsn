@@ -79,7 +79,6 @@
     </tr>
   </table>
   <the-loading :hidden="isReloadData" />
-  <the-loading hidden />
 </template>
 
 <script>
@@ -87,11 +86,13 @@ import ItemTable from "./ItemTable.vue";
 import { getByFilter } from "@/api/api";
 import Resource from "@/resource/Resource";
 import TheLoading from "../Loading/TheLoading.vue";
+import { toast } from "vue3-toastify";
+
 export default {
   components: { ItemTable, TheLoading },
   async created() {
     this.listIdSelection = new Set()
-    this.LoadDataTable();
+    this.LoadDataTable(1);
   },
   data() {
     return {
@@ -99,7 +100,7 @@ export default {
       listData: [],
       priorityFilter: {
         pageNumber: 1,
-        pageSize: 5,
+        pageSize: 20,
         txtSearch: "",
         DepartmentId: null,
         AssetCategoryId: null,
@@ -109,20 +110,25 @@ export default {
       listIdSelection: null,
     };
   },
+  mounted() {
+      this.emitter.on("LoadingDataDelete", () => {
+      this.LoadDataTable(1);
+    });
+  },
   methods: {
     /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
      * Lấy dữ tài sản
      */
-    async LoadDataTable() {
+    async LoadDataTable(pageNumber) {
       this.isReloadData = false;
       this.stateAll = false;
       this.ClearData();
       await getByFilter(
         "Assets/Filter",
         {
-          pageNumber: this.priorityFilter.pageNumber,
+          pageNumber: pageNumber,
           pageSize: this.priorityFilter.pageSize,
           txtSearch: this.priorityFilter.txtSearch,
           DepartmentId: this.priorityFilter.DepartmentId,
@@ -137,7 +143,10 @@ export default {
         },
         () => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-          console.log(Resource.VN_ErroData);
+           toast.error(Resource.VN_ErroData, {
+              autoClose: 2000,
+              position: "top-center",
+            });
         }
       );
     },
@@ -163,7 +172,7 @@ export default {
      */
     selectNumber(numberPage) {
       this.priorityFilter.pageNumber = numberPage;
-      this.LoadDataTable();
+      this.LoadDataTable(this.priorityFilter.pageNumber);
     },
 
     /**
@@ -183,7 +192,7 @@ export default {
       } else {
         this.stateAll = false;
       }
-      console.log(this.listIdSelection);
+      this.SendDataDelete()
     },
     /**
      * Author: TVTam
@@ -204,7 +213,6 @@ export default {
       this.listData.data.forEach((element) => {
         this.listIdSelection.add(element.fixed_asset_id);
       });
-      console.log(this.listIdSelection);
 
     },
 
@@ -218,17 +226,19 @@ export default {
         this.SelectAll();
       } else {
         this.ClearData();
-        console.log(this.listIdSelection);
       }
+      this.SendDataDelete()
     },
+   /**
+     * Author: TVTam
+     * created : tvTam (1/03/2023)
+     * gửi danh sách id chọn để thực hiện xóa
+     */
+  SendDataDelete(){
+      this.$emit("updateListId",this.listIdSelection)
+  }
   },
-  // watch: {
-  //   listIdSelection(old,state) {
-  //     console.log(old);
-  //     console.log(state);
-  //   },
-  //   immediate:true
-  // },
+ 
 };
 </script>
 

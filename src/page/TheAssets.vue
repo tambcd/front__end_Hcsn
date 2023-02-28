@@ -34,20 +34,24 @@
     </div>
 
     <div class="toolbar-action">
-      <button class="btn-add button" @click="ShowDialog">
-        + Thêm tài sản
-      </button>
+      <button class="btn-add button" @click="ShowDialog">+ Thêm tài sản</button>
       <button
         class="btn-export icon36 button-icon backgrsvg"
         @click="Export()"
       ></button>
-      <button class="btn__delete icon36 button-icon backgrsvg"></button>
+      <button class="btn__delete icon36 button-icon backgrsvg" @click="DeleteAssets()"></button>
     </div>
   </div>
   <div class="table">
-    <data-table />
+    <data-table  @updateListId = updateListIdDelete />
   </div>
-  <dialog-message :typeMessage="2" titleMessage="bạn có muốn xóa không ?" hidden />
+  <dialog-message
+    :listIdAsset="listIdDelete"
+    :typeMessage="2"
+    titleMessage="bạn có muốn xóa không ?"
+    v-show="isMessageDelete"
+    @deleteSuccefull = ReLoadingDataDelete
+  />
 </template>
 
 <script>
@@ -56,7 +60,8 @@ import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
 import { get } from "@/api/api.js";
 import Resource from "@/resource/Resource";
-import DialogMessage from '@/components/DialogMessage/DialogMessage.vue';
+import DialogMessage from "@/components/DialogMessage/DialogMessage.vue";
+import { toast } from "vue3-toastify";
 
 export default {
   components: { DataTable, TheInput, TheCombobox, DialogMessage },
@@ -74,7 +79,9 @@ export default {
       },
       () => {
         // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-        console.log(Resource.VN_ErroData);
+        toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,position :'bottom-right'
+          });
       }
     );
     /**
@@ -90,7 +97,9 @@ export default {
       },
       () => {
         // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-        console.log(Resource.VN_ErroData);
+        toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,position :'bottom-right'
+          });
       }
     );
     /**
@@ -106,15 +115,19 @@ export default {
       },
       () => {
         // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-        console.log(Resource.VN_ErroData);
+        toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,position :'bottom-right'
+          });
       }
     );
   },
   data() {
     return {
+      isMessageDelete:false,
       departments: [],
-      assetCategorys:[],
-      dataAssets : []
+      assetCategorys: [],
+      dataAssets: [],
+      listIdDelete:null
     };
   },
   methods: {
@@ -138,15 +151,49 @@ export default {
         "Assets/Export",
         () => {
           window.open("https://localhost:7115/api/v1/Assets/Export");
-          console.log(`Xuất khẩu thành công`);
+          toast.success(Resource.VN_ExportSucces, {
+            autoClose: 2000,position :'bottom-right'
+          });
         },
         () => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-          console.log(`Có lỗi mục xuất khẩu`);
+          toast.error(Resource.VN_ExportErro, {
+            autoClose: 2000,position :'bottom-right'
+          });
         }
       );
     },
+
+    /**
+     * Description:  xóa 
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+    DeleteAssets(){
+       this.isMessageDelete = true;
+      
+    },
+     /**
+     * Description:  cập nhập id chọn tại table
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+
+  updateListIdDelete(e){
+    this.listIdDelete = e
   },
+
+   /**
+     * Description: Load lại data khi xóa
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+    ReLoadingDataDelete(){
+      this.isMessageDelete = false;
+    }
+
+  },
+
 };
 </script>
 

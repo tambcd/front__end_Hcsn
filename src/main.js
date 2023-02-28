@@ -3,6 +3,8 @@ import mitt from 'mitt';
 import { createApp } from 'vue'
 import App from './App.vue'
 import {requiredComponents} from './globalComponents'
+import 'vue3-toastify/dist/index.css';
+
 
 
 // event bus

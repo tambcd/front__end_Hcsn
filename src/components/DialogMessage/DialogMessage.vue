@@ -26,7 +26,7 @@
           <TheButton
             btnName="Có"
             class="btnWarn-Yes"
-            @click="deleteEmployee()"
+            @click="deleteAssets()"
             btnType="2"
           />
           <TheButton
@@ -69,23 +69,21 @@
 
 <script>
 import TheButton from "../button/BaseButton.vue";
-import { deleteAssets, deleteMultiAssets } from "@/api/api";
-// import {Resource} from '@/resource/Resource';
+import { deleteMultiAssets } from "@/api/api";
+import { Resource } from "@/resource/Resource";
+import { toast } from "vue3-toastify";
+
 export default {
   props: {
     /** kiểm tra kiểu của thông báo */
     typeMessage: Number,
     /**nội dung thông báo */
     titleMessage: String,
-    /**khóa chính tài sản */
-    idAsset: {
-      typeof: String,
-      default: "",
-    },
+
     /**mảng khóa chính tài sản */
     listIdAsset: {
-      typeof: Array,
-      default: [],
+      typeof: Set,
+      default: null,
     },
   },
   components: { TheButton },
@@ -104,8 +102,7 @@ export default {
      * Last Edited: 28/02/2023  *
      */
     closeThisMessage() {
-      this.$emit("ClosethisMg");
-      this.emitter.emit("foucusInputError");
+      this.$emit("deleteSuccefull");
     },
     /**
      * Author: TVTam
@@ -129,41 +126,40 @@ export default {
      * Author: TVTam
      * Last Edited: 28/02/2023
      */
-    async deleteEmployee() {
-      // check nếu nhân nut xóa 1 thì data của idEmployee đc cập nhập
-      if (this.idEmployyee !== "") {
-        await deleteAssets(
+    async deleteAssets() {
+      try {
+        // xóa nhiều thì mảng xóa đc cập nhập data
+        let a = await deleteMultiAssets(
           "Assets",
-          this.idAsset,
-          () => {
-            // Trường hợp thành công nhận về dữ liệu thì gán lại các thông tin vào bảng
-            // toaster.error(Resource.VN_DeleteSuccess),
-            //     setTimeout(toaster.clear, 2000);
-            // check chon nhieu
-            this.emitter.emit("deleteOneSuccefull", this.idAsset);
-            this.$emit("LoadingDataDelete");
-          },
+          Array.from(this.listIdAsset),
           (error) => {
             // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-            // toaster.error(Resource.VN_DeleteFailure);
+            toast.error(Resource.VN_DeleteFailure, {
+              autoClose: 2000,
+              position: "bottom-right",
+            });
             console.log(error);
           }
         );
-      }
-      // xóa nhiều thì mảng xóa đc cập nhập data
-      else {
-        let a = await deleteMultiAssets("Assets", this.listIdAsset, (error) => {
-          // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-          // toaster.error(Resource.VN_DeleteFailure);
-          console.log(error);
-        });
         if (a) {
-          // toaster.error(Resource.VN_DeleteSuccess);
+          toast.success(Resource.VN_DeleteSuccess, {
+            autoClose: 2000,
+            position: "bottom-right",
+          });
           // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-          this.emitter.emit("deleteSuccefull");
-          this.$emit("LoadingDataDelete");
+          this.emitter.emit("LoadingDataDelete");
+          this.$emit("deleteSuccefull");
         }
+      } catch (error) {
+        toast.error(Resource.VN_DeleteEmpty, {
+          autoClose: 2000,
+          position: "bottom-right",
+        });
+        console.log(error);
+        this.$emit("deleteSuccefull");
       }
+        
+      
     },
   },
 };
