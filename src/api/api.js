@@ -61,7 +61,7 @@ export const put  = async(route = '', data, success, errorHandler) =>{
  * Description: Hàm xóa dữ liệu dựa trên tham số đàu vào.
  * created : tvTam (22/02/2023)
  */
-export const deleteEmployee = async(route = '', param, success, errorHandler) =>{
+export const deleteAssets = async(route = '', param, success, errorHandler) =>{
     return await Axios.delete(API + route +`/${param}`).then((response) =>success(response)).catch((error) => errorHandler(error));
 }
 
@@ -69,7 +69,7 @@ export const deleteEmployee = async(route = '', param, success, errorHandler) =>
  * Description: Hàm xóa hàng loạt dữ liệu dựa trên tham số đàu vào.
  * created : tvTam (22/02/2023)
  */
- export const deleteMultiEmployee = async(route = '', params, errorHandler) =>{
+ export const deleteMultiAssets = async(route = '', params, errorHandler) =>{
     let result = true;
     for (let param of params){
         await Axios.delete(API + route +`/${param}`).catch((error) => {errorHandler(error); result = false});

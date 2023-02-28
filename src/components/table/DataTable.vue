@@ -2,7 +2,7 @@
   <table class="table__assets">
     <tr class="header__table weight700">
       <th class="first__column center input_checkbox" ref="checkBoxAll">
-        <input type="checkbox" />
+        <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
       </th>
       <th class="center" style="width: 50px">STT</th>
       <th style="min-width: 150px">Mã tài sản</th>
@@ -18,7 +18,9 @@
       </th>
     </tr>
     <tbody>
-      <item-table class="item__table"
+      <item-table
+        :stateIsAll="stateAll"
+        @changeDataSelect="changeDataId"
         v-for="(item, index) in listData.data"
         :key="item.fixed_asset_id"
         :dataItem="item"
@@ -76,14 +78,15 @@
       <td class="The-actions center" style="width: auto"></td>
     </tr>
   </table>
-  <the-loading :hidden = isReloadData />
+  <the-loading :hidden="isReloadData" />
+  <the-loading hidden />
 </template>
 
 <script>
 import ItemTable from "./ItemTable.vue";
 import { getByFilter } from "@/api/api";
 import Resource from "@/resource/Resource";
-import TheLoading from '../Loading/TheLoading.vue';
+import TheLoading from "../Loading/TheLoading.vue";
 export default {
   components: { ItemTable, TheLoading },
   async created() {
@@ -91,16 +94,18 @@ export default {
   },
   data() {
     return {
+      stateAll: false,
       listData: [],
       priorityFilter: {
         pageNumber: 1,
-        pageSize: 20,
+        pageSize: 5,
         txtSearch: "",
         DepartmentId: null,
         AssetCategoryId: null,
       },
       listpageNumber: [],
-      isReloadData:false,
+      isReloadData: false,
+      listIdSelection: [],
     };
   },
   methods: {
@@ -126,7 +131,6 @@ export default {
           this.listData = response.data;
           this.HideNumberPage();
           this.isReloadData = true;
-
         },
         () => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -149,7 +153,7 @@ export default {
         this.listpageNumber = ["1", "2", "...", 4];
       }
     },
-   /**
+    /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
      * Chọn lại trang load lại giá trí trên table
@@ -158,7 +162,70 @@ export default {
       this.priorityFilter.pageNumber = numberPage;
       this.LoadDataTable();
     },
+
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * lấy ra id của phần từ được chọn lưu vào mảng
+     */
+    changeDataId(id) {
+      if (id[1]) {
+        this.listIdSelection.push(id[0]);
+      } else {
+        this.listIdSelection = this.listIdSelection.filter(
+          (item) => item !== id[0]
+        );
+      }
+      if (this.listIdSelection.length === this.listData.data.length) {
+        this.stateAll = true;
+      } else {
+        this.stateAll = false;
+      }
+      console.log(this.listIdSelection);
+    },
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * xóa tất cả phần tử được chọn
+     */
+    ClearData() {
+      this.listIdSelection = [];
+    },
+
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * chọn tất cả
+     */
+    SelectAll() {
+      this.listIdSelection = [];
+      this.listData.data.forEach((element) => {
+        this.listIdSelection.push(element.fixed_asset_id);
+      });
+
+    },
+
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * trạng thái bỏ chọn tất cả hoặc chọn tất cả
+     */
+    IsCheckAll() {
+      if (!this.stateAll) {
+        this.SelectAll();
+      } else {
+        this.ClearData();
+        console.log(this.listIdSelection);
+      }
+    },
   },
+  // watch: {
+  //   listIdSelection(old,state) {
+  //     console.log(old);
+  //     console.log(state);
+  //   },
+  //   immediate:true
+  // },
 };
 </script>
 

@@ -1,0 +1,117 @@
+.messing button {
+    padding: 6px 16px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: transparent;
+    cursor: pointer;
+
+}
+
+.messing {
+    z-index: 10000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.16);
+}
+
+.messing__content {
+    position: relative;
+    background-color: #FFF;
+    min-width: 444px;
+    width: 444px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+
+}
+
+.messing__body {
+    padding: 32px;
+}
+
+/* icon error */
+.icon__message .icon__error {
+    background: url(../../../assets/img/Sprites.64af8f61.svg) no-repeat -598px -463px;
+}
+
+
+.message__title {
+    overflow: auto;
+    max-height: 400px;
+    margin-bottom: 32px;
+    padding-left: 16px;
+    padding-top: 12px;
+}
+
+
+/* erro  list btn*/
+.footer__error {
+    align-items: center;
+    justify-content: center;
+}
+
+.footer__error .btnError__close {
+
+    color: #fff;
+    background-color: #2ca01c;
+
+}
+
+/* cảnh báo  list btn*/
+.footer__warning {
+    align-items: center;
+    justify-content: end;
+    flex-direction: row-reverse;
+}
+
+.footer__warning .btnWarn__close {
+
+    color: #000;
+    border: 1px solid #000;
+
+}
+
+
+
+/* thông báo  list btn*/
+.footer__mesage {
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.footer__mesage .footer__left {
+    width: 60%;
+}
+
+.footer__mesage .footer__left .btnWarn__close {
+
+    color: #000;
+    border: 1px solid #000;
+
+}
+
+.footer__mesage .footer__right {
+    flex-direction: row-reverse;
+    width: 40%;
+    margin-left: 30px;
+}
+
+.footer__mesage .footer__right .btnWarn__Yes {
+
+    color: #fff;
+    background-color: #2ca01c;
+    margin-left: 10px;
+
+}
+
+.footer__mesage .footer__right .btnWarn__close {
+
+    color: #000;
+    border: 1px solid #000;
+
+}

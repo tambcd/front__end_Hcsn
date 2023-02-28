@@ -12,19 +12,28 @@
 @import url(./components/dialog/main__dialog.css);
 @import url(./components/combobox.css);
 @import url(./components/loading.css);
-.container{
+@import url(./components/message/message.css);
+
+.container {
     height: 100vh;
     width: 100vw;
-    margin: 0;  
+    margin: 0;
     font-size: 13px;
     overflow: hidden;
-    font-family: MISA__Medium;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     padding: 0;
     font-size: 13px;
-    
+
 }
-.backgrsvg{
+
+.backgrsvg {
     background-image: url(../assets/icon/qlts-icon.svg);
     cursor: pointer;
 }
 
+a {
+    text-decoration: none
+}
+.flex{
+    display: flex;
+}

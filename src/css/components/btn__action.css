@@ -4,15 +4,17 @@
     border-radius: 3px;
     border: none;
     cursor: pointer;
+    background-color: transparent;
     
     /* display: none; */
 
 
 }
 .btn__edit{
-    
  background-position:  -156px -68px;
- margin-right: 10px;
+ margin-left: 22px;
+ float: left;
+ width: 40px;
 }
 .btn__nhanban{
     background-position: -244px -112px;

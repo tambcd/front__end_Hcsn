@@ -47,6 +47,7 @@
   <div class="table">
     <data-table />
   </div>
+  <dialog-message :typeMessage="3" titleMessage="bạn có muốn xóa không ?" />
 </template>
 
 <script>
@@ -55,9 +56,10 @@ import TheInput from "@/components/input/TheInput.vue";
 import TheCombobox from "@/components/combobox/TheCombobox.vue";
 import { get } from "@/api/api.js";
 import Resource from "@/resource/Resource";
+import DialogMessage from '@/components/DialogMessage/DialogMessage.vue';
 
 export default {
-  components: { DataTable, TheInput, TheCombobox },
+  components: { DataTable, TheInput, TheCombobox, DialogMessage },
   async created() {
     /**
      * Author: TVTam

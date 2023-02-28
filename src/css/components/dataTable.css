@@ -29,16 +29,15 @@
 }
 .The-actions {
   height: 39px;
-  width: 77px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   right: 0px;
   position: sticky;
+  /* background-color: #ffffff; */
 
 }
 .The-actions button{
   display: block;
+  
+  
 }
 
 .Last_row {
@@ -55,5 +54,8 @@
 
 }
 .item__table:hover{
+  background-color: #d1edf4;
+}
+.row__selected {
   background-color: #d1edf4;
 }

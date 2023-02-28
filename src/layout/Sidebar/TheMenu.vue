@@ -1,25 +1,36 @@
 <template>
-  <div class="the__menu">
-    <div class="menu-item__home">
-      <div class="menu-item-home__icon backgrsvg" />
-    </div>
-    <div class="menu-item" >
-        <button v-for="item in OptionMenu" :key="item.ItemID" class="menu-item__all" :class="item.itemBg" >
-      <router-link
-        :to="item.path"
-      >
-          <div class="icon24 backgrsvg" :class="item.item_icon" />
-      </router-link>
-        </button>
-    </div>
+  <div class="the__menu" :class="{'the__menu__mini':isMenuMini}">
+      <menu-item
+      :isTypeMenu="isMenuMini"
+       v-for="item in OptionMenu" :key="item.ItemID"
+        :positionIcon="item.item_icon"
+        :content="item.ItemTxt"
+        :isHeader="item.isheader ?? false"
+        :isBottom="item.isbottom?? false"
+        :seletionItem="item.ItemID ==selectItem"
+        :isRouter="item.path ?? '' "
+        @click="SelectItemMenu(item.ItemID)"
+      />
   </div>
 </template>
 
 <script>
+import MenuItem from "./MenuItem.vue";
 export default {
+  components: { MenuItem },
   data() {
     return {
+      isMenuMini:false,
+      selectItem:1,
       OptionMenu: [
+        {
+          ItemID: 0,
+          ItemTxt: "MISA QLTS",
+          item_icon: "menu-item-home__icon",
+          itemBg: "menu-item-overview",
+          path: "/home",
+          isheader: true,
+        },
         {
           ItemID: 1,
           ItemTxt: "Tổng quan",
@@ -69,8 +80,34 @@ export default {
           itemBg: "menu-item-repost",
           path: "/",
         },
+        {
+          ItemID: 8,
+          ItemTxt: "Thu gọn",
+          item_icon: "botton__menu",
+          itemBg: "menu-item-repost",
+          isbottom: true,
+        },
       ],
     };
+  },
+  methods: {
+     /**
+     * Author: TVTam
+     * created : tvTam (27/02/2023)
+     * chọn phần tử trên sidebar
+     */
+    SelectItemMenu(data){
+      if(data !== 8){
+
+        this.selectItem = data
+      }
+      else{
+        this.isMenuMini = !this.isMenuMini
+        this.$emit('ChangetypeMenu', this.isMenuMini)
+      }
+      
+      
+    }
   },
 };
 </script>

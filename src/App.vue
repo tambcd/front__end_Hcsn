@@ -1,8 +1,8 @@
 <template>
-  <div className="container">
-    <the-menu />
+  <div class="container">
+    <the-menu @ChangetypeMenu = "ChangeMenu"/>
 
-    <div className="the__body">
+    <div class="the__body" :class="{'the__body__mini' : isTypeMenu }">
       <the-header />
       <the-body />
     </div>
@@ -12,18 +12,34 @@
 
 <script>
 import DialogAssets from './components/TheDialog/DialogAssets.vue';
+import TheMenu from './layout/Sidebar/TheMenu.vue';
 import TheBody from "./layout/TheBody.vue";
 import TheHeader from "./layout/TheHeader.vue";
-import TheMenu from "./layout/TheMenu.vue";
 
 export default {
   name: "App",
   components: {
-    TheMenu,
     TheHeader,
     TheBody,
     DialogAssets,
+    TheMenu,
   },
+  data() {
+    return {
+      isTypeMenu:false
+    }
+  },
+  methods: {
+    /**
+     * Author: TVTam
+     * created : tvTam (27/02/2023)
+     * thay đổi size của sidebar
+     */
+    ChangeMenu(e){
+      this.isTypeMenu =e
+    }
+  },
+  
 };
 </script>
 

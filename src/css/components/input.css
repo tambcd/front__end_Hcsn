@@ -5,7 +5,6 @@
 }
 input[type="text"]
 {
-    font-family: MISA__Regular;
     font-weight: 400;
     font-size: 14px;
 }
@@ -20,9 +19,7 @@ input[type="text"]
 }
 
 .content__input {
-    font-family: MISA__Bold;
     font-weight: 500;
-    font-size: 14;
 }
 
 .input__icon__sreach {
@@ -46,7 +43,6 @@ input[type="text"]
 }
 
 ::placeholder{
-    font-family: MISA__Italic;
     font-weight: 400;
     font-size: 14px;
 }
