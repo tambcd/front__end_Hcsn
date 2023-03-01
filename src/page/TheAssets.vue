@@ -39,18 +39,21 @@
         class="btn-export icon36 button-icon backgrsvg"
         @click="Export()"
       ></button>
-      <button class="btn__delete icon36 button-icon backgrsvg" @click="DeleteAssets()"></button>
+      <button
+        class="btn__delete icon36 button-icon backgrsvg"
+        @click="DeleteAssets()"
+      ></button>
     </div>
   </div>
   <div class="table">
-    <data-table  @updateListId = updateListIdDelete />
+    <data-table @updateListId="updateListIdDelete" />
   </div>
   <dialog-message
     :listIdAsset="listIdDelete"
     :typeMessage="2"
     titleMessage="bạn có muốn xóa không ?"
     v-show="isMessageDelete"
-    @deleteSuccefull = ReLoadingDataDelete
+    @deleteSuccefull="ReLoadingDataDelete"
   />
 </template>
 
@@ -77,11 +80,13 @@ export default {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
         this.departments = response.data;
       },
-      () => {
+      (erro) => {
         // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
         toast.error(Resource.VN_ErroData, {
-            autoClose: 2000,position :'bottom-right'
-          });
+          autoClose: 2000,
+          position: "top-center",
+        });
+        console.log(erro);
       }
     );
     /**
@@ -95,39 +100,24 @@ export default {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
         this.assetCategorys = response.data;
       },
-      () => {
+      (erro) => {
         // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
         toast.error(Resource.VN_ErroData, {
-            autoClose: 2000,position :'bottom-right'
-          });
+          autoClose: 2000,
+          position: "top-center",
+        });
+         console.log(erro);
       }
     );
-    /**
-     * Author: TVTam
-     * created : tvTam (22/02/2023)
-     * Lấy dữ liệu loại tài sản
-     */
-    await get(
-      "AssetCategorys",
-      (response) => {
-        // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
-        this.assetCategorys = response.data;
-      },
-      () => {
-        // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-        toast.error(Resource.VN_ErroData, {
-            autoClose: 2000,position :'bottom-right'
-          });
-      }
-    );
+   
   },
   data() {
     return {
-      isMessageDelete:false,
+      isMessageDelete: false,
       departments: [],
       assetCategorys: [],
       dataAssets: [],
-      listIdDelete:null
+      listIdDelete: null,
     };
   },
   methods: {
@@ -137,7 +127,7 @@ export default {
      * @ hàm : Gửi sự kiên mở dialog btn thêm mới sang component Dialog
      */
     ShowDialog() {
-      this.emitter.emit("showDialog");
+      this.emitter.emit("showDialog",{dataAsset:null, typeDialog:1});
     },
 
     /**
@@ -152,48 +142,47 @@ export default {
         () => {
           window.open("https://localhost:7115/api/v1/Assets/Export");
           toast.success(Resource.VN_ExportSucces, {
-            autoClose: 2000,position :'bottom-right'
+            autoClose: 2000,
+            position: "bottom-right",
           });
         },
         () => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
           toast.error(Resource.VN_ExportErro, {
-            autoClose: 2000,position :'bottom-right'
+            autoClose: 2000,
+            position: "bottom-right",
           });
         }
       );
     },
 
     /**
-     * Description:  xóa 
+     * Description:  xóa
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
-    DeleteAssets(){
-       this.isMessageDelete = true;
-      
+    DeleteAssets() {
+      this.isMessageDelete = true;
     },
-     /**
+    /**
      * Description:  cập nhập id chọn tại table
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
 
-  updateListIdDelete(e){
-    this.listIdDelete = e
-  },
+    updateListIdDelete(e) {
+      this.listIdDelete = e;
+    },
 
-   /**
+    /**
      * Description: Load lại data khi xóa
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
-    ReLoadingDataDelete(){
+    ReLoadingDataDelete() {
       this.isMessageDelete = false;
-    }
-
+    },
   },
-
 };
 </script>
 

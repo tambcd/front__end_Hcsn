@@ -92,7 +92,7 @@ export default {
   components: { ItemTable, TheLoading },
   async created() {
     this.listIdSelection = new Set()
-    this.LoadDataTable(1);
+    await this.LoadDataTable(1);
   },
   data() {
     return {
@@ -111,6 +111,7 @@ export default {
     };
   },
   mounted() {
+    /**tải lại data khi thực hiện xóa */
       this.emitter.on("LoadingDataDelete", () => {
       this.LoadDataTable(1);
     });
@@ -141,12 +142,14 @@ export default {
           this.HideNumberPage();
           this.isReloadData = true;
         },
-        () => {
+        (erro) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
            toast.error(Resource.VN_ErroData, {
               autoClose: 2000,
               position: "top-center",
             });
+            console.log(erro);
+            this.isReloadData = true;
         }
       );
     },

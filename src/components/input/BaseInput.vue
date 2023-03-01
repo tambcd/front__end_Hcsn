@@ -42,24 +42,31 @@
 <script>
 export default {
   props: {
+    ///kiểu input số
     iconNumber: {
       defaulf: true,
     },
+    //kiểu định dạng tiền
     money: {
       default: false,
     },
+
     disabledInput:{
       default:false
     },
+    //kiểu 
     typeInput: {
       default: "text",
     },
+    //icon trái
     iconLeft: {
       defaulf: false,
     },
+    //icon phải
     iconRight: {
       defaulf: false,
     },
+    // place input
     contentInput: {
       typeof: String,
       default: "",
@@ -67,9 +74,11 @@ export default {
     heightInput: {
       defaulf: "35",
     },
+    // chiều rộng
     widthInput: {
       defaulf: "179",
     },
+    // nhãn của input
     titleInput: {
       defaulf: " ",
     },
@@ -79,9 +88,16 @@ export default {
     marginInput: {
       defaulf: "0px",
     },
+    // định dạng căn lề chữ
     textalignInput: {
       default: "left",
     },
+    valueInputFisrt:{
+      default:""
+    }
+  },
+  mounted() {
+    this.valueInput = this.valueInputFisrt;
   },
   data() {
     return {
@@ -187,6 +203,14 @@ export default {
 
           return strRev;
         }
+  },
+  watch: {
+    valueInput(value){
+          this.$emit("sendValueInput",value)
+    },
+    valueInputFisrt(value){
+      this.valueInput= value
+    }
   },
 
 };

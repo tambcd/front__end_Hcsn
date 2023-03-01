@@ -1,24 +1,26 @@
 <template>
-  <div class="dialog-model" v-if="ShowHideDialog">
+  <div class="dialog-model" v-if="showHideDialog">
     <div class="dialog-content">
       <div class="dialog-main">
         <div class="dialog-header">
-          <div class="dialog-header-tilte weight700">Thêm tài sản</div>
+          <div class="dialog-header-tilte weight700">{{contentForm}}</div>
           <div
             class="dialog-header-close icon24 backgrsvg"
-            @click="() => (ShowHideDialog = false)"
+            @click="() => (showHideDialog = false)"
           ></div>
         </div>
         <div class="dialog-body">
           <div class="item-multiple">
             <div class="item-code item-left">
               <the-input
+                :valueInputFisrt= asset.fixed_asset_code
                 heightInput="35px"
                 widthInput="100%"
                 contentInput="TS0001"
                 titleInput="Mã tài sản"
                 required="True"
                 marginInput="8px"
+                @sendValueInput ="(e)=>{this.asset.fixed_asset_code = e}"
               />
             </div>
             <div class="item-name item-right">
@@ -192,17 +194,58 @@
 <script>
 import TheCombobox from "../combobox/BaseCombobox.vue";
 import TheInput from "../input/BaseInput.vue";
+import { getNewAssetsCode } from "@/api/api.js";
+import { toast } from "vue3-toastify";
+import Resource from "@/resource/Resource";
+import MISAEnum from "@/enums/enums"
+
+
 export default {
   created() {
-    this.emitter.on("showDialog", () => {
-      this.ShowHideDialog = true;
+    this.emitter.on("showDialog", (data) => {
+      if (data.typeDialog === MISAEnum.stateDialog.add) {
+        this.addNewEmployee()
+        this.contentForm = Resource.VN_Add
+      }
+      else if(data.typeDialog === MISAEnum.stateDialog.update ){
+          this.contentForm = Resource.VN_update
+      }
+      else if(data.typeDialog === MISAEnum.stateDialog.replication){
+         this.contentForm = Resource.VN_Add
+      }
+      this.showHideDialog = true;     
+
     });
   },
   components: { TheInput, TheCombobox },
   data() {
     return {
-      ShowHideDialog: false,
+      contentForm:"Thêm tài sản",
+      showHideDialog: false,
+      asset: {
+        fixed_asset_code: "",
+        fixed_asset_name: "",
+      },
     };
+  },
+  methods: {
+    async addNewEmployee() {
+      await getNewAssetsCode(
+        "Assets/NewEmployeeCode",
+        (response) => {
+          // Trường hợp thành công gán giá trị cho  AssetCode
+          this.asset.fixed_asset_code = response.data;
+        },
+        (erro) => {
+          // Trường hợp thất bại thì hiển thị toastMessage lỗi và và gán lại AssetCode = ""
+          toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,
+            position: "top-center",
+          });
+          console.log(erro);
+        }
+      );
+    },
   },
 };
 </script>

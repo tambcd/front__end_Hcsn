@@ -1,12 +1,19 @@
-export const MISAEnum = {
+ const MISAEnum = {
     /**kiểu của form nhập liệu 
-     * @ 1 : thêm
-     * @ 2 : sửa 
+     * @ add =  1 : thêm
+     * @ update = 2 : sửa 
+     * @ Replication = 2 : nhan bản 
      * */ 
     stateDialog : {
-        Add :1, 
-        update:2 
+        add :1, 
+        update:2 ,
+        replication:3
     },
+    /**kiểu của form nhập liệu 
+     * @ delete =  1 : xóa
+     * @ erro = 2 : cảnh báo 
+     * 
+     * */ 
     typeMessage:{
         delete:1,
         erro:2
@@ -14,3 +21,4 @@ export const MISAEnum = {
     }
     
 }
+export default MISAEnum;

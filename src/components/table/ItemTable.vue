@@ -27,14 +27,15 @@
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
-      <button class="btn__edit btn__action backgrsvg"></button>
-      <button class="btn__nhanban btn__action backgrsvg"></button>
+      <button class="btn__edit btn__action backgrsvg" @click="updateAsset(dataItem)"></button>
+      <button class="btn__nhanban btn__action backgrsvg" @click="replicationAsset(dataItem)"></button>
     </td>
   </tr>
 </template>
 
 <script>
 import { FormatMoney } from "../../assets/js/Format";
+
 export default {
   props: {
     indexItemTable: {
@@ -57,12 +58,13 @@ export default {
     /**
      * create by : MF1270
      * create day : 19/02/2023
-     * ham : Đảo ngược chuỗi
+     * ham : định dạng tiền
      */
 
     FormatMoney(dataFormat) {
       return FormatMoney(dataFormat);
     },
+
     sendCheckEmp(state, id) {
       if (state) {
         this.ItemSelect[0] = id;
@@ -73,6 +75,22 @@ export default {
       }
       this.$emit("changeDataSelect", this.ItemSelect);
     },
+      /**
+     * create by : MF1270
+     * create day : 1/03/2023
+     * ham : gửi data sửa tài sản lên form
+     */
+    updateAsset(itemAsset){
+        this.emitter.emit("showDialog",{dataAsset:itemAsset, typeDialog:2});
+    },
+      /**
+     * create by : MF1270
+     * create day : 1/03/2023
+     * ham : gửi data nhân bản tài sản lên form
+     */
+    replicationAsset(itemAsset){
+        this.emitter.emit("showDialog",{dataAsset:itemAsset, typeDialog:3});
+    }
   },
   watch: {
     stateIsAll(state) {
