@@ -5,13 +5,18 @@
         class="menu-item__all menu-item-overview"
         :class="{ menu__select: seletionItem }"
       >
-        <div class="menu-item___icon" :class="{ 'combobox__button__right': isTypeMenu && isBottom }"> 
-          <div
-            class="backgrsvg icon36"
-            :class="positionIcon"
-            v-if="isHeader"
-          ></div>
-          <div class="backgrsvg icon24" :class="positionIcon" v-else></div>
+        <div
+          class="menu-item___icon"
+          :class="{ combobox__button__right: isTypeMenu && isBottom }"
+        >
+          <BaseTooltip position="right" :tooltipText="content" :display="isTypeMenu && !isBottom">
+            <div
+              class="backgrsvg icon36"
+              :class="positionIcon"
+              v-if="isHeader"
+            ></div>
+            <div class="backgrsvg icon24" :class="positionIcon" v-else></div>
+          </BaseTooltip>
         </div>
         <div class="menu__content" v-if="!isTypeMenu">{{ content }}</div>
       </div>

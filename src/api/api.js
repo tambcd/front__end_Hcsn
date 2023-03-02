@@ -1,10 +1,6 @@
 import Axios from 'axios';
 
-
 const API = 'https://localhost:7115/api/v1/';
-
-
-
 
 /**
  * Description: Hàm để get dữ liệu không tham số. 

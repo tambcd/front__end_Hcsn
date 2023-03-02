@@ -9,7 +9,7 @@
       />
 
       <the-combobox
-        dataShow="fixed_asset_category_name"
+        dataContent="fixed_asset_category_name"
         :DataCombobox="assetCategorys"
         keyData="fixed_asset_category_id"
         contentComboxbox="Loại tài sản"
@@ -21,7 +21,7 @@
       />
 
       <the-combobox
-        dataShow="department_name"
+        dataContent="department_name"
         :DataCombobox="departments"
         keyData="department_id"
         contentComboxbox="Bộ phận sử dụng"
