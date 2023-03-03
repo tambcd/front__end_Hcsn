@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import DialogAssets from './components/TheDialog/DialogAssets.vue';
+import DialogAssets from '@/components/dialog/DialogAssets.vue';
 import TheMenu from './layout/Sidebar/TheMenu.vue';
 import TheBody from "./layout/TheBody.vue";
 import TheHeader from "./layout/TheHeader.vue";

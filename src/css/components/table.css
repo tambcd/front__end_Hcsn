@@ -5,8 +5,8 @@
     background-color: aliceblue;
     box-sizing: border-box;
     overflow: auto;
-    border: 1px solid ;
-}
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .16)
+  }
 .table::-webkit-scrollbar{
     width: 7px;
     

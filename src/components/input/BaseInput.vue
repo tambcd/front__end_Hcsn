@@ -25,8 +25,9 @@
       :disabled = disabledInput
       @focus="InputFocus()"
       @blur="OutFocus()"
-      v-model="valueInput"
+      v-model="valueInput" v-if="typeInput!='date'"
     />
+
     <button
       class="combobox-icon__right backgrsvg"
       v-if="iconRight"
@@ -102,7 +103,7 @@ export default {
   data() {
     return {
       focusInput: false,
-      valueInput: "",
+      valueInput: '',
       IscheckEmpty: false,
     };
   },
@@ -214,7 +215,16 @@ export default {
   },
 
 };
-</script>
+</script >
 
-<style>
+<style scope>
+.dateInput{
+  width: 100%;
+}
+.mx-input{
+  height: 36px !important;
+}
+.mx-input:hover, .mx-input:focus{
+  border-color: #5DC748 !important;
+}
 </style>

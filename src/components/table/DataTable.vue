@@ -10,13 +10,13 @@
       <th style="min-width: 150px">Loại tài sản</th>
       <th style="min-width: 150px">Bộ phận sử dụng</th>
       <th class="right" style="min-width: 50px">Số lượng</th>
-      <th class="right" style="width: 150px">Nguyên giá</th>
-      <th class="right" style="width: 150px">
+      <th class="right" style="min-width: 150px">Nguyên giá</th>
+      <th class="right" style="min-width: 150px">
       <BaseTooltipTable :isInline="true" tooltipContent="Giá trị hoa mòn năm " :show="true">
         <span>HM/KH lũy kế</span>
       </BaseTooltipTable>
       </th>
-      <th class="right" style="width: 150px">Giá trị còn lại</th>
+      <th class="right" style="min-width: 150px">Giá trị còn lại</th>
       <th style="min-width: 100px" class="The-actions center header-actions">
         Chức năng
       </th>

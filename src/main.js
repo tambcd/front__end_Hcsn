@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import {requiredComponents} from './globalComponents'
 import 'vue3-toastify/dist/index.css';
+import 'vue-datepicker-next/index.css';
+
 
 
 

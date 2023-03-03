@@ -1,6 +1,7 @@
 <template>
   <div class="combobox" @keydown.enter="ShowhideItemCombobox()">
     <the-input
+      :valueInputFisrt="dataCombobox"
       :iconLeft="iconComboboxLeft"
       heightInput="35px"
       widthInput="100%"
@@ -11,6 +12,7 @@
       :iconRight="iconComboboxRight"
       @ShowBodyItem="ShowhideItemCombobox"
       @HideBodyItem="HideItemCombobox"
+      
     />
 
     <div class="body-combobox" v-if="showHideItem">
@@ -64,12 +66,19 @@ export default {
     requiredCombobox: {
       default: true,
     },
+    valueSelect: {
+      default: "",
+    },
   },
   data() {
     return {
       showHideItem: false,
-      isSelection:""
+      isSelection: "",
+      dataCombobox: "",
     };
+  },
+  created() {
+    this.dataCombobox = this.valueSelect;
   },
   methods: {
     /**
@@ -93,10 +102,10 @@ export default {
      * create day : 19/02/2023
      * ham : đóng combobox
      */
-    selectItem(idItem){
-      console.log(idItem)
-      this.HideItemCombobox()
-    }
+    selectItem(idItem) {
+      this.dataCombobox = idItem[this.dataContent]
+      this.HideItemCombobox();
+    },
   },
 };
 </script>

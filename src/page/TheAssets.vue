@@ -63,11 +63,10 @@ import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
 import { get } from "@/api/api.js";
 import Resource from "@/resource/Resource";
-import DialogMessage from "@/components/DialogMessage/DialogMessage.vue";
 import { toast } from "vue3-toastify";
 
 export default {
-  components: { DataTable, TheInput, TheCombobox, DialogMessage },
+  components: { DataTable, TheInput, TheCombobox },
   async created() {
     /**
      * Author: TVTam

@@ -1,51 +1,51 @@
 @font-face{
     font-family: MISA__Black;
-    src: url(../../assets/font/GoogleSans-Black.otf);
+    src: url(../../assets/font/Roboto-Black.ttf);
 }
 
 @font-face {
     font-family: MISA__BlackItalic;
-    src: url(../../assets/font/GoogleSans-BlackItalic.otf);
+    src: url(../../assets/font/Roboto-BlackItalic.ttf);
 }
 @font-face {
     font-family: MISA__Bold;
-    src: url(../../assets/font/GoogleSans-Bold.otf);
+    src: url(../../assets/font/Roboto-Bold.ttf);
 }
 @font-face {
     font-family: MISA__BoldItalic;
-    src: url(../../assets/font/GoogleSans-BoldItalic.otf);
+    src: url(../../assets/font/Roboto-BoldItalic.ttf);
 }
 @font-face {
     font-family: MISA__Italic;
-    src: url(../../assets/font/GoogleSans-Italic.otf);
+    src: url(../../assets/font/Roboto-Italic.ttf);
 }
 @font-face {
     font-family: MISA__Light;
-    src: url(../../assets/font/GoogleSans-Light.otf);
+    src: url(../../assets/font/Roboto-Light.ttf)
 }
 @font-face {
     font-family: MISA__LightItalic;
-    src: url(../../assets/font/GoogleSans-LightItalic.otf);
+    src: url(../../assets/font/Roboto-LightItalic.ttf);
 }
 @font-face {
     font-family: MISA__Medium;
-    src: url(../../assets/font/GoogleSans-Medium.otf);
+    src: url(../../assets/font/Roboto-Medium.ttf);
 }
 @font-face {
     font-family: MISA__MediumItalic;
-    src: url(../../assets/font/GoogleSans-MediumItalic.otf);
+    src: url(../../assets/font/Roboto-MediumItalic.ttf);
 }
 @font-face {
     font-family: MISA__Regular;
-    src: url(../../assets/font/GoogleSans-Regular.otf);
+    src: url(../../assets/font/Roboto-Regular.ttf);
 }
 @font-face {
     font-family: MISA__Thin;
-    src: url(../../assets/font/GoogleSans-Thin.otf);
+    src: url(../../assets/font/Roboto-Thin.ttf);
 }
 @font-face {
     font-family: MISA__ThinItalic;
-    src: url(../../assets/font/GoogleSans-ThinItalic.otf);
+    src: url(../../assets/font/Roboto-ThinItalic.ttf);
 }
 .weight700{
     font-weight: 700;

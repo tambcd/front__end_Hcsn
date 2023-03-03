@@ -27,8 +27,14 @@
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
+      <BaseTooltipTable :isInline="true" tooltipContent="Sửa" :show="true">       
+
       <button class="btn__edit btn__action backgrsvg" @click="updateAsset(dataItem)"></button>
+      </BaseTooltipTable>
+            <BaseTooltipTable :isInline="true" tooltipContent="Nhân bản" :show="true">       
+
       <button class="btn__nhanban btn__action backgrsvg" @click="replicationAsset(dataItem)"></button>
+            </BaseTooltipTable>
     </td>
   </tr>
 </template>

@@ -1,5 +1,5 @@
 <template>  
-    <span tooltip="" :flow="position" v-if="!display"><slot></slot></span>
+    <span tooltip="" :flow="position" v-if="!displayTooltip"><slot></slot></span>
     <span :tooltip="tooltipText" :flow="position" v-else><slot></slot></span>
  
 </template>
@@ -17,8 +17,9 @@ export default {
       default: "down",
       type: String,
     },
-    display:{
-      default:false
+    displayTooltip:{
+      default:true,
+      type:Boolean
     }
   },
 

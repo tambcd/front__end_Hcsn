@@ -9,14 +9,15 @@
           class="menu-item___icon"
           :class="{ combobox__button__right: isTypeMenu && isBottom }"
         >
-          <BaseTooltip position="right" :tooltipText="content" :display="isTypeMenu && !isBottom">
+        <base-tooltip position="right" :tooltipText="content" :displayTooltip="isTypeMenu && !isBottom">
+        
             <div
               class="backgrsvg icon36"
               :class="positionIcon"
               v-if="isHeader"
             ></div>
             <div class="backgrsvg icon24" :class="positionIcon" v-else></div>
-          </BaseTooltip>
+        </base-tooltip>
         </div>
         <div class="menu__content" v-if="!isTypeMenu">{{ content }}</div>
       </div>
@@ -25,7 +26,9 @@
 </template>
 
 <script>
+import BaseTooltip from '@/components/tooltip/BaseTooltip.vue';
 export default {
+  components: { BaseTooltip },
   props: {
     isTypeMenu: {
       default: true,

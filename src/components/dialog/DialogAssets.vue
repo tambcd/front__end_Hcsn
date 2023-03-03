@@ -1,6 +1,7 @@
 <template>
-  <div class="dialog-model" v-if="showHideDialog" >
-    <div class="dialog-content" >
+
+  <div class="dialog-model" v-if="showHideDialog">
+    <div class="dialog-content">
       <div class="dialog-main">
         <div class="dialog-header">
           <div class="dialog-header-tilte weight700">{{ contentForm }}</div>
@@ -9,7 +10,7 @@
             @click="() => (showHideDialog = false)"
           ></div>
         </div>
-        <div class="dialog-body" >
+        <div class="dialog-body">
           <div class="item-multiple">
             <div class="item-code item-left" ref="assetsCode">
               <the-input
@@ -47,6 +48,7 @@
           <div class="item-multiple">
             <div class="item-code item-left">
               <the-combobox
+                :valueSelect="asset.department_code"
                 :DataCombobox="departments"
                 dataContent="department_code"
                 keyData="department_id"
@@ -76,6 +78,7 @@
           <div class="item-multiple">
             <div class="item-code item-left">
               <the-combobox
+                :valueSelect="asset.fixed_asset_category_code"
                 :DataCombobox="assetCategorys"
                 keyData="fixed_asset_category_id"
                 dataContent="fixed_asset_category_code"
@@ -149,7 +152,7 @@
                 typeInput="number"
                 heightInput="35px"
                 widthInput="100%"
-                titleInput="số năm sử dụng"
+                titleInput="Số năm sử dụng"
                 contentInput="1"
                 required="True"
                 marginInput="8px"
@@ -223,41 +226,30 @@
           </div>
           <div class="item-multiple">
             <div class="item-code item-left">
-              <the-input
-                :valueInputFisrt="asset.purchase_date"
-                typeInput="date"
-                heightInput="35px"
-                widthInput="100%"
-                titleInput="Ngày mua"
-                contentInput="1"
-                required="True"
-                marginInput="8px"
-                @sendValueInput="
-                  (e) => {
-                    this.asset.purchase_date = e;
-                  }
-                "
-              />
+              <label for="" class="content-input">
+                Ngày mua <span style="color: red">*</span></label
+              >
+              <DatePicker
+                v-model:value="asset.purchase_date"
+                format="DD/MM/YYYY"
+                class="date-input"
+              ></DatePicker>
+             
             </div>
             <div class="item-code item-left">
-              <the-input
-                :valueInputFisrt="asset.production_year"
-                typeInput="date"
-                heightInput="35px"
-                widthInput="100%"
-                titleInput="Ngày bắt đầu sử dụng"
-                required="True"
-                marginInput="8px"
-                @sendValueInput="
-                  (e) => {
-                    this.asset.production_year = e;
-                  }
-                "
-              />
+              <label for="" class="content-input">
+                Ngày bắt đầu sử dụng <span style="color: red">*</span></label
+              >
+              <DatePicker
+                v-model:value="asset.production_year"
+                format="DD/MM/YYYY"
+                class="date-input"
+              ></DatePicker>
             </div>
             <div class="item-code item-left"></div>
           </div>
         </div>
+        
         <div class="dialog__footer">
           <button class="btn-add btn">Lưu</button>
           <button class="btn__cancel btn">Hủy</button>
@@ -353,7 +345,7 @@ export default {
     };
   },
   mounted() {
-            // this.$refs["assetsCode"].querySelector("input").focus();
+    // this.$refs["assetsCode"].querySelectorAll("input").focus();
   },
   methods: {
     /**
@@ -451,6 +443,15 @@ export default {
   },
 };
 </script>
-
-<style>
+<style scope>
+.date-input {
+  width: 260px !important;
+  height: 36px !important;
+  margin-top: 8px;
+  border: none  !important;
+  
+}
+.mx-datepicker-popup{
+  z-index: 10000000 !important;
+}
 </style>

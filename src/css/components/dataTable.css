@@ -17,7 +17,6 @@
   padding: 0;
   outline: 0.5px solid #c7c7c7;
   height: 34px;
-  font-size: 12px;
   background-color: #f5f5f5;
   position: sticky;
   top: 0;
@@ -43,7 +42,7 @@
 .Last_row {
   background-color: #FFFFFF;
   left: 0px;
-  bottom: -2px;
+  bottom: 0;
   position: sticky;
 }
 .drop-paging{
