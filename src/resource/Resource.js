@@ -14,6 +14,8 @@ export  const Resource = {
     VN_DeleteEmpty : "Vui lòng chọn tài sản",   
     /**Xóa thất bại */ 
     VN_DeleteFailure : "Xóa thất bại vui lòng thử lại", 
+    /**Thêm thất bại */ 
+    VN_AddFailure : "Xóa thất bại vui lòng thử lại", 
     /**Xuất khẩu thành công */
     VN_ExportSucces:"Xuất khẩu thành công" ,
     /**Xuất khẩu thất bại*/
@@ -22,6 +24,7 @@ export  const Resource = {
     VN_Add:"Thêm tài sản",
     /**Sửa tài sản */
     VN_update:"Sửa tài sản", 
+    
 }
 
 

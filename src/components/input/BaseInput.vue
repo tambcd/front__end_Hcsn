@@ -8,7 +8,7 @@
       'toolbar-filter-text-focus': focusInput,
       'toolbar-filter-text-erro': IscheckEmpty && required,
       'hide-icon': iconNumber,
-      'disabledInput':disabledInput
+      disabledInput: disabledInput,
     }"
     :style="{
       width: widthInput,
@@ -16,16 +16,22 @@
       'margin-top': marginInput,
     }"
   >
-    <div class="input-icon-sreach icon24 backgrsvg" :class="{input__icon__filter : iconLeft && iconRight}" v-if="iconLeft"></div>
+    <div
+      class="input-icon-sreach icon24 backgrsvg"
+      :class="{ input__icon__filter: iconLeft && iconRight }"
+      v-if="iconLeft"
+    ></div>
     <input
+      :ref="refInput"
       :type="typeInput"
       class="input"
       :placeholder="contentInput"
       :style="{ 'text-align': textalignInput }"
-      :disabled = disabledInput
+      :disabled="disabledInput"
       @focus="InputFocus()"
       @blur="OutFocus()"
-      v-model="valueInput" v-if="typeInput!='date'"
+      v-model="valueInput"
+      v-if="typeInput != 'date'"
     />
 
     <button
@@ -43,6 +49,10 @@
 <script>
 export default {
   props: {
+    
+    refInput:{
+      default : ""
+    },
     ///kiểu input số
     iconNumber: {
       defaulf: true,
@@ -52,10 +62,10 @@ export default {
       default: false,
     },
 
-    disabledInput:{
-      default:false
+    disabledInput: {
+      default: false,
     },
-    //kiểu 
+    //kiểu
     typeInput: {
       default: "text",
     },
@@ -93,9 +103,9 @@ export default {
     textalignInput: {
       default: "left",
     },
-    valueInputFisrt:{
-      default:""
-    }
+    valueInputFisrt: {
+      default: "",
+    },
   },
   mounted() {
     this.valueInput = this.valueInputFisrt;
@@ -103,7 +113,7 @@ export default {
   data() {
     return {
       focusInput: false,
-      valueInput: '',
+      valueInput: "",
       IscheckEmpty: false,
     };
   },
@@ -116,7 +126,9 @@ export default {
     InputFocus() {
       this.focusInput = true;
       this.IscheckEmpty = false;
-      this.valueInput = this.valueInput.replaceAll('.', '')
+      if (this.valueInput.length > 3) {
+        this.valueInput = this.valueInput.replaceAll(".", "");
+      }
     },
     /**
      * create by : MF1270
@@ -125,12 +137,12 @@ export default {
      */
     OutFocus() {
       this.focusInput = false;
-      this.hideBodyCombobox()
+      this.hideBodyCombobox();
       if (this.valueInput === "") {
         this.IscheckEmpty = true;
       } else {
         this.IscheckEmpty = false;
-        this.FormatData()
+        this.FormatData();
       }
     },
     /**
@@ -146,7 +158,7 @@ export default {
      * create day : 18/02/2023
      * ham : ẩn hiện danh sách combobox
      */
-    hideBodyCombobox(){
+    hideBodyCombobox() {
       this.$emit("HideBodyItem");
     },
     isNumberKey(e) {
@@ -161,7 +173,6 @@ export default {
      * ham : định dạng tiền
      */
     FormatData() {
-      
       if (this.money) {
         var result = "";
         let a = Math.floor(this.valueInput.length / 3);
@@ -186,7 +197,7 @@ export default {
           }
           result = this.reverse(result);
         }
-        this.valueInput =  result;
+        this.valueInput = result;
       }
     },
 
@@ -196,35 +207,35 @@ export default {
      * ham : Đảo ngược chuỗi
      */
     reverse(string) {
-          var strRev = "";
+      var strRev = "";
 
-          for (var i = string.length - 1; i >= 0; i--) {
-            strRev += string[i];
-          }
+      for (var i = string.length - 1; i >= 0; i--) {
+        strRev += string[i];
+      }
 
-          return strRev;
-        }
+      return strRev;
+    },
   },
   watch: {
-    valueInput(value){
-          this.$emit("sendValueInput",value)
+    valueInput(value) {
+      this.$emit("sendValueInput", value);
     },
-    valueInputFisrt(value){
-      this.valueInput= value
-    }
+    valueInputFisrt(value) {
+      this.valueInput = value;
+    },
   },
-
 };
 </script >
 
 <style scope>
-.dateInput{
+.dateInput {
   width: 100%;
 }
-.mx-input{
+.mx-input {
   height: 36px !important;
 }
-.mx-input:hover, .mx-input:focus{
-  border-color: #5DC748 !important;
+.mx-input:hover,
+.mx-input:focus {
+  border-color: #5dc748 !important;
 }
 </style>

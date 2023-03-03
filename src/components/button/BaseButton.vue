@@ -36,7 +36,7 @@ export default {
     border: #1aa4c8 1px solid;
     color: #1aa4c8;
 }
-.btn__color:focus{
+.btn__color:focus {
     background-color: #0cc3f0 ;
 }
 .btn__color:hover{

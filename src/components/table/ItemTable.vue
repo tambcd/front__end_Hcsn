@@ -1,11 +1,17 @@
 <template>
-  <tr class="item-table" :class="{ row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id) }">
+  <tr @dblclick="updateAsset(dataItem)"
+    class="item-table"
+    :class="{
+      row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id),
+    }"
+  >
     <td class="center first-column input-checkbox" style="width: 50px">
       <input
         type="checkbox"
         v-model="ischeckItem"
-        :checked= stateIsAll.has(dataItem.fixed_asset_id)
-        @change="sendCheckEmp(ischeckItem, dataItem.fixed_asset_id)"      />
+        :checked="stateIsAll.has(dataItem.fixed_asset_id)"
+        @change="sendCheckEmp(ischeckItem, dataItem.fixed_asset_id)"
+      />
     </td>
     <td class="center" style="width: 50px">{{ this.indexItemTable }}</td>
     <td style="width: 150px">{{ dataItem.fixed_asset_code }}</td>
@@ -27,14 +33,15 @@
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
-      <BaseTooltipTable :isInline="true" tooltipContent="Sửa" :show="true">       
+      <button
+        class="btn__edit btn__action backgrsvg"
+        @click="updateAsset(dataItem)"
+      ></button>
 
-      <button class="btn__edit btn__action backgrsvg" @click="updateAsset(dataItem)"></button>
-      </BaseTooltipTable>
-            <BaseTooltipTable :isInline="true" tooltipContent="Nhân bản" :show="true">       
-
-      <button class="btn__nhanban btn__action backgrsvg" @click="replicationAsset(dataItem)"></button>
-            </BaseTooltipTable>
+      <button
+        class="btn__nhanban btn__action backgrsvg"
+        @click="replicationAsset(dataItem)"
+      ></button>
     </td>
   </tr>
 </template>
@@ -52,8 +59,7 @@ export default {
       default: false,
     },
   },
-  created() {
-  },
+  created() {},
   data() {
     return {
       ischeckItem: false,
@@ -81,29 +87,26 @@ export default {
       }
       this.$emit("changeDataSelect", this.ItemSelect);
     },
-      /**
+    /**
      * create by : MF1270
      * create day : 1/03/2023
      * ham : gửi data sửa tài sản lên form
      */
-    updateAsset(itemAsset){
-        this.emitter.emit("showDialog",{dataAsset:itemAsset, typeDialog:2});
+    updateAsset(itemAsset) {
+      this.emitter.emit("showDialog", { dataAsset: itemAsset, typeDialog: 2 });
     },
-      /**
+    /**
      * create by : MF1270
      * create day : 1/03/2023
      * ham : gửi data nhân bản tài sản lên form
      */
-    replicationAsset(itemAsset){
-        this.emitter.emit("showDialog",{dataAsset:itemAsset, typeDialog:3});
-    }
+    replicationAsset(itemAsset) {
+      this.emitter.emit("showDialog", { dataAsset: itemAsset, typeDialog: 3 });
+    },
   },
   watch: {
     stateIsAll(state) {
-      if(state === true)
-      this.ischeckItem = state;
-    
-    
+      if (state === true) this.ischeckItem = state;
     },
   },
 };

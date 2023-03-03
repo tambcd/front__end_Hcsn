@@ -18,6 +18,16 @@
         delete:1,
         erro:2
 
+    },
+    /** Key combobox 
+     * @ deparment =  1 : phòng ban
+     * @ category = 2 : loại tài sản 
+     * 
+     * */ 
+    typeCombobox:{
+        deparment:"department",
+        category:"fixed_asset_category"
+
     }
     
 }

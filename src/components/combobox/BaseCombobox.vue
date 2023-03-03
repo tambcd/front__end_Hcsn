@@ -19,7 +19,7 @@
       <div
         class="item-combobox"
         v-for="item in DataCombobox"
-        :key="item[keyData]"
+        :key="item[keyData + '_id']"
         @click="selectItem(item)"
       >
         {{ item[dataContent] }}
@@ -105,6 +105,7 @@ export default {
     selectItem(idItem) {
       this.dataCombobox = idItem[this.dataContent]
       this.HideItemCombobox();
+      this.emitter.emit("dataComboboxSendForm",[idItem,this.keyData]);
     },
   },
 };
