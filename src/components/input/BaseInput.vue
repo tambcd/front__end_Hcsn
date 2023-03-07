@@ -20,9 +20,9 @@
       class="input-icon-sreach icon24 backgrsvg"
       :class="{ input__icon__filter: iconLeft && iconRight }"
       v-if="iconLeft"
+      @click="btnSearch()"
     ></div>
     <input
-      :ref="refInput"
       :type="typeInput"
       class="input"
       :placeholder="contentInput"
@@ -50,9 +50,7 @@
 export default {
   props: {
     
-    refInput:{
-      default : ""
-    },
+   
     ///kiểu input số
     iconNumber: {
       defaulf: true,
@@ -215,6 +213,14 @@ export default {
 
       return strRev;
     },
+        /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham :sự kiện tìm kiếm txt
+     */
+    btnSearch(){
+      this.$emit("searchInput");
+    }
   },
   watch: {
     valueInput(value) {

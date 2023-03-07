@@ -26,7 +26,7 @@
           <TheButton
             btnName="Có"
             class="btnWarn-Yes"
-            @click="deleteAssets()"
+            @click="btnYes()"
             btnType="2"
           />
           <TheButton
@@ -69,9 +69,6 @@
 
 <script>
 import TheButton from "../button/BaseButton.vue";
-import { deleteMultiAssets } from "@/api/api";
-import { Resource } from "@/resource/Resource";
-import { toast } from "vue3-toastify";
 
 export default {
   props: {
@@ -102,7 +99,7 @@ export default {
      * Last Edited: 28/02/2023  *
      */
     closeThisMessage() {
-      this.$emit("deleteSuccefull");
+      this.$emit("hideMessage");
     },
     /**
      * Author: TVTam
@@ -120,47 +117,17 @@ export default {
     closeThisDialogAndSave() {
       this.$emit("CloseThisDialogAndSave");
     },
-
     /**
-     * thực hiện xóa và xóa nhiều
+     * đống ý
      * Author: TVTam
      * Last Edited: 28/02/2023
      */
-    async deleteAssets() {
-      try {
-        // xóa nhiều thì mảng xóa đc cập nhập data
-        let a = await deleteMultiAssets(
-          "Assets",
-          Array.from(this.listIdAsset),
-          (error) => {
-            // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-            toast.error(Resource.VN_DeleteFailure, {
-              autoClose: 2000,
-              position: "bottom-right",
-            });
-            console.log(error);
-          }
-        );
-        if (a) {
-          toast.success(Resource.VN_DeleteSuccess, {
-            autoClose: 2000,
-            position: "bottom-right",
-          });
-          // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-          this.emitter.emit("LoadingDataDelete");
-          this.$emit("deleteSuccefull");
-        }
-      } catch (error) {
-        toast.error(Resource.VN_DeleteEmpty, {
-          autoClose: 2000,
-          position: "bottom-right",
-        });
-        console.log(error);
-        this.$emit("deleteSuccefull");
-      }
-        
-      
-    },
+    btnYes(){
+       this.$emit("btnYesMessage");
+
+    }
+
+  
   },
 };
 </script>

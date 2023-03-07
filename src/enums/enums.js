@@ -28,6 +28,16 @@
         deparment:"department",
         category:"fixed_asset_category"
 
+    },
+     /** kiểu validate
+     * @ empty =  1 : để trống
+     * @ cost = 2 : nguyên giá lớn hơn giá trị hao mòn
+     * 
+     * */ 
+     typeValidate:{
+        empty:1,
+        cost:2
+
     }
     
 }

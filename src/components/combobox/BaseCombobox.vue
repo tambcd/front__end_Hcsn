@@ -105,7 +105,7 @@ export default {
     selectItem(idItem) {
       this.dataCombobox = idItem[this.dataContent]
       this.HideItemCombobox();
-      this.emitter.emit("dataComboboxSendForm",[idItem,this.keyData]);
+      this.$emit('selectItemCombobox',idItem ,this.keyData);
     },
   },
 };

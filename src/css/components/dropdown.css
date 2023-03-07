@@ -2,12 +2,14 @@
     background-color: #ffffff;
     border-radius: 2.5px;
     border: 1px solid #afafaf;    
-    position: relative;
+    box-shadow: 0 3px 16px rgba(23,27,42,0.24)
+   
 }
 
     
     
 .header-dropdown{
+    position: relative;
     width: 100%;
     height: 35px;
     overflow: hidden;
@@ -36,7 +38,7 @@
 }
 
 .dropdown-icon-right {
-    background-position: -72px -338px;
+    background-position: -28px -338px;
     width: 7px;
     height: 5px;
     margin-right: 12px;
@@ -45,10 +47,11 @@
     
 }
 .body-dropdown{  
+    box-shadow: 0 3px 16px rgba(23,27,42,0.24);
     background-color: #ffffff;  
-    width: 100%;
+    width: 60px;
     position: absolute;
-    top: 35px;
+    top: -116px;
     z-index: 10;
     max-height: 200px;
     overflow-x: auto;
@@ -71,9 +74,10 @@
 }
 .item-dropdown:hover{
     cursor: pointer;
-    background-color: rgba(80,184,60,0.1);
+    background-color: #e3f9de;
 }
-.show{
-    display: block;
+.is-selection{
+    background-color: #e3f9de;
+    color: #3ae917;
 }
 

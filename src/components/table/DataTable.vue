@@ -12,9 +12,13 @@
       <th class="right" style="min-width: 50px">Số lượng</th>
       <th class="right" style="min-width: 150px">Nguyên giá</th>
       <th class="right" style="min-width: 150px">
-      <BaseTooltipTable :isInline="true" tooltipContent="Giá trị hoa mòn năm " :show="true">
-        <span>HM/KH lũy kế</span>
-      </BaseTooltipTable>
+        <BaseTooltipTable
+          :isInline="true"
+          tooltipContent="Giá trị hoa mòn năm "
+          :show="true"
+        >
+          <span>HM/KH lũy kế</span>
+        </BaseTooltipTable>
       </th>
       <th class="right" style="min-width: 150px">Giá trị còn lại</th>
       <th style="min-width: 100px" class="The-actions center header-actions">
@@ -42,19 +46,25 @@
           <div class="drop-paging dropdown">
             <div class="header-dropdown">
               <div class="dropdown-left">
-                <div class="dropdown-value">20</div>
+                <div class="dropdown-value">{{this.priorityFilter.pageSize}}</div>
               </div>
-              <button class="dropdown-icon__right backgrsvg"></button>
+              <button class="dropdown-icon-right backgrsvg" @click="showHideDrop()"></button>
             </div>
-            <div class="body__dropdown" hidden>
-              <div class="item-dropdown">10</div>
-              <div class="item-dropdown">40</div>
-              <div class="item-dropdown">50</div>
-              <div class="item-dropdown">100</div>
+            <div class="body-dropdown" :hidden= isDropd>
+              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 20}" @click="setPageSize(20)">20</div>
+              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 50}" @click="setPageSize(50)">50</div>
+              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 80}"  @click="setPageSize(80)">80</div>
+              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 100}" @click="setPageSize(100)">100</div>
             </div>
           </div>
           <div class="number-page">
-            <button class="btn-page icon20 btn-back">{{ "<" }}</button>
+            <button
+              :disabled="priorityFilter.pageNumber == 1"
+              class="btn-page icon20 btn-back"
+              @click="changePage(1)"
+            >
+              {{ "<" }}
+            </button>
             <button
               class="btn-page icon20 btn__item"
               :class="{
@@ -67,7 +77,11 @@
               {{ itemPage }}
             </button>
 
-            <button class="btn-page icon20 btn-new">
+            <button
+              class="btn-page icon20 btn-new"
+              :disabled="priorityFilter.pageNumber == this.listData.totalPage"
+              @click="changePage(22)"
+            >
               {{ ">" }}
             </button>
           </div>
@@ -91,15 +105,17 @@ import { getByFilter } from "@/api/api";
 import Resource from "@/resource/Resource";
 import TheLoading from "../Loading/TheLoading.vue";
 import { toast } from "vue3-toastify";
+import MISAEnum from "@/enums/enums";
 
 export default {
   components: { ItemTable, TheLoading },
   async created() {
-    this.listIdSelection = new Set()
+    this.listIdSelection = new Set();
     await this.LoadDataTable(1);
   },
   data() {
     return {
+      isDropd:true,
       stateAll: false,
       listData: [],
       priorityFilter: {
@@ -116,8 +132,33 @@ export default {
   },
   mounted() {
     /**tải lại data khi thực hiện xóa */
-      this.emitter.on("LoadingDataDelete", () => {
+    this.emitter.on("LoadingDataDelete", () => {
       this.LoadDataTable(1);
+    });
+
+    this.emitter.on("showLoading", (state) => {
+      this.isReloadData = state;
+    });
+    // tải lại dữ liêu sau khi thêm - sửa
+    this.emitter.on("ReloadData", (state) => {
+      if (state === MISAEnum.stateDialog.add) {
+        this.LoadDataTable(1);
+      } else {
+        this.LoadDataTable(this.priorityFilter.pageNumber);
+      }
+    });
+    // lọc tài sản
+    this.emitter.on("filterAssets", (data) => {
+      
+      this.priorityFilter.txtSearch = data[0].toString();
+      this.priorityFilter.AssetCategoryId = data[2].toString();
+      this.priorityFilter.DepartmentId = data[1].toString();
+      try {
+        this.LoadDataTable(1);
+      } catch (error) {
+        console.log(error);
+      }
+     
     });
   },
   methods: {
@@ -143,19 +184,33 @@ export default {
         (response) => {
           // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
           this.listData = response.data;
-          this.HideNumberPage();
+          this.hideNumberPage();
           this.isReloadData = true;
         },
         (erro) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-           toast.error(Resource.VN_ErroData, {
-              autoClose: 2000,
-              position: "top-center",
-            });
-            console.log(erro);
-            this.isReloadData = true;
+          toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,
+            position: "top-center",
+          });
+          console.log(erro);
+          this.isReloadData = true;
         }
       );
+    },
+    /**
+     * Author: TVTam
+     * created : tvTam (1/03/2023)
+     * đến trang phía sau-trước
+     */
+    changePage(state) {
+      if (state == 1) {
+        this.priorityFilter.pageNumber = this.priorityFilter.pageNumber - 1;
+        this.LoadDataTable(this.priorityFilter.pageNumber);
+      } else {
+        this.priorityFilter.pageNumber = this.priorityFilter.pageNumber + 1;
+        this.LoadDataTable(this.priorityFilter.pageNumber);
+      }
     },
 
     /**
@@ -164,12 +219,15 @@ export default {
      * hiển thị số btn của phân trang
      */
 
-    HideNumberPage() {
-      if (this.listData.totalPage < 3) {
-        this.listpageNumber = ["1", "2", "3"];
+    hideNumberPage() {
+      this.listpageNumber = [];
+      if (this.listData.totalPage <= 4) {
+        for (let index = 0; index < this.listData.totalPage; index++) {
+          this.listpageNumber.push(index + 1);
+        }
       }
-      if (this.listData.totalPage > 3) {
-        this.listpageNumber = ["1", "2", "...", 4];
+      if (this.listData.totalPage > 4) {
+        this.listpageNumber = ["1", "2", "...", this.listData.totalPage];
       }
     },
     /**
@@ -192,14 +250,13 @@ export default {
         this.listIdSelection.add(id[0]);
       } else {
         this.listIdSelection.delete(id[0]);
-        
       }
       if (this.listIdSelection.size === this.listData.data.length) {
         this.stateAll = true;
       } else {
         this.stateAll = false;
       }
-      this.SendDataDelete()
+      this.SendDataDelete();
     },
     /**
      * Author: TVTam
@@ -220,7 +277,6 @@ export default {
       this.listData.data.forEach((element) => {
         this.listIdSelection.add(element.fixed_asset_id);
       });
-
     },
 
     /**
@@ -234,18 +290,36 @@ export default {
       } else {
         this.ClearData();
       }
-      this.SendDataDelete()
+      this.SendDataDelete();
     },
-   /**
+    /**
      * Author: TVTam
      * created : tvTam (1/03/2023)
      * gửi danh sách id chọn để thực hiện xóa
      */
-  SendDataDelete(){
-      this.$emit("updateListId",this.listIdSelection)
-  }
+    SendDataDelete() {
+      this.$emit("updateListId", this.listIdSelection);
+    },
+  /**
+     * Author: TVTam
+     * created : tvTam (1/03/2023)
+     * ẩn hiện droplist
+     */
+
+    showHideDrop(){
+      this.isDropd = !this.isDropd
+    },
+    /**
+     * Author: TVTam
+     * created : tvTam (1/03/2023)
+     * đổi số bản ghi trên trang
+     */
+    setPageSize(size){
+      this.priorityFilter.pageSize = size;
+      this.showHideDrop()
+      this.LoadDataTable(1)
+    }
   },
- 
 };
 </script>
 

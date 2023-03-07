@@ -51,7 +51,7 @@
 /* erro  list btn*/
 .footer-error {
     align-items: center;
-    justify-content: center;
+    justify-content: end;
 }
 
 .footer-error .btnError-close {

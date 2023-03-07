@@ -11,9 +11,8 @@
         </div>
         <div class="dialog-body">
           <div class="item-multiple">
-            <div class="item-code item-left" >
-              <the-input
-                :refInput="'assetsCode'"
+            <div class="item-code item-left" ref="fixed_asset_code"  >
+              <the-input   
                 :valueInputFisrt="asset.fixed_asset_code"
                 heightInput="35px"
                 widthInput="100%"
@@ -28,7 +27,7 @@
                 "
               />
             </div>
-            <div class="item-name item-right">
+            <div class="item-name item-right" ref="fixed_asset_name">
               <the-input
                 :valueInputFisrt="asset.fixed_asset_name"
                 heightInput="35px"
@@ -46,8 +45,9 @@
             </div>
           </div>
           <div class="item-multiple">
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="department_code">
               <the-combobox
+                @selectItemCombobox="(data,key)=>{getDataComboboxItem(data,key)}"
                 :valueSelect="asset.department_code"
                 :DataCombobox="departments"
                 dataContent="department_code"
@@ -59,7 +59,7 @@
                 requiredCombobox="true"
               />
             </div>
-            <div class="item-name item-right">
+            <div class="item-name item-right" ref="department_name">
               <the-input
                 :valueInputFisrt="asset.department_name"
                 disabledInput="true"
@@ -76,8 +76,9 @@
             </div>
           </div>
           <div class="item-multiple">
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="fixed_asset_category_code">
               <the-combobox
+                @selectItemCombobox="(data,key)=>{getDataComboboxItem(data,key)}"
                 :valueSelect="asset.fixed_asset_category_code"
                 :DataCombobox="assetCategorys"
                 keyData="fixed_asset_category"
@@ -89,8 +90,9 @@
                 requiredCombobox="true"
               />
             </div>
-            <div class="item-name item-right">
+            <div class="item-name item-right" ref="fixed_asset_category_name">
               <the-input
+              
                 :valueInputFisrt="asset.fixed_asset_category_name"
                 disabledInput="true"
                 heightInput="35px"
@@ -107,7 +109,7 @@
             </div>
           </div>
           <div class="item-multiple">
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="quantity">
               <the-input
                 :valueInputFisrt="asset.quantity"
                 iconNumber="false"
@@ -126,7 +128,7 @@
                 "
               />
             </div>
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="cost">
               <the-input
                 :valueInputFisrt="asset.cost"
                 :money="true"
@@ -145,7 +147,7 @@
                 "
               />
             </div>
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="life_time">
               <the-input
                 :valueInputFisrt="asset.life_time"
                 iconNumber="false"
@@ -166,7 +168,7 @@
             </div>
           </div>
           <div class="item-multiple">
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="depreciation_rate">
               <the-input
                 :valueInputFisrt="asset.depreciation_rate"
                 iconNumber="false"
@@ -185,11 +187,11 @@
                 "
               />
             </div>
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="depreciation_value">
               <the-input
                 :valueInputFisrt="asset.depreciation_value"
+                :money="true"
                 iconNumber="false"
-                typeInput="number"
                 heightInput="35px"
                 widthInput="100%"
                 titleInput="Giá trị hao mòn năm"
@@ -204,7 +206,7 @@
                 "
               />
             </div>
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="tracked_year">
               <the-input
                 :valueInputFisrt="asset.tracked_year"
                 iconNumber="false"
@@ -225,7 +227,7 @@
             </div>
           </div>
           <div class="item-multiple">
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="purchase_date">
               <label for="" class="content-input">
                 Ngày mua <span style="color: red">*</span></label
               >
@@ -235,7 +237,7 @@
                 class="date-input"
               ></DatePicker>
             </div>
-            <div class="item-code item-left">
+            <div class="item-code item-left" ref="production_year">
               <label for="" class="content-input">
                 Ngày bắt đầu sử dụng <span style="color: red">*</span></label
               >
@@ -261,15 +263,24 @@
       </div>
     </div>
   </div>
+  <dialog-message
+    :typeMessage="typeMessage"
+    :titleMessage="ContentMessage"
+    v-if="isMessage"
+    @hideMessage="()=>{
+      this.isMessage = false
+    }"
+  />
 </template>
 
 <script>
 import TheCombobox from "../combobox/BaseCombobox.vue";
 import TheInput from "../input/BaseInput.vue";
-import { getNewAssetsCode, get, post } from "@/api/api.js";
+import { getNewAssetsCode, get, post, put } from "@/api/api.js";
 import { toast } from "vue3-toastify";
 import Resource from "@/resource/Resource";
 import MISAEnum from "@/enums/enums";
+import { FormatMoney } from "@/assets/js/Format";
 
 export default {
   async created() {
@@ -319,23 +330,33 @@ export default {
     this.emitter.on("showDialog", (data) => {
       this.dataAssignment(data.typeDialog, data.dataAsset);
       this.showHideDialog = true;
+     
     });
   },
   components: { TheInput, TheCombobox },
   data() {
     return {
+      typeMessage :1,
+      isMessage:false,
+      ContentMessage:'',
+      isValidate: {
+        stateValide: true,
+        isfocus: "",
+      },
+      typeDialog: 1,
       departments: [],
       assetCategorys: [],
       contentForm: "Thêm tài sản",
       showHideDialog: false,
       asset: {
+        fixed_asset_id: "0d4aa7be-2106-11ed-82ee-0259e1bc84a2",
         fixed_asset_code: "",
         fixed_asset_name: "",
-        department_id: "",
         department_code: "",
+        department_id: "",
         department_name: "",
-        fixed_asset_category_id: "",
         fixed_asset_category_code: "",
+        fixed_asset_category_id: "",
         fixed_asset_category_name: "",
         purchase_date: new Date(),
         cost: 0,
@@ -349,28 +370,50 @@ export default {
     };
   },
   mounted() {
-    // this.$nextTick(function(){
+    
+    // this.setFocus("fixed_asset_code")      
+    //  this.$refs[refFocus].queryseletor.focus();  
 
-    //   this.$refs.assetsCode.focus();
-    // })
-
-    /**tải lại data khi thực hiện xóa */
-    this.emitter.on("dataComboboxSendForm", (data) => {
-      if (data[1] === MISAEnum.typeCombobox.deparment) {
-
-        this.asset.department_code = data[0][MISAEnum.typeCombobox.deparment + "_code"];
-        this.asset.department_name = data[0][MISAEnum.typeCombobox.deparment + "_name"];
-        this.asset.department_id = data[0][MISAEnum.typeCombobox.deparment + "_id"];
-      } else {
-        this.asset.fixed_asset_category_code = data[0][MISAEnum.typeCombobox.category + "_code"];
-        this.asset.fixed_asset_category_name = data[0][MISAEnum.typeCombobox.category + "_name"];
-        this.asset.fixed_asset_category_id = data[0][MISAEnum.typeCombobox.category + "_id"];
-        this.asset.life_time = data[0]['life_time'];
-        this.asset.depreciation_rate = Number(data[0]['depreciation_rate'].toFixed(2));
-      }
-    });
   },
   methods: {
+
+    /**
+     * create by : MF1270
+     * create day : 1/03/2023
+     * ham : set focus
+     */
+    setFocus(refFocus){      
+     
+        console.log(this.$refs[refFocus]);
+      //  this.$refs[refFocus].queryseletor.focus();   
+    },
+      /**
+     * create by : MF1270
+     * create day : 1/03/2023
+     * ham : lấy dữ liệu combobox 
+     */
+    getDataComboboxItem(data,key){
+         if (key === MISAEnum.typeCombobox.deparment) {
+        this.asset.department_code =
+          data[MISAEnum.typeCombobox.deparment + "_code"];
+        this.asset.department_name =
+          data[MISAEnum.typeCombobox.deparment + "_name"];
+        this.asset.department_id =
+          data[MISAEnum.typeCombobox.deparment + "_id"];
+      } else {
+        this.asset.fixed_asset_category_code =
+          data[MISAEnum.typeCombobox.category + "_code"];
+        this.asset.fixed_asset_category_name =
+          data[MISAEnum.typeCombobox.category + "_name"];
+        this.asset.fixed_asset_category_id =
+          data[MISAEnum.typeCombobox.category + "_id"];
+        this.asset.life_time = data["life_time"];
+        this.asset.depreciation_rate = Number(
+          data["depreciation_rate"].toFixed(2)
+        );
+      }
+    },
+
     /**
      * create by : MF1270
      * create day : 1/03/2023
@@ -398,15 +441,19 @@ export default {
      * create day : 1/03/2023
      * ham : gán giá trị lên form nhập liệu
      */
-     dataAssignment(typeDialog, data) {
+    dataAssignment(typeDialog, data) {
       if (typeDialog === MISAEnum.stateDialog.update) {
+        this.typeDialog = 2;
         this.contentForm = Resource.VN_update;
         this.asset.fixed_asset_code = data.fixed_asset_code;
+        this.asset.fixed_asset_id = data.fixed_asset_id;
         this.byData(data);
       } else if (typeDialog === MISAEnum.stateDialog.add) {
+        this.typeDialog = 1;
         this.contentForm = Resource.VN_Add;
-         this.newAssetCode();
+        this.newAssetCode();
       } else if (typeDialog === MISAEnum.stateDialog.replication) {
+        this.typeDialog = 1;
         this.contentForm = Resource.VN_Add;
         this.newAssetCode();
         this.byData(data);
@@ -440,7 +487,6 @@ export default {
      * ham : Gắn dữ liệu lên form
      */
     byData(data) {
-      
       this.asset.fixed_asset_name = data.fixed_asset_name;
       this.asset.department_id = data.department_id;
       this.asset.department_code = data.department_code;
@@ -448,26 +494,90 @@ export default {
       this.asset.fixed_asset_category_id = data.fixed_asset_category_id;
       this.asset.fixed_asset_category_code = data.fixed_asset_category_code;
       this.asset.fixed_asset_category_name = data.fixed_asset_category_name;
-      this.asset.purchase_date = data.purchase_date;
+      this.asset.purchase_date = new Date(data.purchase_date);
       this.asset.cost = data.cost;
       this.asset.quantity = data.quantity;
       this.asset.depreciation_value = data.depreciation_value;
       this.asset.depreciation_rate = data.depreciation_rate;
       this.asset.tracked_year = data.tracked_year;
       this.asset.life_time = data.life_time;
-      this.production_year = data.production_year;
+      this.asset.production_year =new Date(data.production_year) ;
     },
+
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : valide
+     */
+    isValidateEmpty() {
+      for (var key in this.asset) {
+        if (
+          typeof this.asset[key] == "string" &&
+          this.asset[key].trim() == ""
+        ) {
+          this.isValidate.stateValide = true;
+          this.isValidate.isfocus = key;
+          return;
+        }
+        if (this.asset[key] == null) {
+          this.isValidate.stateValide = true;
+          this.isValidate.isfocus = key;
+          return;
+        }
+        this.isValidate.stateValide = false;
+        this.isValidate.isfocus = "";
+      }
+    },
+
     /**
      * create by : MF1270
      * create day : 03/03/2023
      * ham : thêm - sửa tài sản
      */
-    async saveAsset() {
-      this.moneyToNumber(this.asset.cost);
-      console.log(this.asset);
-      // this.moneyToNumber(this.asset.cost);
-      // this.moneyToNumber(this.asset.cost);
-      // this.moneyToNumber(this.asset.cost);
+    saveAsset() {
+
+      this.isValidateEmpty();
+      if (this.isValidate.stateValide) {
+        this.typeMessage = 1;
+        this.ContentMessage = Resource.MapNameAsset[this.isValidate.isfocus] + Resource.VN_EmptyData;
+        this.isMessage = true;
+        return;
+      }
+      this.asset.cost = this.moneyToNumber(this.asset.cost);
+      this.asset.depreciation_value = this.moneyToNumber(
+        this.asset.depreciation_value
+      );
+      if(this.asset.cost < this.asset.depreciation_value) {
+        this.isValidate.isfocus = "depreciation_value"
+        this.typeMessage = 1;
+        this.ContentMessage = Resource.MapNameAsset[this.isValidate.isfocus] + Resource.VN_NumberSS;
+        this.isMessage = true;
+         return;
+      }
+
+      try {
+          this.emitter.emit("showLoading",false);
+
+        if (this.typeDialog === MISAEnum.stateDialog.add) {
+          this.addAsset();
+        } else {
+          this.updateAsset();
+        }
+      } catch (error) {
+        toast.error(Resource.VN_AddFailure, {
+          autoClose: 2000,
+          position: "top-center",
+        });
+        console.log(error);
+        this.emitter.emit("showLoading",true);
+      }
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : thêm
+     */
+    async addAsset() {
       await post(
         `Assets`,
         this.asset,
@@ -477,44 +587,84 @@ export default {
             autoClose: 2000,
             position: "bottom-right",
           });
-          this.showHideDialog = false
+          this.showHideDialog = false;
           // đóng form loading
-          this.$emit("LoadingClose");
-          // cất và thêm
-          // if (this.checkSave === 1) {
-          //   this.$emit("OpenDialogContinue");
-          // }
-          // // cất
-          // else {
-          //   this.$emit("ContinueAdd");
-          // }
+          this.emitter.emit("showLoading",true);
+          this.emitter.emit("ReloadData",MISAEnum.stateDialog.add);
+         
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.\
-          toast.error(Resource.VN_, {
+          toast.error(Resource.VN_AddFailure, {
             autoClose: 2000,
             position: "top-center",
           });
           console.log(
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
+           // đóng loading
+          this.emitter.emit("showLoading",true);
 
-          // this.checkError.id = true;
-          // this.fisrtForcus();
+         
 
-          // // đóng loading
-          // this.$emit("LoadingClose");
         }
       );
     },
-    moneyToNumber(money){
+    /**
+     * sửa nhân tài sản
+     * @param : tài sản cần sửa
+     * Author: TVTam
+     * Last Edited: 5/03/2023
+     */
+    async updateAsset() {
+      await put(
+        `Assets`,
+        this.asset,
+        () => {
+          // Trường hợp thành công nhận về dữ liệu thì toast thông báo
+          toast.success(Resource.VN_UpdateSuccess, {
+            autoClose: 2000,
+            position: "bottom-right",
+          });
+          this.showHideDialog = false;
+
+          /// đóng loading
+          this.emitter.emit("showLoading",true);
+          //load lại data
+          this.emitter.emit("ReloadData",MISAEnum.stateDialog.update);
+
+        },
+        (error) => {
+          toast.error(Resource.VN_UpdateFailure, {
+            autoClose: 2000,
+            position: "top-center",
+          });
+          console.log(
+            `${error.response.data.devMsg}: ${error.response.data.erros}`
+          );
+        }
+      );
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : định dạng tiền
+     */
+    FormatMoney(dataFormat) {
+      return FormatMoney(dataFormat);
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : tiền thành số
+     */
+    moneyToNumber(money) {
       if (money.length > 3) {
-        money.replaceAll(".", "")
+        money.replaceAll(".", "");
         return Number(money.replaceAll(".", ""));
       }
       return Number(money);
-
-    }
+    },
   },
   watch: {
     showHideDialog(stateShowHide) {
@@ -522,20 +672,16 @@ export default {
         this.clearData();
       }
     },
-    'asset.cost'(data){
-      if (!this.asset.depreciation_rate) {
-        this.asset.depreciation_value =0;
-        return;
-      }      
-      this.asset.depreciation_value = Math.round(this.moneyToNumber(data)*this.asset.depreciation_rate);
+    "asset.cost"(data) {
+      this.asset.depreciation_value = this.FormatMoney(
+        (this.moneyToNumber(data) * this.asset.depreciation_rate).toFixed()
+      );
     },
-    'asset.depreciation_rate'(data){
-      if (!this.asset.depreciation_rate) {
-        this.asset.depreciation_value =0;
-        return;
-      }      
-      this.asset.depreciation_value = Math.round(this.moneyToNumber(this.asset.cost)* data);
-    }
+    "asset.depreciation_rate"(data) {
+      this.asset.depreciation_value = this.FormatMoney(
+        (this.moneyToNumber(this.asset.cost) * data).toFixed()
+      );
+    },
   },
 };
 </script>

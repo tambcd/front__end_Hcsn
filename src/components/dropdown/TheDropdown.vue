@@ -1,23 +1,17 @@
 <template>
-  <div class="toolbar-filter-dropdown-assets dropdown">
+  <div class="drop-paging dropdown">
     <div class="header-dropdown">
       <div class="dropdown-left">
-        <div
-          class="dropdown-icon-left icon24 backgrsvg"
-          :v-model="ShowIcon"
-        ></div>
-        <div class="dropdown-value">{{NameDropdown}}</div>
+        <div class="dropdown-value">20</div>
       </div>
       <button class="dropdown-icon-right backgrsvg"></button>
     </div>
-    <div class="body-dropdown" hidden>
-      <div
-        class="item-dropdown"
-        v-for="itemdropdown in ListDataDropdown"
-        :key="itemdropdown.id"
-      >
-        hello
-      </div>
+    <div class="body-dropdown">
+      <div class="item-dropdown">40</div>
+      <div class="item-dropdown">40</div>
+      <div class="item-dropdown">50</div>
+      <div class="item-dropdown">80</div>
+      <div class="item-dropdown">100</div>
     </div>
   </div>
 </template>
@@ -31,10 +25,10 @@ export default {
     ShowIcon: {
       default: true,
     },
-    NameDropdown:{
-        typeof : String,
-        default : "Tên của dropdown"
-    }
+    NameDropdown: {
+      typeof: String,
+      default: "Tên của dropdown",
+    },
   },
 };
 </script>

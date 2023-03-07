@@ -73,14 +73,12 @@
     width: 80px;
     border-radius: 4px;
     font-size: 14px;
-    font-weight: 500;
     border: unset;
     cursor: pointer;
 
 }
 .btn-add{
-    background-color: #1aa4c8;
-    color: #FFFFFF;
+    width: 125px !important ;
 }
 .btn__cancel{
     background-color: #FFFFFF;
