@@ -10,12 +10,16 @@
 
 
 }
+.actions__item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .btn__edit{
- background-position:  -156px -68px;
- margin-left: 22px;
- float: left;
+ background-position:  -146px -68px;
  width: 40px;
 }
 .btn__nhanban{
-    background-position: -244px -112px;
+    width: 40px;
+    background-position: -234px -112px;
 }

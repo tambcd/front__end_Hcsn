@@ -1,5 +1,5 @@
 <template>
-  <div class="combobox" @keydown.enter="ShowhideItemCombobox()">
+  <div class="combobox" @keydown.enter="ShowhideItemCombobox()" @keydown.down="foucustItem()">
     <the-input
       :valueInputFisrt="dataCombobox"
       :iconLeft="iconComboboxLeft"
@@ -12,11 +12,15 @@
       :iconRight="iconComboboxRight"
       @ShowBodyItem="ShowhideItemCombobox"
       @HideBodyItem="HideItemCombobox"
-      
+      @sendValueInput="
+        (e) => {
+          this.dataCombobox = e;
+        }
+      "
     />
 
     <div class="body-combobox" v-if="showHideItem">
-      <div
+      <div :ref="item[keyData + '_id']"
         class="item-combobox"
         v-for="item in DataCombobox"
         :key="item[keyData + '_id']"
@@ -103,9 +107,15 @@ export default {
      * ham : đóng combobox
      */
     selectItem(idItem) {
-      this.dataCombobox = idItem[this.dataContent]
+      this.dataCombobox = idItem[this.dataContent];
       this.HideItemCombobox();
-      this.$emit('selectItemCombobox',idItem ,this.keyData);
+      this.$emit("selectItemCombobox", idItem, this.keyData);
+    },
+  },
+  watch: {
+    dataCombobox() {
+      this.showHideItem = true;
+
     },
   },
 };

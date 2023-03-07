@@ -47,9 +47,9 @@ export  const Resource = {
         tracked_year:"Năm sử dụng",
         life_time :"Năm theo dõi ",
         production_year :"Ngày bắt đầu sử dụng "
-
-
-    }
+    },
+    VN_CancelAdd:"Bạn có muốn hủy khai báo tài sản này?",
+    VN_CancelUpdate:"Thông tin thay đổi sẽ không được cập nhập nếu bạn không lưu. Bạn có muốn lưu các thay đổi này? "
     
 }
 

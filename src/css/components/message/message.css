@@ -81,7 +81,7 @@
 /* thông báo  list btn*/
 .footer-mesage {
     align-items: center;
-    justify-content: space-between;
+    justify-content: end;
     flex-direction: row-reverse;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .footer-mesage .footer-left .btnWarn-close {
-
+        
     color: #000;
     border: 1px solid #000;
 
@@ -111,8 +111,11 @@
 }
 
 .footer-mesage .footer-right .btnWarn-close {
-
+    margin-right: 10px;
     color: #000;
     border: 1px solid #000;
 
+}
+.btnWarn-close{
+    margin-right: 10px;
 }

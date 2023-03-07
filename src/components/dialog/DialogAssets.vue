@@ -4,15 +4,17 @@
       <div class="dialog-main">
         <div class="dialog-header">
           <div class="dialog-header-tilte weight700">{{ contentForm }}</div>
-          <div
-            class="dialog-header-close icon24 backgrsvg"
-            @click="() => (showHideDialog = false)"
-          ></div>
+          <BaseTooltip position="down" tooltipText="Đóng">
+            <div
+              class="dialog-header-close icon24 backgrsvg"
+              @click="() => (showHideDialog = false)"
+            ></div>
+          </BaseTooltip>
         </div>
         <div class="dialog-body">
           <div class="item-multiple">
-            <div class="item-code item-left" ref="fixed_asset_code"  >
-              <the-input   
+            <div class="item-code item-left" ref="fixed_asset_code">
+              <the-input
                 :valueInputFisrt="asset.fixed_asset_code"
                 heightInput="35px"
                 widthInput="100%"
@@ -47,7 +49,11 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="department_code">
               <the-combobox
-                @selectItemCombobox="(data,key)=>{getDataComboboxItem(data,key)}"
+                @selectItemCombobox="
+                  (data, key) => {
+                    getDataComboboxItem(data, key);
+                  }
+                "
                 :valueSelect="asset.department_code"
                 :DataCombobox="departments"
                 dataContent="department_code"
@@ -78,7 +84,11 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="fixed_asset_category_code">
               <the-combobox
-                @selectItemCombobox="(data,key)=>{getDataComboboxItem(data,key)}"
+                @selectItemCombobox="
+                  (data, key) => {
+                    getDataComboboxItem(data, key);
+                  }
+                "
                 :valueSelect="asset.fixed_asset_category_code"
                 :DataCombobox="assetCategorys"
                 keyData="fixed_asset_category"
@@ -92,7 +102,6 @@
             </div>
             <div class="item-name item-right" ref="fixed_asset_category_name">
               <the-input
-              
                 :valueInputFisrt="asset.fixed_asset_category_name"
                 disabledInput="true"
                 heightInput="35px"
@@ -258,18 +267,29 @@
             class="btnWarn-Yes btn-save"
             btnType="2"
           />
-          <TheButton btnName="Hủy" class="btnWarn-close" btnType="1" />
+          <TheButton
+            btnName="Hủy"
+            class="btnWarn-close"
+            btnType="1"
+            @click="btnCancel()"
+          />
         </div>
       </div>
     </div>
   </div>
   <dialog-message
+    @btnYesMessageUpdate="updateAssetMessage"
+    @btnYesMessage="btnYesMessage"
+    :titleBtnNo="Không"
+    titleBtnYes="Hủy bỏ"
     :typeMessage="typeMessage"
     :titleMessage="ContentMessage"
     v-if="isMessage"
-    @hideMessage="()=>{
-      this.isMessage = false
-    }"
+    @hideMessage="
+      () => {
+        this.isMessage = false;
+      }
+    "
   />
 </template>
 
@@ -330,15 +350,14 @@ export default {
     this.emitter.on("showDialog", (data) => {
       this.dataAssignment(data.typeDialog, data.dataAsset);
       this.showHideDialog = true;
-     
     });
   },
   components: { TheInput, TheCombobox },
   data() {
     return {
-      typeMessage :1,
-      isMessage:false,
-      ContentMessage:'',
+      typeMessage: 1,
+      isMessage: false,
+      ContentMessage: "",
       isValidate: {
         stateValide: true,
         isfocus: "",
@@ -370,30 +389,26 @@ export default {
     };
   },
   mounted() {
-    
-    // this.setFocus("fixed_asset_code")      
-    //  this.$refs[refFocus].queryseletor.focus();  
-
+    // this.setFocus("fixed_asset_code")
+    //  this.$refs[refFocus].queryseletor.focus();
   },
   methods: {
-
     /**
      * create by : MF1270
      * create day : 1/03/2023
      * ham : set focus
      */
-    setFocus(refFocus){      
-     
-        console.log(this.$refs[refFocus]);
-      //  this.$refs[refFocus].queryseletor.focus();   
+    setFocus(refFocus) {
+      console.log(this.$refs[refFocus]);
+      //  this.$refs[refFocus].queryseletor.focus();
     },
-      /**
+    /**
      * create by : MF1270
      * create day : 1/03/2023
-     * ham : lấy dữ liệu combobox 
+     * ham : lấy dữ liệu combobox
      */
-    getDataComboboxItem(data,key){
-         if (key === MISAEnum.typeCombobox.deparment) {
+    getDataComboboxItem(data, key) {
+      if (key === MISAEnum.typeCombobox.deparment) {
         this.asset.department_code =
           data[MISAEnum.typeCombobox.deparment + "_code"];
         this.asset.department_name =
@@ -501,7 +516,7 @@ export default {
       this.asset.depreciation_rate = data.depreciation_rate;
       this.asset.tracked_year = data.tracked_year;
       this.asset.life_time = data.life_time;
-      this.asset.production_year =new Date(data.production_year) ;
+      this.asset.production_year = new Date(data.production_year);
     },
 
     /**
@@ -535,11 +550,12 @@ export default {
      * ham : thêm - sửa tài sản
      */
     saveAsset() {
-
       this.isValidateEmpty();
       if (this.isValidate.stateValide) {
         this.typeMessage = 1;
-        this.ContentMessage = Resource.MapNameAsset[this.isValidate.isfocus] + Resource.VN_EmptyData;
+        this.ContentMessage =
+          Resource.MapNameAsset[this.isValidate.isfocus] +
+          Resource.VN_EmptyData;
         this.isMessage = true;
         return;
       }
@@ -547,16 +563,17 @@ export default {
       this.asset.depreciation_value = this.moneyToNumber(
         this.asset.depreciation_value
       );
-      if(this.asset.cost < this.asset.depreciation_value) {
-        this.isValidate.isfocus = "depreciation_value"
+      if (this.asset.cost < this.asset.depreciation_value) {
+        this.isValidate.isfocus = "depreciation_value";
         this.typeMessage = 1;
-        this.ContentMessage = Resource.MapNameAsset[this.isValidate.isfocus] + Resource.VN_NumberSS;
+        this.ContentMessage =
+          Resource.MapNameAsset[this.isValidate.isfocus] + Resource.VN_NumberSS;
         this.isMessage = true;
-         return;
+        return;
       }
 
       try {
-          this.emitter.emit("showLoading",false);
+        this.emitter.emit("showLoading", false);
 
         if (this.typeDialog === MISAEnum.stateDialog.add) {
           this.addAsset();
@@ -569,7 +586,7 @@ export default {
           position: "top-center",
         });
         console.log(error);
-        this.emitter.emit("showLoading",true);
+        this.emitter.emit("showLoading", true);
       }
     },
     /**
@@ -589,9 +606,8 @@ export default {
           });
           this.showHideDialog = false;
           // đóng form loading
-          this.emitter.emit("showLoading",true);
-          this.emitter.emit("ReloadData",MISAEnum.stateDialog.add);
-         
+          this.emitter.emit("showLoading", true);
+          this.emitter.emit("ReloadData", MISAEnum.stateDialog.add);
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.\
@@ -602,11 +618,8 @@ export default {
           console.log(
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
-           // đóng loading
-          this.emitter.emit("showLoading",true);
-
-         
-
+          // đóng loading
+          this.emitter.emit("showLoading", true);
         }
       );
     },
@@ -629,10 +642,9 @@ export default {
           this.showHideDialog = false;
 
           /// đóng loading
-          this.emitter.emit("showLoading",true);
+          this.emitter.emit("showLoading", true);
           //load lại data
-          this.emitter.emit("ReloadData",MISAEnum.stateDialog.update);
-
+          this.emitter.emit("ReloadData", MISAEnum.stateDialog.update);
         },
         (error) => {
           toast.error(Resource.VN_UpdateFailure, {
@@ -644,6 +656,39 @@ export default {
           );
         }
       );
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : mỏ hộp thông báo hàm hủy thêm - sửa
+     */
+    btnCancel() {
+      this.isMessage = true;
+      if (this.typeDialog === MISAEnum.stateDialog.add) {
+        this.typeMessage = 2;
+        this.ContentMessage = Resource.VN_CancelAdd;
+      } else {
+        this.typeMessage = 3;
+        this.ContentMessage = Resource.VN_CancelUpdate;
+      }
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : thực hiện hủy thêm - sửa
+     */
+    btnYesMessage() {
+      this.isMessage = false;
+      this.showHideDialog = false;
+    },
+    /**
+     * create by : MF1270
+     * create day : 03/03/2023
+     * ham : thực hiện sửa
+     */
+    updateAssetMessage() {
+      this.isMessage = false;
+      this.saveAsset();
     },
     /**
      * create by : MF1270

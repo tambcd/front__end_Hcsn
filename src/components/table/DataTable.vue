@@ -46,15 +46,44 @@
           <div class="drop-paging dropdown">
             <div class="header-dropdown">
               <div class="dropdown-left">
-                <div class="dropdown-value">{{this.priorityFilter.pageSize}}</div>
+                <div class="dropdown-value">
+                  {{ this.priorityFilter.pageSize }}
+                </div>
               </div>
-              <button class="dropdown-icon-right backgrsvg" @click="showHideDrop()"></button>
+              <button
+                class="dropdown-icon-right backgrsvg"
+                @click="showHideDrop()"
+              ></button>
             </div>
-            <div class="body-dropdown" :hidden= isDropd>
-              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 20}" @click="setPageSize(20)">20</div>
-              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 50}" @click="setPageSize(50)">50</div>
-              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 80}"  @click="setPageSize(80)">80</div>
-              <div class="item-dropdown" :class="{'is-selection':priorityFilter.pageSize == 100}" @click="setPageSize(100)">100</div>
+            <div class="body-dropdown" :hidden="isDropd">
+              <div
+                class="item-dropdown"
+                :class="{ 'is-selection': priorityFilter.pageSize == 20 }"
+                @click="setPageSize(20)"
+              >
+                20
+              </div>
+              <div
+                class="item-dropdown"
+                :class="{ 'is-selection': priorityFilter.pageSize == 50 }"
+                @click="setPageSize(50)"
+              >
+                50
+              </div>
+              <div
+                class="item-dropdown"
+                :class="{ 'is-selection': priorityFilter.pageSize == 80 }"
+                @click="setPageSize(80)"
+              >
+                80
+              </div>
+              <div
+                class="item-dropdown"
+                :class="{ 'is-selection': priorityFilter.pageSize == 100 }"
+                @click="setPageSize(100)"
+              >
+                100
+              </div>
             </div>
           </div>
           <div class="number-page">
@@ -73,6 +102,7 @@
               v-for="itemPage in listpageNumber"
               :key="itemPage"
               @click="selectNumber(itemPage)"
+              :disabled="itemPage == '...'"
             >
               {{ itemPage }}
             </button>
@@ -80,7 +110,7 @@
             <button
               class="btn-page icon20 btn-new"
               :disabled="priorityFilter.pageNumber == this.listData.totalPage"
-              @click="changePage(22)"
+              @click="changePage(2)"
             >
               {{ ">" }}
             </button>
@@ -89,10 +119,10 @@
       </td>
 
       <td></td>
-      <td class="right" style="width: 50px">13</td>
-      <td class="right" style="width: 150px">249.000.000</td>
-      <td class="right" style="width: 150px">19.176.00</td>
-      <td class="right" style="width: 150px">229.284.000</td>
+      <td class="right weight700" style="width: 50px" > {{ FormatMoney(totalQuantity.toString()) }}</td>
+      <td class="right weight700" style="width: 150px"> {{ FormatMoney(totalCost.toString()) }}</td>
+      <td class="right weight700" style="width: 150px"> {{ FormatMoney(totalAtrophy.toString()) }}</td>
+      <td class="right weight700" style="width: 150px"> {{ FormatMoney((totalCost - totalAtrophy).toString()) }}</td>
       <td class="The-actions center" style="width: auto"></td>
     </tr>
   </table>
@@ -106,6 +136,8 @@ import Resource from "@/resource/Resource";
 import TheLoading from "../Loading/TheLoading.vue";
 import { toast } from "vue3-toastify";
 import MISAEnum from "@/enums/enums";
+import { FormatMoney } from "@/assets/js/Format";
+
 
 export default {
   components: { ItemTable, TheLoading },
@@ -115,7 +147,11 @@ export default {
   },
   data() {
     return {
-      isDropd:true,
+      totalAtrophy: 0,
+      totalQuantity: 0,
+      totalCost: 0,
+      valueRemaining: 0,
+      isDropd: true,
       stateAll: false,
       listData: [],
       priorityFilter: {
@@ -149,7 +185,6 @@ export default {
     });
     // lọc tài sản
     this.emitter.on("filterAssets", (data) => {
-      
       this.priorityFilter.txtSearch = data[0].toString();
       this.priorityFilter.AssetCategoryId = data[2].toString();
       this.priorityFilter.DepartmentId = data[1].toString();
@@ -158,7 +193,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-     
     });
   },
   methods: {
@@ -171,6 +205,9 @@ export default {
       this.isReloadData = false;
       this.stateAll = false;
       this.ClearData();
+      this.totalCost = 0;
+      this.totalQuantity = 0;
+      this.totalAtrophy = 0;
       await getByFilter(
         "Assets/Filter",
         {
@@ -184,6 +221,13 @@ export default {
         (response) => {
           // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
           this.listData = response.data;
+
+          this.listData.data.forEach((element) => {
+            this.totalCost += element.cost;
+            this.totalQuantity += element.quantity;
+            this.totalAtrophy += element.depreciation_value;
+          });
+          this.valueRemaining = this.totalCost - this.totalAtrophy;
           this.hideNumberPage();
           this.isReloadData = true;
         },
@@ -221,13 +265,58 @@ export default {
 
     hideNumberPage() {
       this.listpageNumber = [];
-      if (this.listData.totalPage <= 4) {
+      if (this.listData.totalPage <= 6) {
         for (let index = 0; index < this.listData.totalPage; index++) {
           this.listpageNumber.push(index + 1);
         }
       }
-      if (this.listData.totalPage > 4) {
-        this.listpageNumber = ["1", "2", "...", this.listData.totalPage];
+      if (this.listData.totalPage > 6) {
+        if (this.priorityFilter.pageNumber <= 2) {
+          this.listpageNumber = ["1", "2", "3", "...", this.listData.totalPage];
+        }
+        if (
+          this.priorityFilter.pageNumber > 2 &&
+          this.priorityFilter.pageNumber < this.listData.totalPage - 2
+        ) {
+          this.listpageNumber = [
+            "1",
+            this.priorityFilter.pageNumber - 1,
+            this.priorityFilter.pageNumber,
+            this.priorityFilter.pageNumber + 1,
+            "...",
+            this.listData.totalPage,
+          ];
+        }
+        if (this.listData.totalPage - 2 === this.priorityFilter.pageNumber) {
+          this.listpageNumber = [
+            "1",
+            "...",
+            this.priorityFilter.pageNumber - 1,
+            this.priorityFilter.pageNumber,
+            this.priorityFilter.pageNumber + 1,
+            this.listData.totalPage,
+          ];
+        }
+        if (this.listData.totalPage === this.priorityFilter.pageNumber) {
+          this.listpageNumber = [
+            "1",
+            "...",
+            this.priorityFilter.pageNumber - 1,
+            this.priorityFilter.pageNumber,
+            this.priorityFilter.pageNumber + 1,
+            this.listData.totalPage,
+          ];
+        }
+        if (this.priorityFilter.pageNumber > this.listData.totalPage - 2) {
+          this.listpageNumber = [
+            "1",
+            "...",
+            this.listData.totalPage - 3,
+            this.listData.totalPage - 2,
+            this.listData.totalPage - 1,
+            this.listData.totalPage,
+          ];
+        }
       }
     },
     /**
@@ -236,7 +325,7 @@ export default {
      * Chọn lại trang load lại giá trí trên table
      */
     selectNumber(numberPage) {
-      this.priorityFilter.pageNumber = numberPage;
+      this.priorityFilter.pageNumber = Number(numberPage);
       this.LoadDataTable(this.priorityFilter.pageNumber);
     },
 
@@ -300,25 +389,35 @@ export default {
     SendDataDelete() {
       this.$emit("updateListId", this.listIdSelection);
     },
-  /**
+    /**
      * Author: TVTam
      * created : tvTam (1/03/2023)
      * ẩn hiện droplist
      */
 
-    showHideDrop(){
-      this.isDropd = !this.isDropd
+    showHideDrop() {
+      this.isDropd = !this.isDropd;
     },
     /**
      * Author: TVTam
      * created : tvTam (1/03/2023)
      * đổi số bản ghi trên trang
      */
-    setPageSize(size){
+    setPageSize(size) {
       this.priorityFilter.pageSize = size;
-      this.showHideDrop()
-      this.LoadDataTable(1)
-    }
+      this.showHideDrop();
+      this.LoadDataTable(1);
+    },
+        /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : định dạng tiền
+     */
+
+    FormatMoney(dataFormat) {
+      return FormatMoney(dataFormat);
+    },
+
   },
 };
 </script>

@@ -15,7 +15,11 @@
       />
 
       <the-combobox
-        @selectItemCombobox="(data,key)=>{getIdCategory(data,key)}"
+        @selectItemCombobox="
+          (data, key) => {
+            getIdCategory(data, key);
+          }
+        "
         dataContent="fixed_asset_category_name"
         :DataCombobox="assetCategorys"
         keyData="fixed_asset_category"
@@ -28,7 +32,11 @@
       />
 
       <the-combobox
-      @selectItemCombobox="(data,key)=>{getIdCategory(data,key)}"
+        @selectItemCombobox="
+          (data, key) => {
+            getIdCategory(data, key);
+          }
+        "
         dataContent="department_name"
         :DataCombobox="departments"
         keyData="department"
@@ -43,19 +51,23 @@
 
     <div class="toolbar-action">
       <TheButton
-            btnName="+ Thêm tài sản"
-            class="btn-add"
-            @click="ShowDialog()"
-            btnType="2"
-          />
-      <button
-        class="btn-export icon36 button-icon backgrsvg"
-        @click="Export()"
-      ></button>
-      <button
-        class="btn__delete icon36 button-icon backgrsvg"
-        @click="deleteAssets()"
-      ></button>
+        btnName="+ Thêm tài sản"
+        class="btn-add"
+        @click="ShowDialog()"
+        btnType="2"
+      />
+      <BaseTooltip position="down" tooltipText="xuất khẩu">
+        <button
+          class="btn-export icon36 button-icon backgrsvg"
+          @click="Export()"
+        ></button>
+      </BaseTooltip>
+      <BaseTooltip position="down" tooltipText="Xóa">
+        <button
+          class="btn__delete icon36 button-icon backgrsvg"
+          @click="deleteAssets()"
+        ></button>
+      </BaseTooltip>
     </div>
   </div>
   <div class="table">
@@ -74,10 +86,10 @@
 import DataTable from "@/components/table/DataTable.vue";
 import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
-import { get, getById,deleteMultiAssets } from "@/api/api.js";
+import { get, getById, deleteMultiAssets } from "@/api/api.js";
 import Resource from "@/resource/Resource";
 import { toast } from "vue3-toastify";
-import MISAEnum from '@/enums/enums';
+import MISAEnum from "@/enums/enums";
 
 export default {
   components: { DataTable, TheInput, TheCombobox },
@@ -126,8 +138,8 @@ export default {
   data() {
     return {
       txtSreach: "",
-      idDepartment:"",
-      idCategory:"",
+      idDepartment: "",
+      idCategory: "",
       typeMessagepp: 2,
       isDeleteMany: "",
       isMessageDelete: false,
@@ -215,31 +227,27 @@ export default {
       );
     },
 
- 
-
-      /**
+    /**
      * thực hiện xóa và xóa nhiều
      * Author: TVTam
      * Last Edited: 28/02/2023
      */
-    deleteAssets(){
-       this.typeMessagepp = 2;
+    deleteAssets() {
+      this.typeMessagepp = 2;
       if (this.listIdDelete.size == 1) {
         this.getAssetById(Array.from(this.listIdDelete)[0]);
       } else {
         this.isDeleteMany = this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
       }
       this.isMessageDelete = true;
-
     },
     /**
      * xác nhận xóa và xóa nhiều
      * Author: TVTam
      * Last Edited: 28/02/2023
      */
-    
+
     async deleteYes() {
-     
       try {
         // xóa nhiều thì mảng xóa đc cập nhập data
         let a = await deleteMultiAssets(
@@ -261,7 +269,7 @@ export default {
           });
           // chuyền thông báó xóa thành công để clear mảng xóa nhiều
           this.emitter.emit("LoadingDataDelete");
-           this.isMessageDelete = false;
+          this.isMessageDelete = false;
         }
       } catch (error) {
         toast.error(Resource.VN_DeleteEmpty, {
@@ -271,8 +279,6 @@ export default {
         console.log(error);
         this.$emit("hideMessage");
       }
-        
-      
     },
     /**
      * Description:  cập nhập id chọn tại table
@@ -298,19 +304,26 @@ export default {
      * created : tvTam (22/02/2023)
      */
     searchInput() {
-      this.emitter.emit("filterAssets",[this.txtSreach,this.idDepartment,this.idCategory]);
+      this.emitter.emit("filterAssets", [
+        this.txtSreach,
+        this.idDepartment,
+        this.idCategory,
+      ]);
     },
 
-    getIdCategory(data,key){
-      if(key==MISAEnum.typeCombobox.category){
-        this.idCategory = data[key + '_id']
+    getIdCategory(data, key) {
+      if (key == MISAEnum.typeCombobox.category) {
+        this.idCategory = data[key + "_id"];
+      } else {
+        this.idDepartment = data[key + "_id"];
       }
-      else{
-          this.idDepartment = data[key + '_id']
-      }
-      
-       this.emitter.emit("filterAssets",[this.txtSreach,this.idDepartment,this.idCategory]);
-    }
+
+      this.emitter.emit("filterAssets", [
+        this.txtSreach,
+        this.idDepartment,
+        this.idCategory,
+      ]);
+    },
   },
 };
 </script>

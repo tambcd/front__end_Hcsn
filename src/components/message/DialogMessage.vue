@@ -4,7 +4,7 @@
       <div class="messing-body">
         <div class="content flex">
           <div class="icon-message">
-            <div class="icon icon48 icon-error"></div>
+              <div class="icon icon48 icon-error"></div>
           </div>
           <div class="message-title">
             <span>{{ titleMessage }}</span>
@@ -24,13 +24,13 @@
         <!-- btn warning -->
         <div class="footer-warning flex" v-if="typeMessage === 2">
           <TheButton
-            btnName="Có"
+            :btnName="titleBtnYes"
             class="btnWarn-Yes"
             @click="btnYes()"
             btnType="2"
           />
           <TheButton
-            btnName="Không"
+            :btnName="titleBtnNo"
             class="btnWarn-close"
             @click="closeThisMessage()"
             btnType="1"
@@ -39,28 +39,24 @@
 
         <!-- btn mesage -->
         <div class="footer-mesage flex" v-if="typeMessage === 3">
-          <div class="footer-right flex">
-            <TheButton
-              btnName="Lưu"
-              class="btnWarn-Yes"
-              @click="closeThisDialogAndSave()"
-              btnType="2"
-            />
-            <TheButton
-              btnName="Không lưu"
-              class="btnWarn-close"
-              @click="closeThisDialog()"
-              btnType="1"
-            />
-          </div>
-          <div class="footer-left">
-            <TheButton
-              btnName="Hủy bỏ "
-              class="btnWarn-close"
-              @click="closeThisMessage()"
-              btnType="1"
-            />
-          </div>
+          <TheButton
+            btnName="Lưu"
+            class="btnWarn-Yes"
+            @click="btnYesUpdate()"
+            btnType="2"
+          />
+          <TheButton
+            btnName="Không lưu"
+            class="btnWarn-close"
+            @click="btnYes()"
+            btnType="1"
+          />
+          <TheButton
+            btnName="Hủy bỏ"
+            class="btnWarn-close"
+            @click="closeThisMessage()"
+            btnType="1"
+          />
         </div>
       </div>
     </div>
@@ -76,6 +72,12 @@ export default {
     typeMessage: Number,
     /**nội dung thông báo */
     titleMessage: String,
+    titleBtnYes: {
+      default: "Có",
+    },
+    titleBtnNo: {
+      default: "không",
+    },
 
     /**mảng khóa chính tài sản */
     listIdAsset: {
@@ -122,12 +124,17 @@ export default {
      * Author: TVTam
      * Last Edited: 28/02/2023
      */
-    btnYes(){
-       this.$emit("btnYesMessage");
-
-    }
-
-  
+    btnYes() {
+      this.$emit("btnYesMessage");
+    },
+    /**
+     * đống ý sửa
+     * Author: TVTam
+     * Last Edited: 28/02/2023
+     */
+    btnYesUpdate() {
+      this.$emit("btnYesMessageUpdate");
+    },
   },
 };
 </script>

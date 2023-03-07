@@ -1,5 +1,6 @@
 <template>
-  <tr @dblclick="updateAsset(dataItem)"
+  <tr
+    @dblclick="updateAsset(dataItem)"
     class="item-table"
     :class="{
       row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id),
@@ -33,15 +34,19 @@
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
-      <button
-        class="btn__edit btn__action backgrsvg"
-        @click="updateAsset(dataItem)"
-      ></button>
 
-      <button
-        class="btn__nhanban btn__action backgrsvg"
-        @click="replicationAsset(dataItem)"
-      ></button>
+      <BaseTooltip position="down" tooltipText="Sửa">
+        <button class="btn__edit btn__action backgrsvg"
+          @click="updateAsset(dataItem)"
+        ></button>
+      </BaseTooltip>
+
+      <BaseTooltip position="down" tooltipText="Nhân bản">
+        <button
+          class="btn__action backgrsvg btn__nhanban"
+          @click="replicationAsset(dataItem)"
+        ></button>
+      </BaseTooltip>
     </td>
   </tr>
 </template>
