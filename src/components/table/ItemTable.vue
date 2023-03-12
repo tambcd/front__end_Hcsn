@@ -1,10 +1,9 @@
 <template>
   <tr
-    @dblclick="updateAsset(dataItem)"
+    @dblclick="updateAsset(dataItem)" 
     class="item-table"
     :class="{
-      row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id),
-    }"
+      row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id) ||dataItem.fixed_asset_id == selectClick  }"
   >
     <td class="center first-column input-checkbox" style="width: 50px">
       <input
@@ -35,13 +34,13 @@
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
 
-      <BaseTooltip position="down" tooltipText="Sửa">
+      <BaseTooltip position="left" tooltipText="Sửa">
         <button class="btn__edit btn__action backgrsvg"
           @click="updateAsset(dataItem)"
         ></button>
       </BaseTooltip>
 
-      <BaseTooltip position="down" tooltipText="Nhân bản">
+      <BaseTooltip position="left" tooltipText="Nhân bản">
         <button
           class="btn__action backgrsvg btn__nhanban"
           @click="replicationAsset(dataItem)"
@@ -56,6 +55,9 @@ import { FormatMoney } from "../../assets/js/Format";
 
 export default {
   props: {
+    selectClick:{
+      default:""
+    },
     indexItemTable: {
       default: [],
     },
@@ -67,6 +69,7 @@ export default {
   created() {},
   data() {
     return {
+      isClick:"",
       ischeckItem: false,
       ItemSelect: ["", false],
     };
@@ -108,6 +111,7 @@ export default {
     replicationAsset(itemAsset) {
       this.emitter.emit("showDialog", { dataAsset: itemAsset, typeDialog: 3 });
     },
+    
   },
   watch: {
     stateIsAll(state) {
@@ -117,5 +121,6 @@ export default {
 };
 </script>
 
-<style>
+<style scope>
+
 </style>

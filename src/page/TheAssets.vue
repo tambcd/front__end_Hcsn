@@ -13,6 +13,7 @@
         "
         @searchInput="searchInput()"
       />
+      
 
       <the-combobox
         @selectItemCombobox="
@@ -20,6 +21,7 @@
             getIdCategory(data, key);
           }
         "
+        :valueSelect="category.nameCategory"
         dataContent="fixed_asset_category_name"
         :DataCombobox="assetCategorys"
         keyData="fixed_asset_category"
@@ -37,6 +39,7 @@
             getIdCategory(data, key);
           }
         "
+        :valueSelect="deparment.nameDepartment"
         dataContent="department_name"
         :DataCombobox="departments"
         keyData="department"
@@ -138,8 +141,14 @@ export default {
   data() {
     return {
       txtSreach: "",
-      idDepartment: "",
-      idCategory: "",
+      deparment:{
+        nameDepartment:"",
+        idDepartment: "",
+      },
+      category:{
+        nameCategory:"",
+        idCategory: "",
+      },
       typeMessagepp: 2,
       isDeleteMany: "",
       isMessageDelete: false,
@@ -306,22 +315,24 @@ export default {
     searchInput() {
       this.emitter.emit("filterAssets", [
         this.txtSreach,
-        this.idDepartment,
-        this.idCategory,
+        this.deparment.idDepartment,
+        this.category.idCategory,
       ]);
     },
 
     getIdCategory(data, key) {
       if (key == MISAEnum.typeCombobox.category) {
-        this.idCategory = data[key + "_id"];
+        this.category.idCategory = data[key + "_id"];
+        this.category.nameCategory = data[key + "_name"];
       } else {
-        this.idDepartment = data[key + "_id"];
+        this.deparment.idDepartment = data[key + "_id"];
+        this.deparment.nameDepartment = data[key + "_name"];
       }
 
       this.emitter.emit("filterAssets", [
         this.txtSreach,
-        this.idDepartment,
-        this.idCategory,
+        this.deparment.idDepartment,
+        this.category.idCategory,
       ]);
     },
   },

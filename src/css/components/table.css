@@ -1,8 +1,7 @@
 @import url(dataTable.css);
 .table{
     height: calc(100vh - 123px);
-    /* width: calc(100vw - 106px); */
-    background-color: aliceblue;
+    background-color: #ffffff;
     box-sizing: border-box;
     overflow: auto;
     box-shadow: 0 3px 10px rgba(0, 0, 0, .16)

@@ -37,8 +37,7 @@ input[type="text"]
     width: 100%;
     outline: none;
     border: 0px solid #DBDEFF;
-    margin-left: 8px;
-
+    padding: 0 12px;
 
 }
 

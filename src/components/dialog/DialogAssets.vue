@@ -95,8 +95,8 @@
                 dataContent="fixed_asset_category_code"
                 iconCombobox="2"
                 marginCombobox="8px"
-                contentComboxbox="Chọn mã tài sản"
-                titleCombobox=" Mã tài sản"
+                contentComboxbox="Chọn mã loại tài sản"
+                titleCombobox=" Mã loại tài sản"
                 requiredCombobox="true"
               />
             </div>
@@ -436,7 +436,7 @@ export default {
      */
     async newAssetCode() {
       await getNewAssetsCode(
-        "Assets/NewAssetsCode",
+        "Assets/NewAutoCode",
         (response) => {
           // Trường hợp thành công gán giá trị cho  AssetCode
           this.asset.fixed_asset_code = response.data;
@@ -598,7 +598,8 @@ export default {
       await post(
         `Assets`,
         this.asset,
-        () => {
+        (res) => {
+          console.log(res);
           // Trường hợp thành công toast thồng báo
           toast.success(Resource.VN_AddSuccess, {
             autoClose: 2000,
@@ -611,11 +612,11 @@ export default {
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.\
-          toast.error(Resource.VN_AddFailure, {
-            autoClose: 2000,
-            position: "top-center",
-          });
-          console.log(
+        
+          this.typeMessage = 1;
+           this.ContentMessage =  error.response.data.erros[0];
+          this.isMessage = true;      
+              console.log(
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
           // đóng loading
@@ -742,5 +743,8 @@ export default {
 }
 .btn-save {
   margin-left: 10px;
+}
+.mx-table-date td, .mx-table-date th{
+  text-align: center;
 }
 </style>

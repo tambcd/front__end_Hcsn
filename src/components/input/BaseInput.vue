@@ -23,6 +23,7 @@
       @click="btnSearch()"
     ></div>
     <input
+      @keydown="keyDownInput()"
       :type="typeInput"
       class="input"
       :placeholder="contentInput"
@@ -220,11 +221,24 @@ export default {
      */
     btnSearch(){
       this.$emit("searchInput");
+    },
+      /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham :keydown inputbase
+     */
+    keyDownInput(){
+       this.$emit("keyDownbaseInput");
     }
   },
   watch: {
     valueInput(value) {
+      if(value===""){
+        this.IscheckEmpty = true;
+      }
+      this.IscheckEmpty = false;
       this.$emit("sendValueInput", value);
+
     },
     valueInputFisrt(value) {
       this.valueInput = value;

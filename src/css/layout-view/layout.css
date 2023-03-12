@@ -9,13 +9,11 @@
 
 .the__body {
     background-color: #ffffff;
-    margin: 0 20px;
     width: calc(100% - 240px);
 }
 
 .the__body__mini {
     
-    width: calc(100% - 66px) !important;
-    margin: 0 20px;
+    width: calc(100% - 106px) !important;
 }
 

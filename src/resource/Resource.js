@@ -26,6 +26,7 @@ export  const Resource = {
     VN_Add:"Thêm tài sản",
     /**Sửa tài sản */
     VN_update:"Sửa tài sản", 
+  
     VN_EmptyData:"không được phép để trống",
     VN_NumberSS:" không được lớn hơn nguyên giá ",
 

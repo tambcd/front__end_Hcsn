@@ -8,25 +8,26 @@
       <th style="min-width: 150px">Mã tài sản</th>
       <th style="min-width: 150px">Tên tài sản</th>
       <th style="min-width: 150px">Loại tài sản</th>
-      <th style="min-width: 150px">Bộ phận sử dụng</th>
+      <th style="min-width: 200px">Bộ phận sử dụng</th>
       <th class="right" style="min-width: 50px">Số lượng</th>
       <th class="right" style="min-width: 150px">Nguyên giá</th>
       <th class="right" style="min-width: 150px">
         <BaseTooltipTable
           :isInline="true"
-          tooltipContent="Giá trị hoa mòn năm "
+          tooltipContent="Giá trị hao mòn năm "
           :show="true"
         >
           <span>HM/KH lũy kế</span>
         </BaseTooltipTable>
       </th>
       <th class="right" style="min-width: 150px">Giá trị còn lại</th>
-      <th style="min-width: 100px" class="The-actions center header-actions">
+      <th style="width: 100px" class="The-actions center header-actions">
         Chức năng
       </th>
     </tr>
     <tbody>
-      <item-table
+      <item-table @click="selectItem(item.fixed_asset_id)"
+        :selectClick= itemId
         :stateIsAll="listIdSelection"
         @changeDataSelect="changeDataId"
         v-for="(item, index) in listData.data"
@@ -147,6 +148,7 @@ export default {
   },
   data() {
     return {
+      itemId :"",
       totalAtrophy: 0,
       totalQuantity: 0,
       totalCost: 0,
@@ -407,6 +409,15 @@ export default {
       this.priorityFilter.pageSize = size;
       this.showHideDrop();
       this.LoadDataTable(1);
+    },
+
+    /**
+     * create by : MF1270
+     * create day : 1/03/2023
+     * ham : danh dấu item khi click
+     */
+    selectItem(id){
+      this.itemId = id
     },
         /**
      * create by : MF1270

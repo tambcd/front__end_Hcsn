@@ -1,6 +1,7 @@
 <template>
-  <div class="combobox" @keydown.enter="ShowhideItemCombobox()" @keydown.down="foucustItem()">
+  <div class="combobox">
     <the-input
+      @keyDownbaseInput="keyAutoCombobox()"
       :valueInputFisrt="dataCombobox"
       :iconLeft="iconComboboxLeft"
       heightInput="35px"
@@ -18,16 +19,20 @@
         }
       "
     />
+    <div class="body-combobox" v-show="showHideItem">
 
-    <div class="body-combobox" v-if="showHideItem">
-      <div :ref="item[keyData + '_id']"
-        class="item-combobox"
-        v-for="item in DataCombobox"
+      <div class="item-combobox" :class="{'item-select':indext==selectItemFocus || item[dataContent] == dataCombobox }"
+      v-for="(item,indext) in dataArray"
         :key="item[keyData + '_id']"
         @click="selectItem(item)"
-      >
-        {{ item[dataContent] }}
-      </div>
+        @keydown="keyAutoCombobox()">
+                <div class="cobobox-title">
+                    {{ item[dataContent] }}
+                </div>
+                <div class="tick" v-show="item_selectCb==item[keyData + '_id']"></div>
+            
+            </div>
+  
     </div>
   </div>
 </template>
@@ -76,13 +81,20 @@ export default {
   },
   data() {
     return {
+      item_selectCb:'',
+      isSearch:true,
+      selectItemFocus:0,
       showHideItem: false,
       isSelection: "",
       dataCombobox: "",
+      dataRoot:[],
+      dataArray:[]
     };
   },
   created() {
     this.dataCombobox = this.valueSelect;
+    this.dataArray = this.DataCombobox;
+    this.dataRoot = this.DataCombobox;
   },
   methods: {
     /**
@@ -91,6 +103,7 @@ export default {
      * ham : đóng mở combobox
      */
     ShowhideItemCombobox() {
+      this.dataArray = this.dataRoot
       this.showHideItem = !this.showHideItem;
     },
     /**
@@ -107,16 +120,90 @@ export default {
      * ham : đóng combobox
      */
     selectItem(idItem) {
+      if(!idItem){
+        return;
+      }
       this.dataCombobox = idItem[this.dataContent];
-      this.HideItemCombobox();
+       this.showHideItem = false;
       this.$emit("selectItemCombobox", idItem, this.keyData);
+      this.item_selectCb = idItem[this.keyData + '_id']
     },
+
+    
+
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : nút lên xuống chọn 
+     */
+    keyAutoCombobox(){
+      switch (event.code) {
+        case 'ArrowDown':
+          if(this.selectItemFocus < this.dataArray.length -1 && this.selectItemFocus>= 0 ){
+            // this.$refs.thisdataArray[this.selectItemFocus++].focus();
+            this.selectItemFocus++            
+
+            // console.log(this.$refs[].focus());
+          }
+          else {
+            this.selectItemFocus = 0
+          }
+          
+          break;
+        case 'ArrowUp':
+           if (this.selectItemFocus ==0) {
+            this.selectItemFocus =this.dataArray.length -1
+          }
+          else{
+            this.selectItemFocus--
+          }
+          
+          break;
+        case 'Enter':
+          
+          if(this.showHideItem){
+            this.showHideItem = false;
+            this.selectItem(this.dataArray[this.selectItemFocus])
+          }
+          else{
+            this.showHideItem = true
+            return;
+          }       
+          
+          break;
+      
+        default:
+          break;
+      }
+      
+    }
   },
   watch: {
-    dataCombobox() {
+    dataCombobox(txtSearch) {
       this.showHideItem = true;
+      this.dataArray =[]
+      this.dataRoot.forEach(element => {
+        if (element[this.dataContent].toLowerCase().indexOf(txtSearch.toLowerCase()) !== -1) {
+          this.dataArray.push(element);
+                }
+                if (element[this.dataContent] === txtSearch) {
+                  
+                    this.dataArray = this.dataRoot;
+                     this.showHideItem = false;
+                    return;                    
+                }
+            });
+        
+        
+      
+      // this.dataArray = this.dataRoot.filter(item => item.includes(txt))
 
     },
+    "DataCombobox": function(newData) {
+      this.dataRoot= newData
+	}
+  
+  
   },
 };
 </script>
