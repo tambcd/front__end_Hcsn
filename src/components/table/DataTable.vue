@@ -59,10 +59,10 @@
             <div class="body-dropdown" :hidden="isDropd">
               <div
                 class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 20 }"
-                @click="setPageSize(20)"
+                :class="{ 'is-selection': priorityFilter.pageSize == 15 }"
+                @click="setPageSize(15)"
               >
-                20
+                15
               </div>
               <div
                 class="item-dropdown"
@@ -73,10 +73,10 @@
               </div>
               <div
                 class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 80 }"
-                @click="setPageSize(80)"
+                :class="{ 'is-selection': priorityFilter.pageSize == 70 }"
+                @click="setPageSize(70)"
               >
-                80
+                70
               </div>
               <div
                 class="item-dropdown"
@@ -158,7 +158,7 @@ export default {
       listData: [],
       priorityFilter: {
         pageNumber: 1,
-        pageSize: 20,
+        pageSize: 15,
         txtSearch: "",
         DepartmentId: null,
         AssetCategoryId: null,
@@ -211,7 +211,7 @@ export default {
       this.totalQuantity = 0;
       this.totalAtrophy = 0;
       await getByFilter(
-        "Assets/Filter",
+        "Assets/getByFilter",
         {
           pageNumber: pageNumber,
           pageSize: this.priorityFilter.pageSize,

@@ -598,8 +598,7 @@ export default {
       await post(
         `Assets`,
         this.asset,
-        (res) => {
-          console.log(res);
+        () => {
           // Trường hợp thành công toast thồng báo
           toast.success(Resource.VN_AddSuccess, {
             autoClose: 2000,
@@ -632,7 +631,7 @@ export default {
      */
     async updateAsset() {
       await put(
-        `Assets`,
+        `Assets` , this.asset.fixed_asset_id, 
         this.asset,
         () => {
           // Trường hợp thành công nhận về dữ liệu thì toast thông báo

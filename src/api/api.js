@@ -49,8 +49,8 @@ export const post= async(route = '', data, success, errorHandler) =>{
  * Description: Hàm để put để thay đổi dữ liệu của một bản ghi nhất định.
  * created : tvTam (22/02/2023)
  */
-export const put  = async(route = '', data, success, errorHandler) =>{
-    return await Axios.put(API + route , data).then((response) =>success(response)).catch((error) => errorHandler(error));
+export const put  = async(route = '',param, data, success, errorHandler) =>{
+    return await Axios.put(API + route +`/${param}`, data).then((response) =>success(response)).catch((error) => errorHandler(error));
 }
 
 /**
