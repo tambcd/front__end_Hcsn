@@ -5,7 +5,7 @@
     :class="{
       row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id) ||dataItem.fixed_asset_id == selectClick  }"
   >
-    <td class="center first-column input-checkbox" style="width: 50px">
+    <td class="center first-column input-checkbox"  style="width: 50px">
       <input
         type="checkbox"
         v-model="ischeckItem"
@@ -25,11 +25,11 @@
       {{ FormatMoney(dataItem.cost.toString()) }}
     </td>
     <td class="right" style="min-width: 150px">
-      {{ FormatMoney(dataItem.depreciation_value.toString()) }}
+      {{ FormatMoney((dataItem.depreciation_value * dataItem.life_time).toString())}}
     </td>
     <td class="right" style="width: 150px">
       {{
-        FormatMoney((dataItem.cost - dataItem.depreciation_value).toString())
+        FormatMoney((dataItem.cost - dataItem.depreciation_value * dataItem.life_time).toString())
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">

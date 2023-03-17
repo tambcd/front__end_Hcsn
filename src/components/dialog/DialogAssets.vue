@@ -613,6 +613,7 @@ export default {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.\
         
           this.typeMessage = 1;
+          
            this.ContentMessage =  error.response.data.erros[0];
           this.isMessage = true;      
               console.log(

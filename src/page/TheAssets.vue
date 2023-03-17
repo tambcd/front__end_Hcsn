@@ -73,9 +73,7 @@
       </BaseTooltip>
     </div>
   </div>
-  <div class="table">
     <data-table @updateListId="updateListIdDelete" />
-  </div>
   <dialog-message
     :typeMessage="typeMessagepp"
     :titleMessage="isDeleteMany"

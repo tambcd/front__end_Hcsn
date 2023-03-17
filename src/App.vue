@@ -47,5 +47,5 @@ export default {
 body {
   margin: 0;
 }
-@import url(./css/main__css.css);
+@import url(./css/main.css);
 </style>

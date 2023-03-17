@@ -50,14 +50,14 @@ export default {
           ItemTxt: "Tài sản HT_DB",
           item_icon: "menu-item-assets--HTDB__icon",
           itemBg: "menu-item-assets--HTDB",
-          path: "/",
+          path: "/login",
         },
         {
           ItemID: 4,
           ItemTxt: "Công cụ dụng cụ",
           item_icon: "menu-item-tools__icon",
           itemBg: "menu-item-tools",
-          path: "/",
+          path: "/login",
         },
         {
           ItemID: 5,

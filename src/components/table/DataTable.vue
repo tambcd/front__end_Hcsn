@@ -1,132 +1,146 @@
 <template>
-  <table class="table-assets">
-    <tr class="header-table weight700">
-      <th class="first-column center input-checkbox" ref="checkBoxAll">
-        <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
-      </th>
-      <th class="center" style="width: 50px">STT</th>
-      <th style="min-width: 150px">Mã tài sản</th>
-      <th style="min-width: 150px">Tên tài sản</th>
-      <th style="min-width: 150px">Loại tài sản</th>
-      <th style="min-width: 200px">Bộ phận sử dụng</th>
-      <th class="right" style="min-width: 50px">Số lượng</th>
-      <th class="right" style="min-width: 150px">Nguyên giá</th>
-      <th class="right" style="min-width: 150px">
-        <BaseTooltipTable
-          :isInline="true"
-          tooltipContent="Giá trị hao mòn năm "
-          :show="true"
-        >
-          <span>HM/KH lũy kế</span>
-        </BaseTooltipTable>
-      </th>
-      <th class="right" style="min-width: 150px">Giá trị còn lại</th>
-      <th style="width: 100px" class="The-actions center header-actions">
-        Chức năng
-      </th>
-    </tr>
-    <tbody>
-      <item-table @click="selectItem(item.fixed_asset_id)"
-        :selectClick= itemId
-        :stateIsAll="listIdSelection"
-        @changeDataSelect="changeDataId"
-        v-for="(item, index) in listData.data"
-        :key="item.fixed_asset_id"
-        :dataItem="item"
-        :indexItemTable="index + 1"
-      />
-    </tbody>
-
-    <tr class="Last_row">
-      <td colspan="5" class="first-column">
-        <div class="the-paging">
-          <div class="total">
-            Tổng số:
-            <span class="weight700">{{ listData.totalRecord }}</span> bản ghi
-          </div>
-          <div class="drop-paging dropdown">
-            <div class="header-dropdown">
-              <div class="dropdown-left">
-                <div class="dropdown-value">
-                  {{ this.priorityFilter.pageSize }}
+  <div class="table">
+    <table class="table-assets">
+      <tr class="header-table weight700">
+        <th class="first-column center input-checkbox" ref="checkBoxAll">
+          <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
+        </th>
+        <th class="center" style="width: 50px">STT</th>
+        <th style="min-width: 150px">Mã tài sản</th>
+        <th style="min-width: 150px">Tên tài sản</th>
+        <th style="min-width: 150px">Loại tài sản</th>
+        <th style="min-width: 200px">Bộ phận sử dụng</th>
+        <th class="right" style="width: 50px">Số lượng</th>
+        <th class="right" style="width: 150px">Nguyên giá</th>
+        <th class="right" style="width: 150px">
+          <BaseTooltipTable
+            :isInline="true"
+            tooltipContent="Giá trị hao mòn năm "
+            :show="true"
+          >
+            <span>HM/KH lũy kế</span>
+          </BaseTooltipTable>
+        </th>
+        <th class="right" style="min-width: 150px">Giá trị còn lại</th>
+        <th style="width: 100px" class="The-actions center header-actions">
+          Chức năng
+        </th>
+      </tr>
+      <tbody>
+        <item-table
+          @click="selectItem(item.fixed_asset_id)"
+          :selectClick="itemId"
+          :stateIsAll="listIdSelection"
+          @changeDataSelect="changeDataId"
+          v-for="(item, index) in listData.data"
+          :key="item.fixed_asset_id"
+          :dataItem="item"
+          :indexItemTable="index + 1"
+        />
+      </tbody>
+    </table>
+  </div>
+  <div class="paging">
+    <table class="paging-table">
+      <tr class="Last_row">
+        <td colspan="5" class="first-column" style="min-width: 700px">
+          <div class="the-paging">
+            <div class="total">
+              Tổng số:
+              <span class="weight700">{{ listData.totalRecord }}</span> bản ghi
+            </div>
+            <div class="drop-paging dropdown">
+              <div class="header-dropdown">
+                <div class="dropdown-left">
+                  <div class="dropdown-value">
+                    {{ this.priorityFilter.pageSize }}
+                  </div>
+                </div>
+                <button
+                  class="dropdown-icon-right backgrsvg"
+                  @click="showHideDrop()"
+                ></button>
+              </div>
+              <div class="body-dropdown" :hidden="isDropd">
+                <div
+                  class="item-dropdown"
+                  :class="{ 'is-selection': priorityFilter.pageSize == 15 }"
+                  @click="setPageSize(15)"
+                >
+                  15
+                </div>
+                <div
+                  class="item-dropdown"
+                  :class="{ 'is-selection': priorityFilter.pageSize == 50 }"
+                  @click="setPageSize(50)"
+                >
+                  50
+                </div>
+                <div
+                  class="item-dropdown"
+                  :class="{ 'is-selection': priorityFilter.pageSize == 70 }"
+                  @click="setPageSize(70)"
+                >
+                  70
+                </div>
+                <div
+                  class="item-dropdown"
+                  :class="{ 'is-selection': priorityFilter.pageSize == 100 }"
+                  @click="setPageSize(100)"
+                >
+                  100
                 </div>
               </div>
+            </div>
+            <div class="number-page">
               <button
-                class="dropdown-icon-right backgrsvg"
-                @click="showHideDrop()"
-              ></button>
-            </div>
-            <div class="body-dropdown" :hidden="isDropd">
-              <div
-                class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 15 }"
-                @click="setPageSize(15)"
+                :disabled="priorityFilter.pageNumber == 1"
+                class="btn-page icon20 btn-back"
+                @click="changePage(1)"
               >
-                15
-              </div>
-              <div
-                class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 50 }"
-                @click="setPageSize(50)"
+                {{ "<" }}
+              </button>
+              <button
+                class="btn-page icon20 btn__item"
+                :class="{
+                  'btn-paging__active': priorityFilter.pageNumber == itemPage,
+                }"
+                v-for="itemPage in listpageNumber"
+                :key="itemPage"
+                @click="selectNumber(itemPage)"
+                :disabled="itemPage == '...'"
               >
-                50
-              </div>
-              <div
-                class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 70 }"
-                @click="setPageSize(70)"
+                {{ itemPage }}
+              </button>
+
+              <button
+                class="btn-page icon20 btn-new"
+                :disabled="priorityFilter.pageNumber == this.listData.totalPage"
+                @click="changePage(2)"
               >
-                70
-              </div>
-              <div
-                class="item-dropdown"
-                :class="{ 'is-selection': priorityFilter.pageSize == 100 }"
-                @click="setPageSize(100)"
-              >
-                100
-              </div>
+                {{ ">" }}
+              </button>
             </div>
           </div>
-          <div class="number-page">
-            <button
-              :disabled="priorityFilter.pageNumber == 1"
-              class="btn-page icon20 btn-back"
-              @click="changePage(1)"
-            >
-              {{ "<" }}
-            </button>
-            <button
-              class="btn-page icon20 btn__item"
-              :class="{
-                'btn-paging__active': priorityFilter.pageNumber == itemPage,
-              }"
-              v-for="itemPage in listpageNumber"
-              :key="itemPage"
-              @click="selectNumber(itemPage)"
-              :disabled="itemPage == '...'"
-            >
-              {{ itemPage }}
-            </button>
+        </td>
 
-            <button
-              class="btn-page icon20 btn-new"
-              :disabled="priorityFilter.pageNumber == this.listData.totalPage"
-              @click="changePage(2)"
-            >
-              {{ ">" }}
-            </button>
-          </div>
-        </div>
-      </td>
-
-      <td></td>
-      <td class="right weight700" style="width: 50px" > {{ FormatMoney(totalQuantity.toString()) }}</td>
-      <td class="right weight700" style="width: 150px"> {{ FormatMoney(totalCost.toString()) }}</td>
-      <td class="right weight700" style="width: 150px"> {{ FormatMoney(totalAtrophy.toString()) }}</td>
-      <td class="right weight700" style="width: 150px"> {{ FormatMoney((totalCost - totalAtrophy).toString()) }}</td>
-      <td class="The-actions center" style="width: auto"></td>
-    </tr>
-  </table>
+        <td></td>
+        <td class="right weight700" style="width: 50px">
+          {{ FormatMoney(totalQuantity.toString()) }}
+        </td>
+        <td class="right weight700" style="width: 150px">
+          {{ FormatMoney(totalCost.toString()) }}
+        </td>
+        <td class="right weight700" style="width: 150px">
+          {{ FormatMoney(totalAtrophy.toString()) }}
+        </td>
+        <td class="right weight700" style="width: 150px">
+          {{ FormatMoney((totalCost - totalAtrophy).toString()) }}
+        </td>
+        <td class="The-actions center" style="width: 100px"></td>
+      </tr>
+    </table>
+  </div>
   <the-loading :hidden="isReloadData" />
 </template>
 
@@ -139,7 +153,6 @@ import { toast } from "vue3-toastify";
 import MISAEnum from "@/enums/enums";
 import { FormatMoney } from "@/assets/js/Format";
 
-
 export default {
   components: { ItemTable, TheLoading },
   async created() {
@@ -148,7 +161,7 @@ export default {
   },
   data() {
     return {
-      itemId :"",
+      itemId: "",
       totalAtrophy: 0,
       totalQuantity: 0,
       totalCost: 0,
@@ -416,10 +429,10 @@ export default {
      * create day : 1/03/2023
      * ham : danh dấu item khi click
      */
-    selectItem(id){
-      this.itemId = id
+    selectItem(id) {
+      this.itemId = id;
     },
-        /**
+    /**
      * create by : MF1270
      * create day : 19/02/2023
      * ham : định dạng tiền
@@ -428,7 +441,6 @@ export default {
     FormatMoney(dataFormat) {
       return FormatMoney(dataFormat);
     },
-
   },
 };
 </script>

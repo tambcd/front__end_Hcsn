@@ -9,6 +9,7 @@ input[type="text"]
     font-size: 14px;
 }
 .toolbar-filter-text {
+    height: 35px;
     background-color: #ffffff;
     border-radius: 2.5px;
     border: 1px solid #afafaf;

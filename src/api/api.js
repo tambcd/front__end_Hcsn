@@ -24,6 +24,7 @@ export const getByFilter = async(route = '',param ,success, errorHandler) => {
 
         ).catch(error => {
             errorHandler(error);
+            
         })
 }
 /**

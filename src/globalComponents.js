@@ -5,6 +5,7 @@ import BaseTooltip from '@/components/tooltip/BaseTooltip.vue'
 import DatePicker from 'vue-datepicker-next'
 import TheButton from '@/components/button/BaseButton.vue'
 import DialogMessage from "@/components/message/DialogMessage.vue";
+import BaseInput from "@/components/input/BaseInput";
 
 
 
@@ -28,7 +29,11 @@ export const requiredComponents = [
      {
         componentName: 'DialogMessage',
         component: DialogMessage,
-    }
+    },
+     {
+        componentName: 'BaseInput',
+        component: BaseInput,
+    },
     
 
 

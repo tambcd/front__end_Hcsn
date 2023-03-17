@@ -57,8 +57,17 @@
 .tick{
     height: 24px;
     width: 24px;
-    background-color: greenyellow;
+}
+.tickbg{
     background: url(../../assets/icon/icons8-done-24.png)  no-repeat center  ;
+
+}
+.item-combobox:hover .tick{
+    background: url(../../assets/icon/icons8-done-24.png)  no-repeat center  ;
+
+}
+.cobobox-title{
+    width: calc(100% - 24px);
 }
 .select-item{
   background-color: rgba(80,184,60,0.1) !important;

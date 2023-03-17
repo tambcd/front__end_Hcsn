@@ -5,6 +5,14 @@
   background-color: #FFFFFF;
 
 }
+.paging-table{
+  border-collapse: collapse;
+  width: 100%;
+}
+.paging{
+  height: 50px;
+  width: 100%;
+}
 
 .table-assets td,
 .able__assets th {
@@ -52,9 +60,9 @@
   cursor: pointer;
 
 }
-.item-table:hover{
+.item-table:hover ,.item-table:hover .input-checkbox, .item-table:hover .actions__item{
   background-color: #d1edf4;
 }
-.row__selected {
+.row__selected .input-checkbox,.row__selected .actions__item,.row__selected  {
   background-color: #d1edf4;
 }

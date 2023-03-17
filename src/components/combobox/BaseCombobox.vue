@@ -26,10 +26,10 @@
         :key="item[keyData + '_id']"
         @click="selectItem(item)"
         @keydown="keyAutoCombobox()">
+                <div class="tick" :class="{'tickbg' : item_selectCb==item[keyData + '_id']}"></div>
                 <div class="cobobox-title">
                     {{ item[dataContent] }}
                 </div>
-                <div class="tick" v-show="item_selectCb==item[keyData + '_id']"></div>
             
             </div>
   
