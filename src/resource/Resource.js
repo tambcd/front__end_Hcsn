@@ -26,9 +26,12 @@ export  const Resource = {
     VN_Add:"Thêm tài sản",
     /**Sửa tài sản */
     VN_update:"Sửa tài sản", 
+    VN_SeverDisconnect:"Vui lòng kiểm tra kết nối Internet",
   
     VN_EmptyData:"không được phép để trống",
     VN_NumberSS:" không được lớn hơn nguyên giá ",
+    VN_MaxNumber : "Sô tiền quá lớn ",
+    VN_SystemError : "Có lỗi sảy ra vui lòng liên hệ MISA",
 
     VN_DeleteTxt : "Bạn có muốn xóa tài sản ",
     VN_ManyDeleteTxt : ' tài sản bạn đã chọn bạn có muôn xóa các tài sản khỏi danh sách không ?',

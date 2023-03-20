@@ -25,11 +25,11 @@
       {{ FormatMoney(dataItem.cost.toString()) }}
     </td>
     <td class="right" style="min-width: 150px">
-      {{ FormatMoney((dataItem.depreciation_value * dataItem.life_time).toString())}}
+      {{ FormatMoney((dataItem.depreciation_value ).toString())}}
     </td>
     <td class="right" style="width: 150px">
       {{
-        FormatMoney((dataItem.cost - dataItem.depreciation_value * dataItem.life_time).toString())
+        FormatMoney((dataItem.cost - dataItem.depreciation_value).toString())
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">

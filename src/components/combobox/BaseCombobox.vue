@@ -20,19 +20,24 @@
       "
     />
     <div class="body-combobox" v-show="showHideItem">
-
-      <div class="item-combobox" :class="{'item-select':indext==selectItemFocus || item[dataContent] == dataCombobox }"
-      v-for="(item,indext) in dataArray"
+      <div
+        class="item-combobox"
+        :class="{
+          'item-select':
+            indext == selectItemFocus || item[dataContent] == dataCombobox,
+        }"
+        v-for="(item, indext) in dataArray"
         :key="item[keyData + '_id']"
         @click="selectItem(item)"
-        @keydown="keyAutoCombobox()">
-                <div class="tick" :class="{'tickbg' : item_selectCb==item[keyData + '_id']}"></div>
-                <div class="cobobox-title">
-                    {{ item[dataContent] }}
-                </div>
-            
-            </div>
-  
+      >
+        <div
+          class="tick"
+          :class="{ 'tickbg': item_selectCb == item[keyData + '_id'] || indext == selectItemFocus  }"
+        ></div>
+        <div class="cobobox-title">
+          {{ item[dataContent] }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -81,14 +86,14 @@ export default {
   },
   data() {
     return {
-      item_selectCb:'',
-      isSearch:true,
-      selectItemFocus:0,
+      item_selectCb: "",
+      isSearch: true,
+      selectItemFocus: 0,
       showHideItem: false,
       isSelection: "",
       dataCombobox: "",
-      dataRoot:[],
-      dataArray:[]
+      dataRoot: [],
+      dataArray: [],
     };
   },
   created() {
@@ -103,7 +108,7 @@ export default {
      * ham : đóng mở combobox
      */
     ShowhideItemCombobox() {
-      this.dataArray = this.dataRoot
+      this.dataArray = this.dataRoot;
       this.showHideItem = !this.showHideItem;
     },
     /**
@@ -112,6 +117,7 @@ export default {
      * ham : đóng combobox
      */
     HideItemCombobox() {
+      this.dataArray = this.dataRoot;
       this.showHideItem = false;
     },
     /**
@@ -120,90 +126,85 @@ export default {
      * ham : đóng combobox
      */
     selectItem(idItem) {
-      if(!idItem){
+      if (!idItem) {
         return;
       }
       this.dataCombobox = idItem[this.dataContent];
-       this.showHideItem = false;
+      this.showHideItem = false;
       this.$emit("selectItemCombobox", idItem, this.keyData);
-      this.item_selectCb = idItem[this.keyData + '_id']
+      this.item_selectCb = idItem[this.keyData + "_id"];
     },
-
-    
 
     /**
      * create by : MF1270
      * create day : 19/02/2023
-     * ham : nút lên xuống chọn 
+     * ham : nút lên xuống chọn
      */
-    keyAutoCombobox(){
+    keyAutoCombobox() {
       switch (event.code) {
-        case 'ArrowDown':
-          if(this.selectItemFocus < this.dataArray.length -1 && this.selectItemFocus>= 0 ){
+        case "ArrowDown":
+          if (
+            this.selectItemFocus < this.dataArray.length - 1 &&
+            this.selectItemFocus >= 0
+          ) {
             // this.$refs.thisdataArray[this.selectItemFocus++].focus();
-            this.selectItemFocus++            
+            this.selectItemFocus++;
 
             // console.log(this.$refs[].focus());
+          } else {
+            this.selectItemFocus = 0;
           }
-          else {
-            this.selectItemFocus = 0
-          }
-          
+
           break;
-        case 'ArrowUp':
-           if (this.selectItemFocus ==0) {
-            this.selectItemFocus =this.dataArray.length -1
+        case "ArrowUp":
+          if (this.selectItemFocus == 0) {
+            this.selectItemFocus = this.dataArray.length - 1;
+          } else {
+            this.selectItemFocus--;
           }
-          else{
-            this.selectItemFocus--
-          }
-          
+
           break;
-        case 'Enter':
-          
-          if(this.showHideItem){
+        case "Enter":
+          if (this.showHideItem) {
             this.showHideItem = false;
-            this.selectItem(this.dataArray[this.selectItemFocus])
+            this.selectItem(this.dataArray[this.selectItemFocus]);
+          } else {
+            this.dataArray = this.dataRoot;
+            this.showHideItem = true;
           }
-          else{
-            this.showHideItem = true
-            return;
-          }       
-          
+
           break;
-      
+
         default:
+          this.showHideItem = true;
           break;
       }
-      
-    }
+    },
   },
   watch: {
     dataCombobox(txtSearch) {
       this.showHideItem = true;
-      this.dataArray =[]
-      this.dataRoot.forEach(element => {
-        if (element[this.dataContent].toLowerCase().indexOf(txtSearch.toLowerCase()) !== -1) {
+      this.dataArray = [];
+      this.dataRoot.forEach((element) => {
+        if (
+          element[this.dataContent]
+            .toLowerCase()
+            .indexOf(txtSearch.toLowerCase()) !== -1
+        ) {
           this.dataArray.push(element);
-                }
-                if (element[this.dataContent] === txtSearch) {
-                  
-                    this.dataArray = this.dataRoot;
-                     this.showHideItem = false;
-                    return;                    
-                }
-            });
-        
-        
-      
-      // this.dataArray = this.dataRoot.filter(item => item.includes(txt))
+        }
+        if (element[this.dataContent] === txtSearch) {
+          this.dataArray = this.dataRoot;
+          this.showHideItem = false;
+          return;
+        }
+      });
 
+      // this.dataArray = this.dataRoot.filter(item => item.includes(txt))
     },
-    "DataCombobox": function(newData) {
-      this.dataRoot= newData
-	}
-  
-  
+    DataCombobox: function (newData) {
+      this.dataRoot = newData;
+    },
   },
 };
 </script>

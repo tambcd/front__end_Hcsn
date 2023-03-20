@@ -2,6 +2,7 @@
   <div class="toolbar">
     <div class="toolbar-filter">
       <the-input
+        @keyDownbaseInput="searchInputEnter()"
         heightInput="35"
         widthInput="179"
         :iconLeft="true"
@@ -13,9 +14,7 @@
         "
         @searchInput="searchInput()"
       />
-      
-
-      <the-combobox
+            <the-combobox
         @selectItemCombobox="
           (data, key) => {
             getIdCategory(data, key);
@@ -56,7 +55,7 @@
       <TheButton
         btnName="+ Thêm tài sản"
         class="btn-add"
-        @click="ShowDialog()"
+        @click="showDialogAsset()"
         btnType="2"
       />
       <BaseTooltip position="down" tooltipText="xuất khẩu">
@@ -74,6 +73,11 @@
     </div>
   </div>
     <data-table @updateListId="updateListIdDelete" />
+
+    <DialogAssets v-if="showHideDialog"
+    :assetItem="itemAsset"
+    :typeD="typeDialog"
+     @closeDialog ="closeDialog()"     />
   <dialog-message
     :typeMessage="typeMessagepp"
     :titleMessage="isDeleteMany"
@@ -91,9 +95,10 @@ import { get, getById, deleteMultiAssets } from "@/api/api.js";
 import Resource from "@/resource/Resource";
 import { toast } from "vue3-toastify";
 import MISAEnum from "@/enums/enums";
+import DialogAssets from '@/components/dialog/DialogAssets.vue';
 
 export default {
-  components: { DataTable, TheInput, TheCombobox },
+  components: { DataTable, TheInput, TheCombobox, DialogAssets },
   async created() {
     /**
      * Author: TVTam
@@ -138,6 +143,9 @@ export default {
   },
   data() {
     return {
+      itemAsset:{},
+      typeDialog:1,
+      showHideDialog:false,
       txtSreach: "",
       deparment:{
         nameDepartment:"",
@@ -157,6 +165,14 @@ export default {
     };
   },
   mounted() {
+
+      /** mở form thêm sửa cùng dữ liệu */
+
+    this.emitter.on("showDialog", (data) => {
+      this.showHideDialog = true;
+      this.typeDialog =data.typeDialog,
+      this.itemAsset =  data.dataAsset
+    });
     this.emitter.on("messageValidate", (data) => {
       this.isMessageDelete = true;
       this.typeMessagepp = data[1];
@@ -199,13 +215,23 @@ export default {
         }
       );
     },
+     /**
+     * @create by : MF1270
+     * @create day : 19/02/2023
+     * @hàm : đóng form
+     */
+    closeDialog(){
+       this.showHideDialog = false;
+    },
     /**
      * @ create by : MF1270
      * @ create day : 19/02/2023
      * @ hàm : Gửi sự kiên mở dialog btn thêm mới sang component Dialog
      */
-    ShowDialog() {
-      this.emitter.emit("showDialog", { dataAsset: null, typeDialog: 1 });
+    showDialogAsset() {
+      this.showHideDialog = true;
+      this.typeDialog =1,
+      this.itemAsset = {}
     },
 
     /**
@@ -317,7 +343,20 @@ export default {
         this.category.idCategory,
       ]);
     },
-
+ /**
+     * Description: Tìm kiếm text keydown enter
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+    searchInputEnter(){     
+           
+        if(event.code== 'Enter')          
+          {
+            this.searchInput()
+          }         
+           
+    
+    },
     getIdCategory(data, key) {
       if (key == MISAEnum.typeCombobox.category) {
         this.category.idCategory = data[key + "_id"];

@@ -60,13 +60,16 @@ input[type="text"]
     color: red;
     margin-top: 2px;
 }
-
+.combobox-icon__right:hover{
+    background-color: #afafaf;
+}
 .combobox-icon__right {
-    background-position: -72px -338px;
-    width: 7px;
-    height: 5px;
-    margin-right: 12px;
+    background-position: -65px -328px;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
     border: unset;
+    background-color: transparent;
 
 
 }

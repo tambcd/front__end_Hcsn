@@ -14,6 +14,7 @@
     "mitt": "^3.0.0",
     "vue": "^3.2.13",
     "vue-datepicker-next": "^1.0.2",
+    "vue-ref": "^2.0.0",
     "vue-router": "^4.1.6",
     "vue3-toastify": "^0.1.1"
   },

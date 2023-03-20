@@ -7,11 +7,9 @@
       <the-body />
     </div>
   </div>
-  <dialog-assets />
 </template>
 
 <script>
-import DialogAssets from '@/components/dialog/DialogAssets.vue';
 import TheMenu from './layout/Sidebar/TheMenu.vue';
 import TheBody from "./layout/TheBody.vue";
 import TheHeader from "./layout/TheHeader.vue";
@@ -21,7 +19,6 @@ export default {
   components: {
     TheHeader,
     TheBody,
-    DialogAssets,
     TheMenu,
   },
   data() {

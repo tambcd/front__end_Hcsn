@@ -1,5 +1,5 @@
 <template>
-    <button class="btn-base " :class="{btn__dark:btnType == 1,btn__color:btnType == 2} ">
+    <button class="btn-base" :class="{btn__dark:btnType == 1,btn__color:btnType == 2} ">
         {{btnName}}
     </button>
 </template>

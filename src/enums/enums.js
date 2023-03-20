@@ -2,7 +2,7 @@
     /**kiểu của form nhập liệu 
      * @ add =  1 : thêm
      * @ update = 2 : sửa 
-     * @ Replication = 2 : nhan bản 
+     * @ Replication = 3 : nhân bản 
      * */ 
     stateDialog : {
         add :1, 
