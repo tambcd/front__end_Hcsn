@@ -27,6 +27,7 @@
         :step= stepInput min="0"
          :max= maxInput
         @keydown="keyDownInput()"
+        @click="clickBinput()"
         :type="typeInput"
         class="input"
         :placeholder="contentInput"
@@ -41,7 +42,7 @@
         class="combobox-icon__right backgrsvg"
         v-if="iconRight"
         tabindex="-1"
-        @click="ShowBodyItem()"
+        @click.prevent="clickBinput()"
       ></button>
     </div>
     <div class="erro" v-if="IscheckEmpty && required">
@@ -152,6 +153,14 @@ export default {
     /**
      * create by : MF1270
      * create day : 18/02/2023
+     * ham : ham click input
+     */
+    clickBinput(){
+         this.$emit("clickBinput");
+    },
+    /**
+     * create by : MF1270
+     * create day : 18/02/2023
      * ham : Đổi boder khi chọn vào input
      */
     InputFocus() {      
@@ -169,7 +178,6 @@ export default {
      */
     OutFocus() {
       this.focusInput = false;
-      this.hideBodyCombobox();
       if (this.valueInput === "") {
         this.IscheckEmpty = true;
       } else {
@@ -180,14 +188,7 @@ export default {
         }
       }
     },
-    /**
-     * create by : MF1270
-     * create day : 18/02/2023
-     * ham : ẩn hiện danh sách combobox
-     */
-    ShowBodyItem() {
-      this.$emit("ShowBodyItem");
-    },
+    
     /**
      * create by : MF1270
      * create day : 18/02/2023

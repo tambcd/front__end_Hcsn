@@ -7,7 +7,7 @@
           <BaseTooltip position="down" tooltipText="Đóng">
             <div
               class="dialog-header-close icon24 backgrsvg"
-              @click="closeDialog()"
+              @click="btnCancel()"
             ></div>
           </BaseTooltip>
         </div>
@@ -405,10 +405,15 @@ export default {
      
      */
     isNumberKey() {
-     
       if (event.keyCode > 47 && event.keyCode < 58) {
         event.target;
-      } else if (event.keyCode == 9 || event.keyCode == 37|| event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 8) {
+      } else if (
+        event.keyCode == 9 ||
+        event.keyCode == 37 ||
+        event.keyCode == 39 ||
+        event.keyCode == 46 ||
+        event.keyCode == 8
+      ) {
         event.target;
       } else {
         event.preventDefault();
@@ -533,6 +538,46 @@ export default {
       this.asset.tracked_year = data.tracked_year;
       this.asset.life_time = data.life_time;
       this.asset.production_year = new Date(data.production_year);
+    },
+
+    /**
+     * @create by : MF1270
+     * @create day : 1/03/2023
+     * ham : kiểm tra dữ liệu trên form đã thay dổi chưa
+     */
+    ischange() {
+      if (
+        this.asset.fixed_asset_name !== this.assetItem.fixed_asset_name ||
+        this.asset.department_id !== this.assetItem.department_id ||
+        this.asset.department_code !== this.assetItem.department_code ||
+        this.asset.department_name !== this.assetItem.department_name ||
+        this.asset.fixed_asset_category_id !==
+          this.assetItem.fixed_asset_category_id ||
+        this.asset.fixed_asset_category_code !==
+          this.assetItem.fixed_asset_category_code ||
+        this.asset.fixed_asset_category_name !==
+          this.assetItem.fixed_asset_category_name ||
+        new Date(this.asset.purchase_date).getDate() !==
+          new Date(this.assetItem.purchase_date).getDate() ||
+        new Date(this.asset.purchase_date).getMonth() !==
+          new Date(this.assetItem.purchase_date).getMonth() ||
+        new Date(this.asset.purchase_date).getFullYear() !==
+          new Date(this.assetItem.purchase_date).getFullYear() ||
+        this.moneyToNumber(this.asset.cost) !== this.assetItem.cost ||
+        this.asset.quantity !== this.assetItem.quantity ||
+        this.asset.depreciation_rate !== Number(this.assetItem.depreciation_rate.toFixed(1)) ||
+        this.asset.tracked_year !== this.assetItem.tracked_year ||
+        this.asset.life_time !== this.assetItem.life_time ||
+        new Date(this.asset.production_year).getDate() !==
+          new Date(this.assetItem.production_year).getDate() ||
+        new Date(this.asset.production_year).getMonth() !==
+          new Date(this.assetItem.production_year).getMonth() ||
+        new Date(this.asset.production_year).getFullYear() !==
+          new Date(this.assetItem.production_year).getFullYear()
+      ) {
+        return true;
+      }
+      return false;
     },
 
     /**
@@ -698,13 +743,19 @@ export default {
      * ham : mỏ hộp thông báo hàm hủy thêm - sửa
      */
     btnCancel() {
-      this.isMessage = true;
       if (this.typeDialog === MISAEnum.stateDialog.add) {
+        this.isMessage = true;
+
         this.typeMessage = 2;
         this.ContentMessage = Resource.VN_CancelAdd;
       } else {
-        this.typeMessage = 3;
-        this.ContentMessage = Resource.VN_CancelUpdate;
+        if (this.ischange()) {
+          this.isMessage = true;
+          this.typeMessage = 3;
+          this.ContentMessage = Resource.VN_CancelUpdate;
+        } else {
+          this.closeDialog();
+        }
       }
     },
     /**

@@ -1,6 +1,9 @@
 <template>
-  <div class="combobox">
+  <div class="combobox" >
+    <a ref="#" >
+    
     <the-input
+      @click="ShowhideItemCombobox"
       @keyDownbaseInput="keyAutoCombobox()"
       :valueInputFisrt="dataCombobox"
       :iconLeft="iconComboboxLeft"
@@ -11,7 +14,6 @@
       :required="erroCombobox"
       :marginInput="marginCombobox"
       :iconRight="iconComboboxRight"
-      @ShowBodyItem="ShowhideItemCombobox"
       @HideBodyItem="HideItemCombobox"
       @sendValueInput="
         (e) => {
@@ -28,7 +30,7 @@
         }"
         v-for="(item, indext) in dataArray"
         :key="item[keyData + '_id']"
-        @click="selectItem(item)"
+        @click="selectItemClick(item,indext)"
       >
         <div
           class="tick"
@@ -39,6 +41,7 @@
         </div>
       </div>
     </div>
+    </a>
   </div>
 </template>
 
@@ -101,7 +104,22 @@ export default {
     this.dataArray = this.DataCombobox;
     this.dataRoot = this.DataCombobox;
   },
+  mounted() {
+     document.addEventListener('click', this.close)
+  },
+  beforeDestroyed() {
+    document.removeEventListener('click',this.close)
+  },
   methods: {
+
+    toggleDropdown () {
+       this.showHideItem = !this.showHideItem
+    },
+    close (e) {
+      if (!this.$el.contains(e.target)) {
+         this.showHideItem = false
+      }
+    },
     /**
      * create by : MF1270
      * create day : 19/02/2023
@@ -120,6 +138,11 @@ export default {
       this.dataArray = this.dataRoot;
       this.showHideItem = false;
     },
+
+    selectItemClick(item,indext){
+      this.selectItem(item)
+       this.selectItemFocus = indext+1
+    }, 
     /**
      * create by : MF1270
      * create day : 19/02/2023
