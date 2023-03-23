@@ -251,6 +251,8 @@
                 v-model:value="asset.purchase_date"
                 format="DD/MM/YYYY"
                 class="date-input"
+                lang="vi"
+
               ></DatePicker>
             </div>
             <div class="item-code item-left" ref="production_year">
@@ -261,6 +263,7 @@
                 v-model:value="asset.production_year"
                 format="DD/MM/YYYY"
                 class="date-input"
+                lang="vi"
               ></DatePicker>
             </div>
             <div class="item-code item-left"></div>
@@ -304,6 +307,8 @@ import { toast } from "vue3-toastify";
 import Resource from "@/resource/Resource";
 import MISAEnum from "@/enums/enums";
 import { FormatMoney } from "@/assets/js/Format";
+import 'vue-datepicker-next/locale/vi';
+
 
 export default {
   props: {
