@@ -68,6 +68,7 @@
       </BaseTooltip>
       <BaseTooltip position="down" tooltipText="Xóa">
         <button
+          :disabled="!listIdDelete || this.listIdDelete.size == 0"
           class="btn__delete icon36 button-icon backgrsvg"
           @click="deleteAssets()"
         ></button>
@@ -82,7 +83,10 @@
      @closeDialog ="closeDialog()"     />
   <dialog-message
     :typeMessage="typeMessagepp"
+    :typeHighligh ="typeHighligh"
     :titleMessage="isDeleteMany"
+    :titleMessagebottom="titleMessagebottom"
+    :titleMessageheader ="titleMessageheader"
     v-if="isMessageDelete"
     @btnYesMessage="deleteYes"
     @hideMessage="ReLoadingDataDelete"
@@ -158,7 +162,10 @@ export default {
         idCategory: "",
       },
       typeMessagepp: 2,
+      typeHighligh: 1,
       isDeleteMany: "",
+      titleMessageheader: "",
+      titleMessagebottom: "",
       isMessageDelete: false,
       departments: [],
       assetCategorys: [],
@@ -199,13 +206,12 @@ export default {
         id,
         (res) => {
           // Trường hợp thành công  gửi lên form sửa
-          this.isDeleteMany =
-            Resource.VN_DeleteTxt +
-            "<< " +
+          this.titleMessageheader = Resource.VN_DeleteTxt + " " 
+          this.isDeleteMany =          
             res.data.fixed_asset_code +
             " - " +
-            res.data.fixed_asset_name +
-            " >> ?";
+            res.data.fixed_asset_name 
+            this.titleMessagebottom = "  ?";
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -270,14 +276,20 @@ export default {
     deleteAssets() {
       this.typeMessagepp = 2;
       if (this.listIdDelete.size == 1) {
+        this.typeHighligh = 2;
         this.getAssetById(Array.from(this.listIdDelete)[0]);
       } else {
+           this.typeHighligh = 1;
         if (this.listIdDelete.size < 10) {
-           this.isDeleteMany = '0' + this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
+          this.titleMessageheader = '0' + this.listIdDelete.size
+           this.isDeleteMany = Resource.VN_ManyDeleteTxt;
+            this.titleMessagebottom = "";
         }
         else{
 
-          this.isDeleteMany = this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
+          this.titleMessageheader =  this.listIdDelete.size
+           this.isDeleteMany = Resource.VN_ManyDeleteTxt;
+            this.titleMessagebottom = "";
         }
       }
       this.isMessageDelete = true;
