@@ -236,12 +236,9 @@ export default {
         (response) => {
           // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
           this.listData = response.data;
-
-          this.listData.data.forEach((element) => {
-            this.totalCost += element.cost;
-            this.totalQuantity += element.quantity;
-            this.totalAtrophy += element.depreciation_value;
-          });
+          this.totalCost = response.data.totalCost
+          this.totalAtrophy = response.data.totalDepreciationValue;
+          this.totalQuantity = response.data.totalQuantity;   
           this.valueRemaining = this.totalCost - this.totalAtrophy;
           this.hideNumberPage();
           this.isReloadData = true;

@@ -25,11 +25,13 @@
       {{ FormatMoney(dataItem.cost.toString()) }}
     </td>
     <td class="right" style="min-width: 150px">
-      {{ FormatMoney((dataItem.depreciation_value ).toString())}}
+      {{
+        FormatMoney(Math.round(depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
+      }}
     </td>
     <td class="right" style="width: 150px">
       {{
-        FormatMoney((dataItem.cost - dataItem.depreciation_value).toString())
+        FormatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
@@ -75,6 +77,18 @@ export default {
     };
   },
   methods: {
+
+
+     /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : hàm tính giá trị hao mon lũy kết
+     */
+
+    depreciationValue(productionYear,depreciationValueYear) {
+        
+        return ((new Date().getFullYear()- new Date(productionYear).getFullYear())*12 + new Date().getMonth()- new Date(productionYear).getMonth())*(depreciationValueYear/12)
+    },
     /**
      * create by : MF1270
      * create day : 19/02/2023
@@ -85,6 +99,11 @@ export default {
       return FormatMoney(dataFormat);
     },
 
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : chon check box hàng
+     */
     sendCheckEmp(state, id) {
       if (state) {
         this.ItemSelect[0] = id;

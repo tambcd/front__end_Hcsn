@@ -1,5 +1,3 @@
-// import TheLoading from '@/components/Dialog/TheLoading.vue'
-// import TheMesage from '@/components/mesage/TheMesage.vue'
 import BaseTooltipTable from '@/components/tooltip/BaseTooltipTable.vue'
 import BaseTooltip from '@/components/tooltip/BaseTooltip.vue'
 import DatePicker from 'vue-datepicker-next'
@@ -34,6 +32,7 @@ export const requiredComponents = [
         componentName: 'BaseInput',
         component: BaseInput,
     },
+     
     
 
 

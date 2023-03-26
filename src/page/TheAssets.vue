@@ -16,10 +16,11 @@
       />
             <the-combobox
         @selectItemCombobox="
-          (data, key) => {
-            getIdCategory(data, key);
+          (data, key,text) => {
+            getIdCategory(data, key,text);
           }
         "
+        :allItem="true"
         :valueSelect="category.nameCategory"
         dataContent="fixed_asset_category_name"
         :DataCombobox="assetCategorys"
@@ -34,10 +35,11 @@
 
       <the-combobox
         @selectItemCombobox="
-          (data, key) => {
-            getIdCategory(data, key);
+          (data, key,text) => {
+            getIdCategory(data, key,text);
           }
         "
+        :allItem="true"
         :valueSelect="deparment.nameDepartment"
         dataContent="department_name"
         :DataCombobox="departments"
@@ -270,7 +272,13 @@ export default {
       if (this.listIdDelete.size == 1) {
         this.getAssetById(Array.from(this.listIdDelete)[0]);
       } else {
-        this.isDeleteMany = this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
+        if (this.listIdDelete.size < 10) {
+           this.isDeleteMany = '0' + this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
+        }
+        else{
+
+          this.isDeleteMany = this.listIdDelete.size + Resource.VN_ManyDeleteTxt;
+        }
       }
       this.isMessageDelete = true;
     },
@@ -357,13 +365,28 @@ export default {
            
     
     },
-    getIdCategory(data, key) {
+    getIdCategory(data,key,text) {
+
       if (key == MISAEnum.typeCombobox.category) {
+      if(data ===null){
+        this.category.idCategory = "";
+        this.category.nameCategory = "134";
+      }
+      else{
+
         this.category.idCategory = data[key + "_id"];
-        this.category.nameCategory = data[key + "_name"];
+        this.category.nameCategory = text;
+      }
       } else {
+        if(data ===null){
+        this.deparment.idDepartment = "";
+        this.deparment.nameDepartment = text;
+      }
+      else{
+
         this.deparment.idDepartment = data[key + "_id"];
-        this.deparment.nameDepartment = data[key + "_name"];
+        this.deparment.nameDepartment = text;
+      }
       }
 
       this.emitter.emit("filterAssets", [

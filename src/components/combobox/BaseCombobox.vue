@@ -22,6 +22,16 @@
       "
     />
     <div class="body-combobox" v-show="showHideItem">
+        <div
+        class="item-combobox" @click="selectAllItem()"  v-if="allItem"       
+      >
+        <div
+          class="tick"          
+        ></div>
+        <div class="cobobox-title">
+         --Tất cả--
+        </div>
+      </div>
       <div
         class="item-combobox"
         :class="{
@@ -34,7 +44,7 @@
       >
         <div
           class="tick"
-          :class="{ 'tickbg': item_selectCb == item[keyData + '_id'] || indext == selectItemFocus  }"
+          :class="{ 'tickbg': item_selectCb == item[keyData + '_id'] }"
         ></div>
         <div class="cobobox-title">
           {{ item[dataContent] }}
@@ -50,6 +60,9 @@ import TheInput from "../input/BaseInput.vue";
 export default {
   components: { TheInput },
   props: {
+    allItem:{
+      default:false,
+    },
     iconComboboxLeft: {
       default: false,
     },
@@ -123,6 +136,17 @@ export default {
     /**
      * create by : MF1270
      * create day : 19/02/2023
+     * ham : lọc theo tất cả 
+     */
+    selectAllItem(){
+      this.dataCombobox = "Tất cả";
+      this.selectItem(null)
+      this.showHideItem = false;
+
+    },
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
      * ham : đóng mở combobox
      */
     ShowhideItemCombobox() {
@@ -149,13 +173,16 @@ export default {
      * ham : đóng combobox
      */
     selectItem(idItem) {
-      if (!idItem) {
-        return;
+      if (!idItem ) {
+        this.$emit("selectItemCombobox", null, this.keyData, this.dataCombobox);
       }
-      this.dataCombobox = idItem[this.dataContent];
+      else{
+
+        this.dataCombobox = idItem[this.dataContent];
+        this.$emit("selectItemCombobox", idItem, this.keyData,this.dataCombobox);
+        this.item_selectCb = idItem[this.keyData + "_id"];
+      }
       this.showHideItem = false;
-      this.$emit("selectItemCombobox", idItem, this.keyData);
-      this.item_selectCb = idItem[this.keyData + "_id"];
     },
 
     /**
@@ -188,7 +215,9 @@ export default {
 
           break;
         case "Enter":
-          if (this.showHideItem) {
+          
+          if (this.showHideItem) {                   
+            this.dataCombobox = this.dataArray[this.selectItemFocus][this.dataContent]
             this.showHideItem = false;
             this.selectItem(this.dataArray[this.selectItemFocus]);
           } else {
@@ -199,7 +228,6 @@ export default {
           break;
 
         default:
-          this.showHideItem = true;
           break;
       }
     },
@@ -216,7 +244,7 @@ export default {
         ) {
           this.dataArray.push(element);
         }
-        if (element[this.dataContent] === txtSearch) {
+        if (element[this.dataContent] === txtSearch || txtSearch ==="Tất cả") {
           this.dataArray = this.dataRoot;
           this.showHideItem = false;
           return;

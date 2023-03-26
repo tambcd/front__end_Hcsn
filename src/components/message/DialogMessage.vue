@@ -7,7 +7,7 @@
               <div class="icon icon48 icon-error"></div>
           </div>
           <div class="message-title">
-            <span>{{ titleMessage }}</span>
+            <span>{{ titleMessageHighligh }}</span> {{ titleMessage }}
           </div>
         </div>
 
@@ -72,6 +72,7 @@ export default {
     typeMessage: Number,
     /**nội dung thông báo */
     titleMessage: String,
+    titleMessageHighligh: String,
     titleBtnYes: {
       default: "Có",
     },
