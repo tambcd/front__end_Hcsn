@@ -20,7 +20,7 @@ export function reverse(string) {
      * ham : định dạng tiền
      */
 export function FormatMoney (dataFormat) {
-      
+      dataFormat = Number(dataFormat).toString()
       var result = "";
       let a = Math.floor(dataFormat.length / 3);
       let b = dataFormat.length % 3;

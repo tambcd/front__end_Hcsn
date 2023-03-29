@@ -8,8 +8,9 @@
       :class="{
         'toolbar-filter-text-focus': focusInput,
         'toolbar-filter-text-erro': IscheckEmpty && required,
-        'hide-icon': iconNumber,
+        'hide-icon': hideIconInput,
         disabledInput: disabledInput,
+        'hide-icon-number': !hideIconInput 
       }"
       :style="{
         width: widthInput,
@@ -23,7 +24,7 @@
         v-if="iconLeft"
         @click="btnSearch()"
       ></div>
-      <input
+      <input 
         :step= stepInput min="0"
          :max= maxInput
         @keydown="keyDownInput()"
@@ -55,6 +56,9 @@
 import { FormatMoney } from "@/assets/js/Format";
 export default {
   props: {
+    hideIconInput:{
+      default:false
+    },
     //
     stepInput:{
       default: 0.1

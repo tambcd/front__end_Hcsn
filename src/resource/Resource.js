@@ -27,6 +27,7 @@ export  const Resource = {
     /**Sửa tài sản */
     VN_update:"Sửa tài sản", 
     VN_SeverDisconnect:"Vui lòng kiểm tra kết nối Internet",
+    VN_Please:"Vui lòng nhập ",
   
     VN_EmptyData:"không được phép để trống",
     VN_NumberSS:" không được lớn hơn nguyên giá ",
@@ -37,20 +38,20 @@ export  const Resource = {
     VN_ManyDeleteTxt : ' tài sản bạn đã chọn bạn có muôn xóa các tài sản khỏi danh sách không ?',
 
     MapNameAsset : {
-        fixed_asset_code : "Mã tài sản ",
-        fixed_asset_name: "Tên tài sản ",
-        department_code: "Mã phòng ban ",
-        department_name: "Tên phòng ban ",
-        fixed_asset_category_code: "Mã Loại tài sản ",
-        fixed_asset_category_name: "Tên Loại tài sản ",
-        purchase_date:"Ngày mua ",
-        cost:"Nguyên giá ",
-        quantity:"Số lượng ",
-        depreciation_value:"Giá trị hao mòn ",
-        depreciation_rate: "Tỷ lẹ hao mòn năm ",
-        tracked_year:"Năm sử dụng",
-        life_time :"Năm theo dõi ",
-        production_year :"Ngày bắt đầu sử dụng "
+        fixed_asset_code : "mã tài sản ",
+        fixed_asset_name: "tên tài sản ",
+        department_code: "mã phòng ban ",
+        department_name: "tên phòng ban ",
+        fixed_asset_category_code: "mã Loại tài sản ",
+        fixed_asset_category_name: "tên loại tài sản ",
+        purchase_date:"ngày mua ",
+        cost:"nguyên giá ",
+        quantity:"số lượng ",
+        depreciation_value:"giá trị hao mòn ",
+        depreciation_rate: "tỷ lẹ hao mòn năm ",
+        tracked_year:"năm sử dụng",
+        life_time :"năm theo dõi ",
+        production_year :"ngày bắt đầu sử dụng "
     },
     VN_CancelAdd:"Bạn có muốn hủy khai báo tài sản này?",
     VN_CancelUpdate:"Thông tin thay đổi sẽ không được cập nhập nếu bạn không lưu. Bạn có muốn lưu các thay đổi này? "

@@ -120,6 +120,7 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="quantity">
               <the-input
+                :hideIconInput = "true"
                 :stepInput="1"
                 :maxInput="10000"
                 :valueInputFisrt="asset.quantity"
@@ -184,6 +185,7 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="depreciation_rate">
               <the-input
+                :hideIconInput = "true"
                 :maxInput="100"
                 :stepInput="0.1"
                 :valueInputFisrt="asset.depreciation_rate"
@@ -688,9 +690,16 @@ export default {
       this.isValidateEmpty();
       if (this.isValidate.stateValide) {
         this.typeMessage = 1;
+        this.ContentMessage = Resource.VN_Please +
+          Resource.MapNameAsset[this.isValidate.isfocus] 
+        this.isMessage = true;
+        return;
+      }
+      if(this.asset.quantity ==0){
+        this.isValidate.isfocus = "quantity";
+        this.typeMessage = 1;
         this.ContentMessage =
-          Resource.MapNameAsset[this.isValidate.isfocus] +
-          Resource.VN_EmptyData;
+          Resource.VN_Please + Resource.MapNameAsset["quantity"] 
         this.isMessage = true;
         return;
       }

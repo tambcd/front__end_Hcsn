@@ -97,7 +97,7 @@
 import DataTable from "@/components/table/DataTable.vue";
 import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
-import { get, getById, deleteMultiAssets } from "@/api/api.js";
+import { get, getById,deleteManyAssets } from "@/api/api.js";
 import Resource from "@/resource/Resource";
 import { toast } from "vue3-toastify";
 import MISAEnum from "@/enums/enums";
@@ -303,9 +303,19 @@ export default {
     async deleteYes() {
       try {
         // xóa nhiều thì mảng xóa đc cập nhập data
-        let a = await deleteMultiAssets(
+        await deleteManyAssets(
           "Assets",
-          Array.from(this.listIdDelete),
+          {data: Array.from(this.listIdDelete)},
+          ()=>{
+              toast.success(Resource.VN_DeleteSuccess, {
+              autoClose: 2000,
+               position: "bottom-right",
+          });
+          // chuyền thông báó xóa thành công để clear mảng xóa nhiều
+          this.emitter.emit("LoadingDataDelete");
+          this.isMessageDelete = false;
+
+          },
           (error) => {
             // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
             toast.error(Resource.VN_DeleteFailure, {
@@ -315,15 +325,7 @@ export default {
             console.log(error);
           }
         );
-        if (a) {
-          toast.success(Resource.VN_DeleteSuccess, {
-            autoClose: 2000,
-            position: "bottom-right",
-          });
-          // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-          this.emitter.emit("LoadingDataDelete");
-          this.isMessageDelete = false;
-        }
+        
       } catch (error) {
         toast.error(Resource.VN_DeleteEmpty, {
           autoClose: 2000,

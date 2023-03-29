@@ -1,5 +1,6 @@
 <template>
     <DatePicker v-model:value ="value" format="DD/MM/YYYY" value-type="YYYY-MM-DD" lang="vi"></DatePicker>
+    <input type="number"/>
 </template>
 
 <script>

@@ -1,7 +1,15 @@
 .hide-icon input::-webkit-outer-spin-button,
 .hide-icon input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin-right: 10px;
+    margin-left: 5px;
+    font-size: 20px;
+    opacity: 1;
+
+}
+.hide-icon-number input::-webkit-outer-spin-button,
+.hide-icon-number input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0px !important;
+
 }
 input[type="text"]
 {

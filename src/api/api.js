@@ -66,14 +66,10 @@ export const deleteAssets = async(route = '', param, success, errorHandler) =>{
  * Description: Hàm xóa hàng loạt dữ liệu dựa trên tham số đàu vào.
  * created : tvTam (22/02/2023)
  */
- export const deleteMultiAssets = async(route = '', params, errorHandler) =>{
-    let result = true;
-    for (let param of params){
-        await Axios.delete(API + route +`/${param}`).catch((error) => {errorHandler(error); result = false});
-    }
-    return result;
+ 
+export const deleteManyAssets = async(route = '', data, success, errorHandler) =>{
+    return await Axios.delete(API + route ,data).then((response) =>success(response)).catch((error) => errorHandler(error));
 }
-
 /**
  * Description: Hàm để lấy về mã số nhân viên mới.
  * created : tvTam (22/02/2023)
