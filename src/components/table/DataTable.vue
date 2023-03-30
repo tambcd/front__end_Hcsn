@@ -1,5 +1,5 @@
 <template>
-  <div class="table">
+  <div class="table"  tabindex="0"  @keyup.prevent="noPressShift()" @keydown.prevent="pressShift()">
     <table class="table-assets">
       <tr class="header-table weight700">
         <th class="first-column center input-checkbox" ref="checkBoxAll">
@@ -10,7 +10,7 @@
         <th style="min-width: 150px">Tên tài sản</th>
         <th style="min-width: 150px">Loại tài sản</th>
         <th style="min-width: 200px">Bộ phận sử dụng</th>
-        <th class="right" style="width: 50px">Số lượng</th>
+        <th class="right" style="width: 100px">Số lượng</th>
         <th class="right" style="width: 150px">Nguyên giá</th>
         <th class="right" style="width: 150px">
           <BaseTooltipTable
@@ -28,7 +28,7 @@
       </tr>
       <tbody>
         <item-table
-          @click="selectItem(item.fixed_asset_id)"
+          @click="selectItem(item.fixed_asset_id,index)"
           :selectClick="itemId"
           :stateIsAll="listIdSelection"
           @changeDataSelect="changeDataId"
@@ -161,6 +161,10 @@ export default {
   },
   data() {
     return {
+      selectStart:0,
+      selectEnd:0,
+      numberItem:0,
+      isShift:false,
       itemId: "",
       totalAtrophy: 0,
       totalQuantity: 0,
@@ -182,6 +186,7 @@ export default {
     };
   },
   mounted() {
+    
     /**tải lại data khi thực hiện xóa */
     this.emitter.on("LoadingDataDelete", () => {
       this.LoadDataTable(1);
@@ -210,7 +215,31 @@ export default {
       }
     });
   },
+
   methods: {
+     /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * sự kiện nhấn giữ phím shift
+     */
+   pressShift(){
+        if(event.key == "Shift"){
+
+          this.isShift = true
+        }
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * sự kiện bỏ phím shift
+     */
+    noPressShift(){
+
+      if(event.key == "Shift"){
+
+          this.isShift = false
+        }
+    },
     /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
@@ -426,8 +455,25 @@ export default {
      * create day : 1/03/2023
      * ham : danh dấu item khi click
      */
-    selectItem(id) {
+    selectItem(id,index) {
       this.itemId = id;
+      if(index >= this.numberItem){
+         this.selectStart = this.numberItem
+      this.selectEnd = index
+      }
+      else{
+         this.selectStart = index
+         this.selectEnd = this.numberItem
+      }     
+      this.numberItem = index
+      if(this.isShift){
+         this.ClearData()
+        for (let index = this.selectStart;  index < this.selectEnd +1; index++) {
+          this.listIdSelection.add(this.listData.data[index].fixed_asset_id);                  
+        }
+         this.SendDataDelete();       
+      }
+     
     },
     /**
      * create by : MF1270

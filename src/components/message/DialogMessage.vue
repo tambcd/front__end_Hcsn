@@ -1,5 +1,5 @@
 <template>
-  <div class="messing" ref="Close-error">
+  <div class="messing" ref="Close-error" tabindex="0" @keyup.esc="closeThisMessage()">
     <div class="messing-content">
       <div class="messing-body">
         <div class="content flex">

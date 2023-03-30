@@ -1,10 +1,10 @@
 <template>
-  <div class="dialog-model">
+  <div class="dialog-model" tabindex="0" @keyup.esc="btnCancel()" @keydown.ctrl.s.prevent="saveAsset()">
     <div class="dialog-content">
       <div class="dialog-main">
         <div class="dialog-header">
           <div class="dialog-header-tilte weight700">{{ contentForm }}</div>
-          <BaseTooltip position="down" tooltipText="Đóng">
+          <BaseTooltip position="down" tooltipText="Đóng (ESC)">
             <div
               class="dialog-header-close icon24 backgrsvg"
               @click="btnCancel()"
@@ -278,12 +278,14 @@
         </div>
 
         <div class="dialog__footer">
+                    <BaseTooltip position="down" tooltipText="Lưu (Ctrl + S)">
           <TheButton
             @click="saveAsset()"
             btnName="Lưu"
             class="btnWarn-Yes btn-save"
             btnType="2"
           />
+                    </BaseTooltip>
           <TheButton
             btnName="Hủy"
             class="btnWarn-close"
