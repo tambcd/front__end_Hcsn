@@ -31,7 +31,8 @@
     </td>
     <td class="right" style="width: 150px">
       {{
-        FormatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
+        Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)) > 0 ? FormatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString()) : 0
+
       }}
     </td>
     <td class="The-actions center actions__item" style="width: 100px">
@@ -41,7 +42,7 @@
           @click="updateAsset(dataItem)"
         ></button>
       </BaseTooltip>
-
+ 
       <BaseTooltip position="left" tooltipText="Nhân bản">
         <button
           class="btn__action backgrsvg btn__nhanban"

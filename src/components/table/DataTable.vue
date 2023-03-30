@@ -1,5 +1,10 @@
 <template>
-  <div class="table"  tabindex="0"  @keyup.prevent="noPressShift()" @keydown.prevent="pressShift()">
+  <div
+    class="table"
+    tabindex="0"
+    @keyup.prevent="noPressShift()"
+    @keydown.prevent="pressShift()"
+  >
     <table class="table-assets">
       <tr class="header-table weight700">
         <th class="first-column center input-checkbox" ref="checkBoxAll">
@@ -28,7 +33,7 @@
       </tr>
       <tbody>
         <item-table
-          @click="selectItem(item.fixed_asset_id,index)"
+          @click="selectItem(item.fixed_asset_id, index)"
           :selectClick="itemId"
           :stateIsAll="listIdSelection"
           @changeDataSelect="changeDataId"
@@ -161,10 +166,11 @@ export default {
   },
   data() {
     return {
-      selectStart:0,
-      selectEnd:0,
-      numberItem:0,
-      isShift:false,
+      selectStart: 0,
+      selectEnd: 0,
+      numberItem: 0,
+      numberArrowIndext: 0,
+      isShift: false,
       itemId: "",
       totalAtrophy: 0,
       totalQuantity: 0,
@@ -186,7 +192,6 @@ export default {
     };
   },
   mounted() {
-    
     /**tải lại data khi thực hiện xóa */
     this.emitter.on("LoadingDataDelete", () => {
       this.LoadDataTable(1);
@@ -217,28 +222,58 @@ export default {
   },
 
   methods: {
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
-     * sự kiện nhấn giữ phím shift
+     * sự kiện nhấn giữ phím shift và nút lên xuống để thực hiện chọn nhiều phần tử
      */
-   pressShift(){
-        if(event.key == "Shift"){
-
-          this.isShift = true
-        }
+    pressShift() {
+      if (event.key == "Shift") {
+        this.isShift = true;
+      }
+      if (
+        event.code == "ArrowDown" &&
+        this.numberArrowIndext < this.listData.data.length - 1
+      ) {
+        this.ClearData()
+        this.numberArrowIndext++;
+      }
+      if (event.code == "ArrowUp" && this.numberArrowIndext > 0) {
+        this.ClearData()
+        this.numberArrowIndext--;
+      }
+      this.itemId = this.listData.data[this.numberArrowIndext].fixed_asset_id;
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
      * sự kiện bỏ phím shift
      */
-    noPressShift(){
-
-      if(event.key == "Shift"){
-
-          this.isShift = false
+    noPressShift() {
+      if (event.key == "Shift") {
+        this.isShift = false;
+      }
+      if (this.isShift) {
+        if (this.numberArrowIndext >= this.numberItem) {
+          this.selectStart = this.numberItem;
+          this.selectEnd = this.numberArrowIndext;
+        } else {
+          this.selectStart = this.numberArrowIndext;
+          this.selectEnd = this.numberItem;
         }
+        this.numberItem = this.numberArrowIndext;
+
+        this.ClearData();
+        for (
+          let index = this.selectStart;
+          index < this.selectEnd + 1;
+          index++
+        ) {
+          this.changeDataId([this.listData.data[index].fixed_asset_id, true]);
+
+          this.listIdSelection.add(this.listData.data[index].fixed_asset_id);
+        }
+      }
     },
     /**
      * Author: TVTam
@@ -265,9 +300,9 @@ export default {
         (response) => {
           // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
           this.listData = response.data;
-          this.totalCost = response.data.totalCost
+          this.totalCost = response.data.totalCost;
           this.totalAtrophy = response.data.totalDepreciationValue;
-          this.totalQuantity = response.data.totalQuantity;   
+          this.totalQuantity = response.data.totalQuantity;
           this.valueRemaining = this.totalCost - this.totalAtrophy;
           this.hideNumberPage();
           this.isReloadData = true;
@@ -455,25 +490,27 @@ export default {
      * create day : 1/03/2023
      * ham : danh dấu item khi click
      */
-    selectItem(id,index) {
+    selectItem(id, index) {
       this.itemId = id;
-      if(index >= this.numberItem){
-         this.selectStart = this.numberItem
-      this.selectEnd = index
+      if (index >= this.numberItem) {
+        this.selectStart = this.numberItem;
+        this.selectEnd = index;
+      } else {
+        this.selectStart = index;
+        this.selectEnd = this.numberItem;
       }
-      else{
-         this.selectStart = index
-         this.selectEnd = this.numberItem
-      }     
-      this.numberItem = index
-      if(this.isShift){
-         this.ClearData()
-        for (let index = this.selectStart;  index < this.selectEnd +1; index++) {
-          this.listIdSelection.add(this.listData.data[index].fixed_asset_id);                  
+      this.numberItem = index;
+      this.numberArrowIndext = index;
+      if (this.isShift) {
+        this.ClearData();
+        for (
+          let index = this.selectStart;
+          index < this.selectEnd + 1;
+          index++
+        ) {
+          this.changeDataId([this.listData.data[index].fixed_asset_id, true]);
         }
-         this.SendDataDelete();       
       }
-     
     },
     /**
      * create by : MF1270

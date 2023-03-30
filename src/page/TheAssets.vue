@@ -170,7 +170,7 @@ export default {
       departments: [],
       assetCategorys: [],
       dataAssets: [],
-      listIdDelete: null,
+      listIdDelete: "null",
     };
   },
   mounted() {
@@ -250,9 +250,13 @@ export default {
 
     async Export() {
       await get(
-        "Assets/Export",
+        "Assets/Export",{
+          txtSearch : this.txtSreach,
+          DepartmentId: this.deparment.idDepartment,
+          AssetCategoryId : this.category.idCategory
+        },
         () => {
-          window.open("https://localhost:7115/api/v1/Assets/Export");
+          window.open(`https://localhost:7115/api/v1/Assets/Export?txtSearch=${this.txtSreach}&DepartmentId=${this.deparment.idDepartment}&AssetCategoryId=${this.category.idCategory}`);
           toast.success(Resource.VN_ExportSucces, {
             autoClose: 2000,
             position: "bottom-right",

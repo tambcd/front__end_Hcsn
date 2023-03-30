@@ -1,5 +1,10 @@
 <template>
-  <div class="dialog-model" tabindex="0" @keyup.esc="btnCancel()" @keydown.ctrl.s.prevent="saveAsset()">
+  <div
+    class="dialog-model"
+    tabindex="0"
+    @keyup.esc="btnCancel()"
+    @keydown.ctrl.s.prevent="saveAsset()"
+  >
     <div class="dialog-content">
       <div class="dialog-main">
         <div class="dialog-header">
@@ -120,7 +125,7 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="quantity">
               <the-input
-                :hideIconInput = "true"
+                :hideIconInput="true"
                 :stepInput="1"
                 :maxInput="10000"
                 :valueInputFisrt="asset.quantity"
@@ -162,8 +167,8 @@
             </div>
             <div class="item-code item-left" ref="life_time">
               <the-input
-              :maxInput="1000"
-              :stepInput="1"
+                :maxInput="1000"
+                :stepInput="1"
                 :valueInputFisrt="asset.life_time"
                 iconNumber="false"
                 typeInput="number"
@@ -185,7 +190,7 @@
           <div class="item-multiple">
             <div class="item-code item-left" ref="depreciation_rate">
               <the-input
-                :hideIconInput = "true"
+                :hideIconInput="true"
                 :maxInput="100"
                 :stepInput="0.1"
                 :valueInputFisrt="asset.depreciation_rate"
@@ -257,7 +262,6 @@
                 class="date-input"
                 value-type="YYYY-MM-DD"
                 lang="vi"
-
               ></DatePicker>
             </div>
             <div class="item-code item-left" ref="production_year">
@@ -270,7 +274,6 @@
                 format="DD/MM/YYYY"
                 class="date-input"
                 lang="vi"
-                
               ></DatePicker>
             </div>
             <div class="item-code item-left"></div>
@@ -278,20 +281,22 @@
         </div>
 
         <div class="dialog__footer">
-                    <BaseTooltip position="down" tooltipText="Lưu (Ctrl + S)">
-          <TheButton
-            @click="saveAsset()"
-            btnName="Lưu"
-            class="btnWarn-Yes btn-save"
-            btnType="2"
-          />
-                    </BaseTooltip>
-          <TheButton
-            btnName="Hủy"
-            class="btnWarn-close"
-            btnType="1"
-            @click="btnCancel()"
-          />
+          <BaseTooltip position="down" tooltipText="Lưu (Ctrl + S)">
+            <TheButton
+              @click="saveAsset()"
+              btnName="Lưu"
+              class="btnWarn-Yes btn-save"
+              btnType="2"
+            />
+          </BaseTooltip>
+          <BaseTooltip position="down" tooltipText="Hủy (ESC)">
+            <TheButton
+              btnName="Hủy"
+              class="btnWarn-close"
+              btnType="1"
+              @click="btnCancel()"
+            />
+          </BaseTooltip>
         </div>
       </div>
     </div>
@@ -317,7 +322,6 @@ import Resource from "@/resource/Resource";
 import MISAEnum from "@/enums/enums";
 import { FormatMoney } from "@/assets/js/Format";
 
-
 export default {
   props: {
     assetItem: {},
@@ -326,7 +330,6 @@ export default {
     },
   },
   async created() {
-  
     /**
      * Xác định loại form và thực hiện gán dữ liệu tương ứng
      * @create by: TVTam
@@ -397,14 +400,14 @@ export default {
         fixed_asset_category_code: "",
         fixed_asset_category_id: "",
         fixed_asset_category_name: "",
-        purchase_date: '',
+        purchase_date: "",
         cost: 0,
         quantity: 0,
         depreciation_value: 0,
         depreciation_rate: 0,
         tracked_year: 2023,
         life_time: 0,
-        production_year: '',
+        production_year: "",
       },
     };
   },
@@ -412,35 +415,72 @@ export default {
     this.focusInput("fixed_asset_code");
   },
   methods: {
-     /**
+    /**
      * lấy ngày hiện tại
      * @create by : MF1270
      * @@create day : 1/03/2023
      
      */
-    getNowday(){
-        // mặc đinh là ngày hiện tại
-    if(new Date().getMonth()+1<10){
-          if(new Date().getDate()<10){
-          this.asset.production_year  = new Date().getFullYear().toString() + "-0" + (new Date().getMonth()+1).toString() +"-0"+new Date().getDate().toString()
-          this.asset.purchase_date = new Date().getFullYear().toString() + "-0" + (new Date().getMonth()+1).toString() +"-0"+new Date().getDate().toString()
-          return
+    getNowday() {
+      // mặc đinh là ngày hiện tại
+      if (new Date().getMonth() + 1 < 10) {
+        if (new Date().getDate() < 10) {
+          this.asset.production_year =
+            new Date().getFullYear().toString() +
+            "-0" +
+            (new Date().getMonth() + 1).toString() +
+            "-0" +
+            new Date().getDate().toString();
+          this.asset.purchase_date =
+            new Date().getFullYear().toString() +
+            "-0" +
+            (new Date().getMonth() + 1).toString() +
+            "-0" +
+            new Date().getDate().toString();
+          return;
         }
-          this.asset.purchase_date = new Date().getFullYear().toString() + "-0" + (new Date().getMonth()+1).toString() +"-"+new Date().getDate().toString()
-          this.asset.production_year  = new Date().getFullYear().toString() + "-0" + (new Date().getMonth()+1).toString() +"-"+new Date().getDate().toString()
-
-    }
-    else{
-       if(new Date().getDate()<10){
-          this.asset.production_year = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() +"-0"+new Date().getDate().toString()
-          this.asset.purchase_date = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() +"-0"+new Date().getDate().toString()
-          return
+        this.asset.purchase_date =
+          new Date().getFullYear().toString() +
+          "-0" +
+          (new Date().getMonth() + 1).toString() +
+          "-" +
+          new Date().getDate().toString();
+        this.asset.production_year =
+          new Date().getFullYear().toString() +
+          "-0" +
+          (new Date().getMonth() + 1).toString() +
+          "-" +
+          new Date().getDate().toString();
+      } else {
+        if (new Date().getDate() < 10) {
+          this.asset.production_year =
+            new Date().getFullYear().toString() +
+            "-" +
+            (new Date().getMonth() + 1).toString() +
+            "-0" +
+            new Date().getDate().toString();
+          this.asset.purchase_date =
+            new Date().getFullYear().toString() +
+            "-" +
+            (new Date().getMonth() + 1).toString() +
+            "-0" +
+            new Date().getDate().toString();
+          return;
         }
-        this.asset.production_year = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() +"-"+new Date().getDate().toString()
-        this.asset.purchase_date = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() +"-"+new Date().getDate().toString()
-    }
+        this.asset.production_year =
+          new Date().getFullYear().toString() +
+          "-" +
+          (new Date().getMonth() + 1).toString() +
+          "-" +
+          new Date().getDate().toString();
+        this.asset.purchase_date =
+          new Date().getFullYear().toString() +
+          "-" +
+          (new Date().getMonth() + 1).toString() +
+          "-" +
+          new Date().getDate().toString();
+      }
     },
-
 
     /**
      * chuyển date sang chuỗi
@@ -448,19 +488,42 @@ export default {
      * @@create day : 1/03/2023
      
      */
-    dateToString(dateNew){
-      if(new Date(dateNew).getMonth()+1<10){
-        if(new Date(dateNew).getDate()<10){
-           return new Date(dateNew).getFullYear().toString() + "-0" + (new Date(dateNew).getMonth()+1).toString() +"-0"+new Date(dateNew).getDate().toString()
+    dateToString(dateNew) {
+      if (new Date(dateNew).getMonth() + 1 < 10) {
+        if (new Date(dateNew).getDate() < 10) {
+          return (
+            new Date(dateNew).getFullYear().toString() +
+            "-0" +
+            (new Date(dateNew).getMonth() + 1).toString() +
+            "-0" +
+            new Date(dateNew).getDate().toString()
+          );
         }
-          return new Date(dateNew).getFullYear().toString() + "-0" + (new Date(dateNew).getMonth()+1).toString() +"-"+new Date(dateNew).getDate().toString()
+        return (
+          new Date(dateNew).getFullYear().toString() +
+          "-0" +
+          (new Date(dateNew).getMonth() + 1).toString() +
+          "-" +
+          new Date(dateNew).getDate().toString()
+        );
+      } else {
+        if (new Date(dateNew).getDate() < 10) {
+          return (
+            new Date(dateNew).getFullYear().toString() +
+            "-" +
+            (new Date(dateNew).getMonth() + 1).toString() +
+            "-0" +
+            new Date(dateNew).getDate().toString()
+          );
+        }
+        return (
+          new Date(dateNew).getFullYear().toString() +
+          "-" +
+          (new Date(dateNew).getMonth() + 1).toString() +
+          "-" +
+          new Date(dateNew).getDate().toString()
+        );
       }
-    else{
-      if(new Date(dateNew).getDate()<10){
-           return new Date(dateNew).getFullYear().toString() + "-" + (new Date(dateNew).getMonth()+1).toString() +"-0"+new Date(dateNew).getDate().toString()
-        }
-        return new Date(dateNew).getFullYear().toString() + "-" + (new Date(dateNew).getMonth()+1).toString() +"-"+new Date(dateNew).getDate().toString()
-    }
     },
     /**
      * chuyển chuỗi sang date
@@ -468,8 +531,8 @@ export default {
      * @@create day : 1/03/2023
      
      */
-    stringToDate(text){
-      return new Date(text)
+    stringToDate(text) {
+      return new Date(text);
     },
     /**
      * chỉ nhập số
@@ -523,8 +586,6 @@ export default {
      * ham : lấy dữ liệu combobox
      */
     getDataComboboxItem(data, key) {
-     
-      
       if (key === MISAEnum.typeCombobox.deparment) {
         this.asset.department_code =
           data[MISAEnum.typeCombobox.deparment + "_code"];
@@ -574,7 +635,7 @@ export default {
      * @ham : gán giá trị lên form nhập liệu
      */
     dataAssignment(typeDialog, data) {
-      this.isValidate.isfocus = 'fixed_asset_code'
+      this.isValidate.isfocus = "fixed_asset_code";
       if (typeDialog === MISAEnum.stateDialog.update) {
         this.typeDialog = 2;
         this.contentForm = Resource.VN_update;
@@ -582,8 +643,7 @@ export default {
         this.asset.fixed_asset_id = data.fixed_asset_id;
         this.byData(data);
       } else if (typeDialog === MISAEnum.stateDialog.add) {
-        this.getNowday(),
-        this.newAssetCode();
+        this.getNowday(), this.newAssetCode();
         this.typeDialog = 1;
         this.contentForm = Resource.VN_Add;
       } else if (typeDialog === MISAEnum.stateDialog.replication) {
@@ -611,10 +671,12 @@ export default {
       this.asset.cost = data.cost;
       this.asset.quantity = data.quantity;
       this.asset.depreciation_value = data.depreciation_value;
-      this.asset.depreciation_rate = Number((data.depreciation_rate * 100).toFixed(1));
+      this.asset.depreciation_rate = Number(
+        (data.depreciation_rate * 100).toFixed(1)
+      );
       this.asset.tracked_year = data.tracked_year;
       this.asset.life_time = data.life_time;
-      this.asset.production_year =  this.dateToString(data.production_year);
+      this.asset.production_year = this.dateToString(data.production_year);
     },
 
     /**
@@ -642,7 +704,8 @@ export default {
           new Date(this.assetItem.purchase_date).getFullYear() ||
         this.moneyToNumber(this.asset.cost) !== this.assetItem.cost ||
         this.asset.quantity !== this.assetItem.quantity ||
-        this.asset.depreciation_rate !== Number(this.assetItem.depreciation_rate.toFixed(1)) ||
+        this.asset.depreciation_rate !==
+          Number(this.assetItem.depreciation_rate.toFixed(1)) ||
         this.asset.tracked_year !== this.assetItem.tracked_year ||
         this.asset.life_time !== this.assetItem.life_time ||
         new Date(this.asset.production_year).getDate() !==
@@ -688,20 +751,20 @@ export default {
      * ham : thêm - sửa tài sản
      */
     saveAsset() {
-      var isChangeDataUpdate = this.ischange()
+      var isChangeDataUpdate = this.ischange();
       this.isValidateEmpty();
       if (this.isValidate.stateValide) {
         this.typeMessage = 1;
-        this.ContentMessage = Resource.VN_Please +
-          Resource.MapNameAsset[this.isValidate.isfocus] 
+        this.ContentMessage =
+          Resource.VN_Please + Resource.MapNameAsset[this.isValidate.isfocus];
         this.isMessage = true;
         return;
       }
-      if(this.asset.quantity ==0){
+      if (this.asset.quantity == 0) {
         this.isValidate.isfocus = "quantity";
         this.typeMessage = 1;
         this.ContentMessage =
-          Resource.VN_Please + Resource.MapNameAsset["quantity"] 
+          Resource.VN_Please + Resource.MapNameAsset["quantity"];
         this.isMessage = true;
         return;
       }
@@ -709,7 +772,7 @@ export default {
       this.asset.depreciation_value = this.moneyToNumber(
         this.asset.depreciation_value
       );
-      this.asset.depreciation_rate = this.asset.depreciation_rate/100
+      this.asset.depreciation_rate = this.asset.depreciation_rate / 100;
 
       if (this.asset.cost < this.asset.depreciation_value) {
         this.isValidate.isfocus = "depreciation_value";
@@ -719,24 +782,20 @@ export default {
         this.isMessage = true;
         return;
       }
-      this.asset.purchase_date = new Date(this.asset.purchase_date)
-      
-     this.asset.production_year = new Date(this.asset.production_year )
-      
-      try {
+      this.asset.purchase_date = new Date(this.asset.purchase_date);
 
+      this.asset.production_year = new Date(this.asset.production_year);
+
+      try {
         if (this.typeDialog === MISAEnum.stateDialog.add) {
           this.addAsset();
-                  this.emitter.emit("showLoading", false);
-
+          this.emitter.emit("showLoading", false);
         } else {
-          if(isChangeDataUpdate){
+          if (isChangeDataUpdate) {
             this.updateAsset();
             this.emitter.emit("showLoading", false);
-
-          }
-          else{            
-              this.closeDialog();
+          } else {
+            this.closeDialog();
           }
         }
       } catch (error) {
@@ -896,29 +955,29 @@ export default {
     },
   },
   watch: {
-   
     "asset.cost"(data) {
       this.asset.depreciation_value = this.FormatMoney(
-        (this.moneyToNumber(data) * this.asset.depreciation_rate/100).toFixed()
+        (
+          (this.moneyToNumber(data) * this.asset.depreciation_rate) /
+          100
+        ).toFixed()
       );
     },
     "asset.depreciation_rate"(data) {
       this.asset.depreciation_value = this.FormatMoney(
-        (this.moneyToNumber(this.asset.cost) * data/100).toFixed()
+        ((this.moneyToNumber(this.asset.cost) * data) / 100).toFixed()
       );
     },
     "asset.life_time"(data) {
-      if(data==0){
+      if (data == 0) {
         this.asset.depreciation_rate = 0.00001;
+      } else {
+        this.asset.depreciation_rate = Number(((1 / data) * 100).toFixed(1));
       }
-      else{
-
-        this.asset.depreciation_rate = Number((1/data *100).toFixed(1)) ;      
-      }
-        this.asset.depreciation_rate = Number(this.asset.depreciation_rate.toFixed(1)) ;      
-
+      this.asset.depreciation_rate = Number(
+        this.asset.depreciation_rate.toFixed(1)
+      );
     },
-
   },
 };
 </script>
