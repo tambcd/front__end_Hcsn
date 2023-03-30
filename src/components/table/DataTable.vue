@@ -164,8 +164,10 @@ export default {
     this.listIdSelection = new Set();
     await this.LoadDataTable(1);
   },
+  
   data() {
     return {
+      isRechange:false,
       selectStart: 0,
       selectEnd: 0,
       numberItem: 0,
@@ -233,14 +235,34 @@ export default {
       }
       if (
         event.code == "ArrowDown" &&
-        this.numberArrowIndext < this.listData.data.length - 1
+        this.numberArrowIndext < this.listData.data.length    
       ) {
-        this.ClearData()
-        this.numberArrowIndext++;
+        this.isRechange = false;
+        if(this.isShift){
+          this.isRechange = false;
+          this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+        }
+        if(this.numberArrowIndext >= this.listData.data.length - 1){
+          console.log();
+          this.numberArrowIndext = this.listData.data.length - 1;
+        }
+        else{
+
+          this.numberArrowIndext++;
+        }
       }
-      if (event.code == "ArrowUp" && this.numberArrowIndext > 0) {
-        this.ClearData()
-        this.numberArrowIndext--;
+      if (event.code == "ArrowUp" && this.numberArrowIndext >= 0) {
+
+        if(this.isShift){
+          this.isRechange = true;
+          this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+        }
+        if(this.numberArrowIndext <=0){
+             this.numberArrowIndext ==0
+      }
+      else{
+          this.numberArrowIndext--;
+      }
       }
       this.itemId = this.listData.data[this.numberArrowIndext].fixed_asset_id;
     },
@@ -253,26 +275,8 @@ export default {
       if (event.key == "Shift") {
         this.isShift = false;
       }
-      if (this.isShift) {
-        if (this.numberArrowIndext >= this.numberItem) {
-          this.selectStart = this.numberItem;
-          this.selectEnd = this.numberArrowIndext;
-        } else {
-          this.selectStart = this.numberArrowIndext;
-          this.selectEnd = this.numberItem;
-        }
-        this.numberItem = this.numberArrowIndext;
-
-        this.ClearData();
-        for (
-          let index = this.selectStart;
-          index < this.selectEnd + 1;
-          index++
-        ) {
-          this.changeDataId([this.listData.data[index].fixed_asset_id, true]);
-
-          this.listIdSelection.add(this.listData.data[index].fixed_asset_id);
-        }
+      if (event.code == "ArrowUp" || event.code == "ArrowDown") {
+                this.numberItem = this.numberArrowIndext
       }
     },
     /**
@@ -521,6 +525,21 @@ export default {
     FormatMoney(dataFormat) {
       return FormatMoney(dataFormat);
     },
+  },
+  watch: {
+    isRechange(value){
+      this.ClearData()
+      if(value){
+
+        this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
+      }
+      else{
+                this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
+
+      }
+
+
+    }
   },
 };
 </script>
