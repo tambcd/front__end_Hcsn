@@ -15,6 +15,10 @@
     background-color: #9E9E9E;
     border-radius: 4px;
 }
+table th:hover{
+  resize: horizontal;
+  overflow: auto;
+}
 
 th,
 td {

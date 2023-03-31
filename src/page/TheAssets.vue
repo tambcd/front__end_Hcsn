@@ -68,7 +68,7 @@
       </BaseTooltip>
       <BaseTooltip position="down" tooltipText="Xóa">
         <button
-          :disabled="!listIdDelete || this.listIdDelete.size == 0"
+         
           class="btn__delete icon36 button-icon backgrsvg"
           @click="deleteAssets()"
         ></button>
@@ -207,11 +207,11 @@ export default {
         (res) => {
           // Trường hợp thành công  gửi lên form sửa
           this.titleMessageheader = Resource.VN_DeleteTxt + " " 
-          this.isDeleteMany =          
+          this.isDeleteMany =    "<<"  +    
             res.data.fixed_asset_code +
             " - " +
-            res.data.fixed_asset_name 
-            this.titleMessagebottom = "  ?";
+            res.data.fixed_asset_name  + ">>" +
+            this.titleMessagebottom + "  ?";
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -279,10 +279,16 @@ export default {
      */
     deleteAssets() {
       this.typeMessagepp = 2;
+      if (this.listIdDelete.size<1 || !this.listIdDelete.size ) {
+        this.typeMessagepp = 1;
+         this.isDeleteMany = Resource.VN_NotDataDelete
+      }
       if (this.listIdDelete.size == 1) {
         this.typeHighligh = 2;
         this.getAssetById(Array.from(this.listIdDelete)[0]);
-      } else {
+      } 
+      
+      if(this.listIdDelete.size > 1){
            this.typeHighligh = 1;
         if (this.listIdDelete.size < 10) {
           this.titleMessageheader = '0' + this.listIdDelete.size

@@ -10,14 +10,14 @@
         <th class="first-column center input-checkbox" ref="checkBoxAll">
           <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
         </th>
-        <th class="center" style="width: 50px">STT</th>
-        <th style="min-width: 150px">Mã tài sản</th>
-        <th style="min-width: 150px">Tên tài sản</th>
-        <th style="min-width: 150px">Loại tài sản</th>
-        <th style="min-width: 200px">Bộ phận sử dụng</th>
-        <th class="right" style="width: 100px">Số lượng</th>
-        <th class="right" style="width: 150px">Nguyên giá</th>
-        <th class="right" style="width: 150px">
+        <th class="center" >STT</th>
+        <th style="min-width: 100px" >Mã tài sản</th>
+        <th style="min-width: 100px">Tên tài sản</th>
+        <th style="min-width: 70px" >Loại tài sản</th>
+        <th style="min-width: 100px" >Bộ phận sử dụng</th>
+        <th class="right" style="min-width: 70px">Số lượng</th>
+        <th class="right" style="min-width: 70px" >Nguyên giá</th>
+        <th class="right" style="min-width: 100px" >
           <BaseTooltipTable
             :isInline="true"
             tooltipContent="Giá trị hao mòn năm "
@@ -131,16 +131,33 @@
 
         <td></td>
         <td class="right weight700" style="width: 50px">
+        <BaseTooltip position="down" tooltipText="Tổng số lượng">           
+          
           {{ FormatMoney(totalQuantity.toString()) }}
+          </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
+           <BaseTooltip position="down" tooltipText="Tổng nguyên giá"> 
+            
           {{ FormatMoney(totalCost.toString()) }}
+          </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
+           <BaseTooltip
+             position="down"
+            tooltipText="Tổng hao mòn lũy kế"
+          >
+          
           {{ FormatMoney(totalAtrophy.toString()) }}
+          </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
+           <BaseTooltip
+            position="down"
+            tooltipText="Tổng giá trị còn lại"         
+          >
           {{ FormatMoney((totalCost - totalAtrophy).toString()) }}
+          </BaseTooltip>
         </td>
         <td class="The-actions center" style="width: 100px"></td>
       </tr>

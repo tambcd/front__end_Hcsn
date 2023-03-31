@@ -33,6 +33,7 @@ export  const Resource = {
     VN_NumberSS:" không được lớn hơn nguyên giá ",
     VN_MaxNumber : "Sô tiền quá lớn ",
     VN_SystemError : "Có lỗi sảy ra vui lòng liên hệ MISA",
+    VN_NotDataDelete :"Vui lòng chọn bản ghi để xóa",
 
     VN_DeleteTxt : "Bạn có muốn xóa tài sản ",
     VN_ManyDeleteTxt : ' tài sản bạn đã chọn bạn có muôn xóa các tài sản khỏi danh sách không ?',

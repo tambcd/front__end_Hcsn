@@ -13,23 +13,23 @@
         @change="sendCheckEmp(ischeckItem, dataItem.fixed_asset_id)"
       />
     </td>
-    <td class="center" style="width: 50px">{{ this.indexItemTable }}</td>
-    <td style="width: 150px">{{ dataItem.fixed_asset_code }}</td>
-    <td style="width: auto">{{ dataItem.fixed_asset_name }}</td>
+    <td class="center" >{{ this.indexItemTable }}</td>
+    <td >{{ dataItem.fixed_asset_code }}</td>
+    <td >{{ dataItem.fixed_asset_name }}</td>
     <td>{{ dataItem.fixed_asset_category_name }}</td>
-    <td style="width: 150px">{{ dataItem.department_name }}</td>
-    <td class="right" style="min-width: 100px">
+    <td >{{ dataItem.department_name }}</td>
+    <td class="right">
       {{ FormatMoney(dataItem.quantity.toString()) }}
     </td>
-    <td class="right" style="min-width: 150px">
+    <td class="right" >
       {{ FormatMoney(dataItem.cost.toString()) }}
     </td>
-    <td class="right" style="min-width: 150px">
+    <td class="right" >
       {{
         FormatMoney(Math.round(depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
       }}
     </td>
-    <td class="right" style="width: 150px">
+    <td class="right" >
       {{
         Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)) > 0 ? FormatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString()) : 0
 
