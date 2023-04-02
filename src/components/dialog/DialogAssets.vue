@@ -688,14 +688,7 @@ export default {
       if (
         this.asset.fixed_asset_name !== this.assetItem.fixed_asset_name ||
         this.asset.department_id !== this.assetItem.department_id ||
-        this.asset.department_code !== this.assetItem.department_code ||
-        this.asset.department_name !== this.assetItem.department_name ||
-        this.asset.fixed_asset_category_id !==
-          this.assetItem.fixed_asset_category_id ||
-        this.asset.fixed_asset_category_code !==
-          this.assetItem.fixed_asset_category_code ||
-        this.asset.fixed_asset_category_name !==
-          this.assetItem.fixed_asset_category_name ||
+        this.asset.fixed_asset_category_id !==this.assetItem.fixed_asset_category_id ||
         new Date(this.asset.purchase_date).getDate() !==
           new Date(this.assetItem.purchase_date).getDate() ||
         new Date(this.asset.purchase_date).getMonth() !==
@@ -704,8 +697,6 @@ export default {
           new Date(this.assetItem.purchase_date).getFullYear() ||
         this.moneyToNumber(this.asset.cost) !== this.assetItem.cost ||
         this.asset.quantity !== this.assetItem.quantity ||
-        this.asset.depreciation_rate !==
-          Number(this.assetItem.depreciation_rate.toFixed(1)) ||
         this.asset.tracked_year !== this.assetItem.tracked_year ||
         this.asset.life_time !== this.assetItem.life_time ||
         new Date(this.asset.production_year).getDate() !==

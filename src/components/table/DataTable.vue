@@ -254,10 +254,11 @@ export default {
         event.code == "ArrowDown" &&
         this.numberArrowIndext < this.listData.data.length    
       ) {
-        this.isRechange = false;
         if(this.isShift){
           this.isRechange = false;
+          
           this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+          this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
         }
         if(this.numberArrowIndext >= this.listData.data.length - 1){
           console.log();
@@ -266,19 +267,29 @@ export default {
         else{
 
           this.numberArrowIndext++;
+            if(this.isShift){
+            this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+
         }
+        }
+      
       }
       if (event.code == "ArrowUp" && this.numberArrowIndext >= 0) {
 
         if(this.isShift){
           this.isRechange = true;
           this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+          this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
         }
         if(this.numberArrowIndext <=0){
              this.numberArrowIndext ==0
       }
       else{
           this.numberArrowIndext--;
+           if(this.isShift){
+            this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+
+        }
       }
       }
       this.itemId = this.listData.data[this.numberArrowIndext].fixed_asset_id;
@@ -546,12 +557,14 @@ export default {
   watch: {
     isRechange(value){
       this.ClearData()
-      if(value){
+              this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
 
+      if(value){
         this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
+
       }
       else{
-                this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
+          this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
 
       }
 
