@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="base-input">
     <label for="" class="content-input" v-if="titleInput != ''"
       >{{ titleInput }}<span style="color: red" v-if="required">*</span></label
     >
@@ -19,7 +19,7 @@
       }"
     >
       <div
-        class="input-icon-sreach icon24 backgrsvg"
+        class="input-icon-sreach icon26 backgrsvg"
         :class="{ input__icon__filter: iconLeft && iconRight }"
         v-if="iconLeft"
         @click="btnSearch()"
@@ -34,8 +34,8 @@
         :placeholder="contentInput"
         :style="{ 'text-align': textalignInput }"
         :disabled="disabledInput"
-        @focus="InputFocus()"
-        @blur="OutFocus()"
+        @focus="inputFocus()"
+        @blur="outFocus()"
         v-model="valueInput"
       />
 
@@ -55,6 +55,7 @@
 <script>
 import { FormatMoney } from "@/assets/js/Format";
 export default {
+  name: "BaseInput",
   props: {
     hideIconInput:{
       default:false
@@ -138,7 +139,7 @@ export default {
   
   created() {
     if(this.money){
-      this.valueInput = this.FormatMoney(String(this.valueInputFisrt).replaceAll('.',''));
+      this.valueInput = this.formatMoney(String(this.valueInputFisrt).replaceAll('.',''));
     }
     else{
       this.valueInput = this.valueInputFisrt
@@ -167,7 +168,7 @@ export default {
      * create day : 18/02/2023
      * ham : Đổi boder khi chọn vào input
      */
-    InputFocus() {      
+    inputFocus() {      
       this.focusInput = true;
       this.IscheckEmpty = false;
       if (this.valueInput.length > 3 && this.money) {
@@ -180,7 +181,7 @@ export default {
      * create day : 18/02/2023
      * ham : Đổi boder khi ra khỏi input
      */
-    OutFocus() {
+    outFocus() {
       this.focusInput = false;
       if (this.valueInput === "") {
         this.IscheckEmpty = true;
@@ -188,7 +189,7 @@ export default {
         this.IscheckEmpty = false;
         if(this.money){
 
-          this.valueInput = this.FormatMoney(this.valueInput.replaceAll('.',''));
+          this.valueInput = this.formatMoney(this.valueInput.replaceAll('.',''));
         }
       }
     },
@@ -207,7 +208,7 @@ export default {
      * @create day : 03/03/2023
      * ham : định dạng tiền
      */
-    FormatMoney(dataFormat) {
+    formatMoney(dataFormat) {
       return FormatMoney(dataFormat);
     },
    

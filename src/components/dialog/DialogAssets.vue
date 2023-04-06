@@ -323,6 +323,8 @@ import MISAEnum from "@/enums/enums";
 import { FormatMoney } from "@/assets/js/Format";
 
 export default {
+  name: "DialogAssets",
+
   props: {
     assetItem: {},
     typeD: {
@@ -688,7 +690,8 @@ export default {
       if (
         this.asset.fixed_asset_name !== this.assetItem.fixed_asset_name ||
         this.asset.department_id !== this.assetItem.department_id ||
-        this.asset.fixed_asset_category_id !==this.assetItem.fixed_asset_category_id ||
+        this.asset.fixed_asset_category_id !==
+          this.assetItem.fixed_asset_category_id ||
         new Date(this.asset.purchase_date).getDate() !==
           new Date(this.assetItem.purchase_date).getDate() ||
         new Date(this.asset.purchase_date).getMonth() !==

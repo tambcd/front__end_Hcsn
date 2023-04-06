@@ -57,6 +57,7 @@
 import { FormatMoney } from "../../assets/js/Format";
 
 export default {
+  name: "ItemTable",
   props: {
     selectClick:{
       default:""

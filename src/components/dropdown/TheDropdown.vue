@@ -18,8 +18,9 @@
 
 <script>
 export default {
+  name: "TheDropdown",
   props: {
-    ListDataDropdown: {
+    listDataDropdown: {
       default: [],
     },
     ShowIcon: {

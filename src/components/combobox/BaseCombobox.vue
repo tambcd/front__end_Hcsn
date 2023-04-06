@@ -3,7 +3,7 @@
     <a ref="#" >
     
     <the-input
-      @click="ShowhideItemCombobox"
+      @click="showhideItemCombobox"
       @keyDownbaseInput="keyAutoCombobox()"
       :valueInputFisrt="dataCombobox"
       :iconLeft="iconComboboxLeft"
@@ -14,7 +14,7 @@
       :required="erroCombobox"
       :marginInput="marginCombobox"
       :iconRight="iconComboboxRight"
-      @HideBodyItem="HideItemCombobox"
+      @HideBodyItem="hideItemCombobox"
       @sendValueInput="
         (e) => {
           this.dataCombobox = e;
@@ -44,7 +44,7 @@
       >
         <div
           class="tick"
-          :class="{ 'tickbg': item_selectCb == item[keyData + '_id'] }"
+          :class="{ 'tickbg': itemSelectCb == item[keyData + '_id'] }"
         ></div>
         <div class="cobobox-title">
           {{ item[dataContent] }}
@@ -58,6 +58,7 @@
 <script>
 import TheInput from "../input/BaseInput.vue";
 export default {
+   name:'BaseCombobox',
   components: { TheInput },
   props: {
     allItem:{
@@ -102,7 +103,7 @@ export default {
   },
   data() {
     return {
-      item_selectCb: "",
+      itemSelectCb: "",
       isSearch: true,
       selectItemFocus: 0,
       showHideItem: false,
@@ -124,10 +125,19 @@ export default {
     document.removeEventListener('click',this.close)
   },
   methods: {
-
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : đóng mở 
+     */
     toggleDropdown () {
        this.showHideItem = !this.showHideItem
     },
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : click ra ngoài đóng 
+     */
     close (e) {
       if (!this.$el.contains(e.target)) {
          this.showHideItem = false
@@ -149,7 +159,7 @@ export default {
      * create day : 19/02/2023
      * ham : đóng mở combobox
      */
-    ShowhideItemCombobox() {
+    showhideItemCombobox() {
       this.dataArray = this.dataRoot;
       this.showHideItem = !this.showHideItem;
     },
@@ -158,7 +168,7 @@ export default {
      * create day : 19/02/2023
      * ham : đóng combobox
      */
-    HideItemCombobox() {
+    hideItemCombobox() {
       this.dataArray = this.dataRoot;
       this.showHideItem = false;
     },
@@ -180,7 +190,7 @@ export default {
 
         this.dataCombobox = idItem[this.dataContent];
         this.$emit("selectItemCombobox", idItem, this.keyData,this.dataCombobox);
-        this.item_selectCb = idItem[this.keyData + "_id"];
+        this.itemSelectCb = idItem[this.keyData + "_id"];
       }
       this.showHideItem = false;
     },

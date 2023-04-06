@@ -69,6 +69,7 @@
 import TheButton from "../button/BaseButton.vue";
 
 export default {
+  name: "DialogMessage",
   props: {
     /** kiểm tra kiểu của thông báo */
     typeMessage: Number,

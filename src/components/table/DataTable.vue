@@ -8,7 +8,7 @@
     <table class="table-assets">
       <tr class="header-table weight700">
         <th class="first-column center input-checkbox" ref="checkBoxAll">
-          <input type="checkbox" v-model="stateAll" @click="IsCheckAll" />
+          <input type="checkbox" v-model="stateAll" @click="isCheckAll" />
         </th>
         <th class="center" >STT</th>
         <th style="min-width: 100px" >Mã tài sản</th>
@@ -176,10 +176,11 @@ import MISAEnum from "@/enums/enums";
 import { FormatMoney } from "@/assets/js/Format";
 
 export default {
+  name: "DataTable",
   components: { ItemTable, TheLoading },
   async created() {
     this.listIdSelection = new Set();
-    await this.LoadDataTable(1);
+    await this.loadDataTable(1);
   },
   
   data() {
@@ -213,7 +214,7 @@ export default {
   mounted() {
     /**tải lại data khi thực hiện xóa */
     this.emitter.on("LoadingDataDelete", () => {
-      this.LoadDataTable(1);
+      this.loadDataTable(1);
     });
 
     this.emitter.on("showLoading", (state) => {
@@ -222,9 +223,9 @@ export default {
     // tải lại dữ liêu sau khi thêm - sửa
     this.emitter.on("ReloadData", (state) => {
       if (state === MISAEnum.stateDialog.add) {
-        this.LoadDataTable(1);
+        this.loadDataTable(1);
       } else {
-        this.LoadDataTable(this.priorityFilter.pageNumber);
+        this.loadDataTable(this.priorityFilter.pageNumber);
       }
     });
     // lọc tài sản
@@ -233,7 +234,7 @@ export default {
       this.priorityFilter.AssetCategoryId = data[2].toString();
       this.priorityFilter.DepartmentId = data[1].toString();
       try {
-        this.LoadDataTable(1);
+        this.loadDataTable(1);
       } catch (error) {
         console.log(error);
       }
@@ -255,10 +256,12 @@ export default {
         this.numberArrowIndext < this.listData.data.length    
       ) {
         if(this.isShift){
-          this.isRechange = false;
-          
+          this.isRechange = false;   
+          if (this.numberArrowIndext<this.listData.data.length - 1) {
+            
+            this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
+          }       
           this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
-          this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
         }
         if(this.numberArrowIndext >= this.listData.data.length - 1){
           console.log();
@@ -278,8 +281,11 @@ export default {
 
         if(this.isShift){
           this.isRechange = true;
+          if (this.numberArrowIndext>0) {
+            
+            this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
+          }
           this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
-          this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
         }
         if(this.numberArrowIndext <=0){
              this.numberArrowIndext ==0
@@ -312,10 +318,10 @@ export default {
      * created : tvTam (23/02/2023)
      * Lấy dữ tài sản
      */
-    async LoadDataTable(pageNumber) {
+    async loadDataTable(pageNumber) {
       this.isReloadData = false;
       this.stateAll = false;
-      this.ClearData();
+      this.clearData();
       this.totalCost = 0;
       this.totalQuantity = 0;
       this.totalAtrophy = 0;
@@ -356,12 +362,13 @@ export default {
      * đến trang phía sau-trước
      */
     changePage(state) {
+       this.clearData()
       if (state == 1) {
         this.priorityFilter.pageNumber = this.priorityFilter.pageNumber - 1;
-        this.LoadDataTable(this.priorityFilter.pageNumber);
+        this.loadDataTable(this.priorityFilter.pageNumber);
       } else {
         this.priorityFilter.pageNumber = this.priorityFilter.pageNumber + 1;
-        this.LoadDataTable(this.priorityFilter.pageNumber);
+        this.loadDataTable(this.priorityFilter.pageNumber);
       }
     },
 
@@ -434,7 +441,8 @@ export default {
      */
     selectNumber(numberPage) {
       this.priorityFilter.pageNumber = Number(numberPage);
-      this.LoadDataTable(this.priorityFilter.pageNumber);
+      this.loadDataTable(this.priorityFilter.pageNumber);
+      this.clearData()
     },
 
     /**
@@ -453,14 +461,14 @@ export default {
       } else {
         this.stateAll = false;
       }
-      this.SendDataDelete();
+      this.sendDataDelete();
     },
     /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
      * xóa tất cả phần tử được chọn
      */
-    ClearData() {
+    clearData() {
       this.listIdSelection.clear();
     },
 
@@ -469,7 +477,7 @@ export default {
      * created : tvTam (23/02/2023)
      * chọn tất cả
      */
-    SelectAll() {
+    selectAll() {
       this.listIdSelection.clear();
       this.listData.data.forEach((element) => {
         this.listIdSelection.add(element.fixed_asset_id);
@@ -481,20 +489,20 @@ export default {
      * created : tvTam (23/02/2023)
      * trạng thái bỏ chọn tất cả hoặc chọn tất cả
      */
-    IsCheckAll() {
+    isCheckAll() {
       if (!this.stateAll) {
-        this.SelectAll();
+        this.selectAll();
       } else {
-        this.ClearData();
+        this.clearData();
       }
-      this.SendDataDelete();
+      this.sendDataDelete();
     },
     /**
      * Author: TVTam
      * created : tvTam (1/03/2023)
      * gửi danh sách id chọn để thực hiện xóa
      */
-    SendDataDelete() {
+    sendDataDelete() {
       this.$emit("updateListId", this.listIdSelection);
     },
     /**
@@ -514,7 +522,7 @@ export default {
     setPageSize(size) {
       this.priorityFilter.pageSize = size;
       this.showHideDrop();
-      this.LoadDataTable(1);
+      this.loadDataTable(1);
     },
 
     /**
@@ -534,7 +542,7 @@ export default {
       this.numberItem = index;
       this.numberArrowIndext = index;
       if (this.isShift) {
-        this.ClearData();
+        this.clearData();
         for (
           let index = this.selectStart;
           index < this.selectEnd + 1;
@@ -556,7 +564,7 @@ export default {
   },
   watch: {
     isRechange(value){
-      this.ClearData()
+      this.clearData()
               this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
 
       if(value){
@@ -567,8 +575,6 @@ export default {
           this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
 
       }
-
-
     }
   },
 };

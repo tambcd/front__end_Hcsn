@@ -14,10 +14,10 @@
         "
         @searchInput="searchInput()"
       />
-            <the-combobox
+      <the-combobox
         @selectItemCombobox="
-          (data, key,text) => {
-            getIdCategory(data, key,text);
+          (data, key, text) => {
+            getIdCategory(data, key, text);
           }
         "
         :allItem="true"
@@ -35,8 +35,8 @@
 
       <the-combobox
         @selectItemCombobox="
-          (data, key,text) => {
-            getIdCategory(data, key,text);
+          (data, key, text) => {
+            getIdCategory(data, key, text);
           }
         "
         :allItem="true"
@@ -68,28 +68,29 @@
       </BaseTooltip>
       <BaseTooltip position="down" tooltipText="Xóa">
         <button
-         
           class="btn__delete icon36 button-icon backgrsvg"
           @click="deleteAssets()"
         ></button>
       </BaseTooltip>
     </div>
   </div>
-    <data-table @updateListId="updateListIdDelete" />
+  <data-table @updateListId="updateListIdDelete" />
 
-    <DialogAssets v-if="showHideDialog"
+  <DialogAssets
+    v-if="showHideDialog"
     :assetItem="itemAsset"
     :typeD="typeDialog"
-     @closeDialog ="closeDialog()"     />
+    @closeDialog="closeDialog()"
+  />
   <dialog-message
     :typeMessage="typeMessagepp"
-    :typeHighligh ="typeHighligh"
+    :typeHighligh="typeHighligh"
     :titleMessage="isDeleteMany"
     :titleMessagebottom="titleMessagebottom"
-    :titleMessageheader ="titleMessageheader"
+    :titleMessageheader="titleMessageheader"
     v-if="isMessageDelete"
     @btnYesMessage="deleteYes"
-    @hideMessage="ReLoadingDataDelete"
+    @hideMessage="reLoadingDataDelete"
   />
 </template>
 
@@ -97,13 +98,14 @@
 import DataTable from "@/components/table/DataTable.vue";
 import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
-import { get, getById,deleteManyAssets } from "@/api/api.js";
+import { get, getById, deleteManyAssets } from "@/api/api.js";
 import Resource from "@/resource/Resource";
 import { toast } from "vue3-toastify";
 import MISAEnum from "@/enums/enums";
-import DialogAssets from '@/components/dialog/DialogAssets.vue';
+import DialogAssets from "@/components/dialog/DialogAssets.vue";
 
 export default {
+  name: "TheAssets",
   components: { DataTable, TheInput, TheCombobox, DialogAssets },
   async created() {
     /**
@@ -149,16 +151,16 @@ export default {
   },
   data() {
     return {
-      itemAsset:{},
-      typeDialog:1,
-      showHideDialog:false,
+      itemAsset: {},
+      typeDialog: 1,
+      showHideDialog: false,
       txtSreach: "",
-      deparment:{
-        nameDepartment:"",
+      deparment: {
+        nameDepartment: "",
         idDepartment: "",
       },
-      category:{
-        nameCategory:"",
+      category: {
+        nameCategory: "",
         idCategory: "",
       },
       typeMessagepp: 2,
@@ -174,13 +176,11 @@ export default {
     };
   },
   mounted() {
-
-      /** mở form thêm sửa cùng dữ liệu */
+    /** mở form thêm sửa cùng dữ liệu */
 
     this.emitter.on("showDialog", (data) => {
       this.showHideDialog = true;
-      this.typeDialog =data.typeDialog,
-      this.itemAsset =  data.dataAsset
+      (this.typeDialog = data.typeDialog), (this.itemAsset = data.dataAsset);
     });
     this.emitter.on("messageValidate", (data) => {
       this.isMessageDelete = true;
@@ -206,12 +206,15 @@ export default {
         id,
         (res) => {
           // Trường hợp thành công  gửi lên form sửa
-          this.titleMessageheader = Resource.VN_DeleteTxt + " " 
-          this.isDeleteMany =    "<<"  +    
+          this.titleMessageheader = Resource.VN_DeleteTxt + " ";
+          this.isDeleteMany =
+            "<<" +
             res.data.fixed_asset_code +
             " - " +
-            res.data.fixed_asset_name  + ">>" +
-            this.titleMessagebottom + "  ?";
+            res.data.fixed_asset_name +
+            ">>" +
+            this.titleMessagebottom +
+            "  ?";
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -223,13 +226,13 @@ export default {
         }
       );
     },
-     /**
+    /**
      * @create by : MF1270
      * @create day : 19/02/2023
      * @hàm : đóng form
      */
-    closeDialog(){
-       this.showHideDialog = false;
+    closeDialog() {
+      this.showHideDialog = false;
     },
     /**
      * @ create by : MF1270
@@ -238,8 +241,7 @@ export default {
      */
     showDialogAsset() {
       this.showHideDialog = true;
-      this.typeDialog =1,
-      this.itemAsset = {}
+      (this.typeDialog = 1), (this.itemAsset = {});
     },
 
     /**
@@ -250,13 +252,16 @@ export default {
 
     async Export() {
       await get(
-        "Assets/Export",{
-          txtSearch : this.txtSreach,
+        "Assets/Export",
+        {
+          txtSearch: this.txtSreach,
           DepartmentId: this.deparment.idDepartment,
-          AssetCategoryId : this.category.idCategory
+          AssetCategoryId: this.category.idCategory,
         },
         () => {
-          window.open(`https://localhost:7115/api/v1/Assets/Export?txtSearch=${this.txtSreach}&DepartmentId=${this.deparment.idDepartment}&AssetCategoryId=${this.category.idCategory}`);
+          window.open(
+            `https://localhost:7115/api/v1/Assets/Export?txtSearch=${this.txtSreach}&DepartmentId=${this.deparment.idDepartment}&AssetCategoryId=${this.category.idCategory}`
+          );
           toast.success(Resource.VN_ExportSucces, {
             autoClose: 2000,
             position: "bottom-right",
@@ -279,27 +284,25 @@ export default {
      */
     deleteAssets() {
       this.typeMessagepp = 2;
-      if (this.listIdDelete.size<1 || !this.listIdDelete.size ) {
+      if (this.listIdDelete.size < 1 || !this.listIdDelete.size) {
         this.typeMessagepp = 1;
-         this.isDeleteMany = Resource.VN_NotDataDelete
+        this.isDeleteMany = Resource.VN_NotDataDelete;
       }
       if (this.listIdDelete.size == 1) {
         this.typeHighligh = 2;
         this.getAssetById(Array.from(this.listIdDelete)[0]);
-      } 
-      
-      if(this.listIdDelete.size > 1){
-           this.typeHighligh = 1;
-        if (this.listIdDelete.size < 10) {
-          this.titleMessageheader = '0' + this.listIdDelete.size
-           this.isDeleteMany = Resource.VN_ManyDeleteTxt;
-            this.titleMessagebottom = "";
-        }
-        else{
+      }
 
-          this.titleMessageheader =  this.listIdDelete.size
-           this.isDeleteMany = Resource.VN_ManyDeleteTxt;
-            this.titleMessagebottom = "";
+      if (this.listIdDelete.size > 1) {
+        this.typeHighligh = 1;
+        if (this.listIdDelete.size < 10) {
+          this.titleMessageheader = "0" + this.listIdDelete.size;
+          this.isDeleteMany = Resource.VN_ManyDeleteTxt;
+          this.titleMessagebottom = "";
+        } else {
+          this.titleMessageheader = this.listIdDelete.size;
+          this.isDeleteMany = Resource.VN_ManyDeleteTxt;
+          this.titleMessagebottom = "";
         }
       }
       this.isMessageDelete = true;
@@ -315,16 +318,15 @@ export default {
         // xóa nhiều thì mảng xóa đc cập nhập data
         await deleteManyAssets(
           "Assets",
-          {data: Array.from(this.listIdDelete)},
-          ()=>{
-              toast.success(Resource.VN_DeleteSuccess, {
+          { data: Array.from(this.listIdDelete) },
+          () => {
+            toast.success(Resource.VN_DeleteSuccess, {
               autoClose: 2000,
-               position: "bottom-right",
-          });
-          // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-          this.emitter.emit("LoadingDataDelete");
-          this.isMessageDelete = false;
-
+              position: "bottom-right",
+            });
+            // chuyền thông báó xóa thành công để clear mảng xóa nhiều
+            this.emitter.emit("LoadingDataDelete");
+            this.isMessageDelete = false;
           },
           (error) => {
             // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -335,7 +337,6 @@ export default {
             console.log(error);
           }
         );
-        
       } catch (error) {
         toast.error(Resource.VN_DeleteEmpty, {
           autoClose: 2000,
@@ -360,7 +361,7 @@ export default {
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
-    ReLoadingDataDelete() {
+    reLoadingDataDelete() {
       this.isMessageDelete = false;
     },
     /**
@@ -375,42 +376,33 @@ export default {
         this.category.idCategory,
       ]);
     },
- /**
+    /**
      * Description: Tìm kiếm text keydown enter
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
-    searchInputEnter(){     
-           
-        if(event.code== 'Enter')          
-          {
-            this.searchInput()
-          }         
-           
-    
+    searchInputEnter() {
+      if (event.code == "Enter") {
+        this.searchInput();
+      }
     },
-    getIdCategory(data,key,text) {
-
+    getIdCategory(data, key, text) {
       if (key == MISAEnum.typeCombobox.category) {
-      if(data ===null){
-        this.category.idCategory = "";
-        this.category.nameCategory = "134";
-      }
-      else{
-
-        this.category.idCategory = data[key + "_id"];
-        this.category.nameCategory = text;
-      }
+        if (data === null) {
+          this.category.idCategory = "";
+          this.category.nameCategory = "134";
+        } else {
+          this.category.idCategory = data[key + "_id"];
+          this.category.nameCategory = text;
+        }
       } else {
-        if(data ===null){
-        this.deparment.idDepartment = "";
-        this.deparment.nameDepartment = text;
-      }
-      else{
-
-        this.deparment.idDepartment = data[key + "_id"];
-        this.deparment.nameDepartment = text;
-      }
+        if (data === null) {
+          this.deparment.idDepartment = "";
+          this.deparment.nameDepartment = text;
+        } else {
+          this.deparment.idDepartment = data[key + "_id"];
+          this.deparment.nameDepartment = text;
+        }
       }
 
       this.emitter.emit("filterAssets", [

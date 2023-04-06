@@ -7,11 +7,6 @@ import 'vue3-toastify/dist/index.css';
 import 'vue-datepicker-next/index.css';
 import 'vue-datepicker-next/locale/vi';
 
-
-
-
-
-
 // event bus
 const emitter = mitt();
 const app = createApp(App);

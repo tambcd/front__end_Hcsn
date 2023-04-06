@@ -6,6 +6,8 @@
 </template>
 <script>
 export default {
+      name: "BaseTooltipTable",
+
     props:{
            tooltipContent:String,//Nội dung tooltip
            show: {

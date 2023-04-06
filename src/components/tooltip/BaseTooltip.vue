@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: "BaseTooltip",
   props: {
     /** nhãn tooltip */
     tooltipText: {

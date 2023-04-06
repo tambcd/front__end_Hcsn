@@ -11,6 +11,9 @@
     margin: 0px !important;
 
 }
+.base-input{
+    min-width: 200px;
+}
 input[type="text"]
 {
     font-weight: 400;
