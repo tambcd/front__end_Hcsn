@@ -1,5 +1,8 @@
 <template>
+  <!-- @mousemove="reSizeColumn($event)"
+ @mousedown="getPositionCurrent($event)" -->
   <div
+    @mouseup="noReSizeColumn()"
     class="table"
     tabindex="0"
     @keyup.prevent="noPressShift()"
@@ -7,35 +10,43 @@
   >
     <table class="table-assets">
       <tr class="header-table weight700">
-        <th class="first-column center input-checkbox" ref="checkBoxAll">
+        <th
+          class="first-column center input-checkbox"
+          ref="checkBoxAll"
+          style="min-width: 50px"
+        >
           <input type="checkbox" v-model="stateAll" @click="isCheckAll" />
         </th>
-        <th class="center" >STT</th>
-        <th style="min-width: 100px" >Mã tài sản</th>
-        <th style="min-width: 100px">Tên tài sản</th>
-        <th style="min-width: 70px" >Loại tài sản</th>
-        <th style="min-width: 100px" >Bộ phận sử dụng</th>
-        <th class="right" style="min-width: 70px">Số lượng</th>
-        <th class="right" style="min-width: 70px" >Nguyên giá</th>
-        <th class="right" style="min-width: 100px" >
-          <BaseTooltipTable
-            :isInline="true"
-            tooltipContent="Giá trị hao mòn năm "
-            :show="true"
+        <th
+          :class="item.alignment"
+          :style="{
+            'min-width': item.minWith,
+            width: item.withBase,
+          }"
+          v-for="(item, index) in modelHeaderTable"
+          :key="index"
+        >
+          <BaseTooltip
+            position="down"
+            :tooltipText="item.nameTooltip"
+            v-if="item.directiveTooltip"
           >
-            <span>HM/KH lũy kế</span>
-          </BaseTooltipTable>
-        </th>
-        <th class="right" style="min-width: 150px">Giá trị còn lại</th>
-        <th style="width: 100px" class="The-actions center header-actions">
-          Chức năng
+            <span>{{ item.nameColumn }} </span>
+          </BaseTooltip>
+          <span v-else>{{ item.nameColumn }} </span>
+          <div
+            :class="{ 'resize-column': item.isResize }"
+            @mousedown="getPositionCurrent($event)"
+            @mousemove="reSizeColumn($event)"
+            @mouseup="noReSizeColumn()"
+          ></div>
         </th>
       </tr>
       <tbody>
         <item-table
           @click="selectItem(item.fixed_asset_id, index)"
           :selectClick="itemId"
-          :stateIsAll="listIdSelection"
+          :stateIsAll="listIdSelection.has(item.fixed_asset_id)"
           @changeDataSelect="changeDataId"
           v-for="(item, index) in listData.data"
           :key="item.fixed_asset_id"
@@ -48,7 +59,7 @@
   <div class="paging">
     <table class="paging-table">
       <tr class="Last_row">
-        <td colspan="5" class="first-column" style="min-width: 700px">
+        <td colspan="5" class="first-column" style="min-width: 570px">
           <div class="the-paging">
             <div class="total">
               Tổng số:
@@ -100,6 +111,7 @@
             <div class="number-page">
               <button
                 :disabled="priorityFilter.pageNumber == 1"
+                :class="{ 'disabled-next': priorityFilter.pageNumber == 1 }"
                 class="btn-page icon20 btn-back"
                 @click="changePage(1)"
               >
@@ -117,9 +129,12 @@
               >
                 {{ itemPage }}
               </button>
-
               <button
                 class="btn-page icon20 btn-new"
+                :class="{
+                  'disabled-next':
+                    priorityFilter.pageNumber == this.listData.totalPage,
+                }"
                 :disabled="priorityFilter.pageNumber == this.listData.totalPage"
                 @click="changePage(2)"
               >
@@ -130,33 +145,24 @@
         </td>
 
         <td></td>
-        <td class="right weight700" style="width: 50px">
-        <BaseTooltip position="down" tooltipText="Tổng số lượng">           
-          
-          {{ FormatMoney(totalQuantity.toString()) }}
+        <td class="right weight700" style="width: 150px">
+          <BaseTooltip position="down" tooltipText="Tổng số lượng">
+            {{ formatMoney(totalQuantity.toString()) }}
           </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
-           <BaseTooltip position="down" tooltipText="Tổng nguyên giá"> 
-            
-          {{ FormatMoney(totalCost.toString()) }}
+          <BaseTooltip position="down" tooltipText="Tổng nguyên giá">
+            {{ formatMoney(totalCost.toString()) }}
           </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
-           <BaseTooltip
-             position="down"
-            tooltipText="Tổng hao mòn lũy kế"
-          >
-          
-          {{ FormatMoney(totalAtrophy.toString()) }}
+          <BaseTooltip position="down" tooltipText="Tổng hao mòn lũy kế">
+            {{ formatMoney(totalAtrophy.toString()) }}
           </BaseTooltip>
         </td>
         <td class="right weight700" style="width: 150px">
-           <BaseTooltip
-            position="down"
-            tooltipText="Tổng giá trị còn lại"         
-          >
-          {{ FormatMoney((totalCost - totalAtrophy).toString()) }}
+          <BaseTooltip position="down" tooltipText="Tổng giá trị còn lại">
+            {{ formatMoney((totalCost - totalAtrophy).toString()) }}
           </BaseTooltip>
         </td>
         <td class="The-actions center" style="width: 100px"></td>
@@ -167,25 +173,33 @@
 </template>
 
 <script>
-import ItemTable from "./ItemTable.vue";
-import { getByFilter } from "@/api/api";
-import Resource from "@/resource/Resource";
+import ItemTable from "./BaseItemTable.vue";
 import TheLoading from "../Loading/TheLoading.vue";
+import { getByFilter } from "@/common/api/api";
 import { toast } from "vue3-toastify";
-import MISAEnum from "@/enums/enums";
-import { FormatMoney } from "@/assets/js/Format";
+import { formatMoney } from "@/common/helper/format";
+import Resource from "@/common/resource/Resource";
+import MISAEnum from "@/common/enums/enums";
 
 export default {
   name: "DataTable",
+  props:{
+    modelHeaderTable: []
+  },
   components: { ItemTable, TheLoading },
   async created() {
     this.listIdSelection = new Set();
     await this.loadDataTable(1);
   },
-  
+
   data() {
     return {
-      isRechange:false,
+      curCol: undefined,
+      nxtCol: undefined,
+      pageX: undefined,
+      nxtColWidth: undefined,
+      curColWidth: undefined,      
+      isRechange: false,
       selectStart: 0,
       selectEnd: 0,
       numberItem: 0,
@@ -222,6 +236,9 @@ export default {
     });
     // tải lại dữ liêu sau khi thêm - sửa
     this.emitter.on("ReloadData", (state) => {
+      this.priorityFilter.txtSearch = "";
+      this.priorityFilter.DepartmentId = "";
+      this.priorityFilter.AssetCategoryId = "";
       if (state === MISAEnum.stateDialog.add) {
         this.loadDataTable(1);
       } else {
@@ -235,6 +252,7 @@ export default {
       this.priorityFilter.DepartmentId = data[1].toString();
       try {
         this.loadDataTable(1);
+        this.priorityFilter.pageNumber = 1;
       } catch (error) {
         console.log(error);
       }
@@ -242,6 +260,46 @@ export default {
   },
 
   methods: {
+    /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * sự kiện lấy ra vị trí của chuột và chiều rộng của cột
+     */
+    getPositionCurrent(event) {
+      this.curCol = event.target.parentElement;
+      this.nxtCol = this.curCol.nextElementSibling;
+      this.pageX = event.pageX;
+      this.curColWidth = this.curCol.offsetWidth;
+      if (this.nxtCol) {
+        this.nxtColWidth = this.nxtCol.offsetWidth;
+      }
+    },
+    /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * sự kiện kéo thả chuột thày dổi chiểu rộng của cột
+     */
+    reSizeColumn(event) {
+      if (this.curCol) {
+        var diffX = event.pageX - this.pageX;
+        if (this.nxtCol) {
+          this.nxtCol.style.width = this.nxtColWidth - diffX + "px";
+        }
+        this.curCol.style.width = this.curColWidth + diffX + "px";
+      }
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * sự kiện thả chuột thì bỏ thay đổi chiểu rộng
+     */
+    noReSizeColumn() {
+      this.curCol = undefined;
+      this.nxtCol = undefined;
+      this.pageX = undefined;
+      this.nxtColWidth = undefined;
+      this.curColWidth = undefined;
+    },
     /**
      * Author: TVTam
      * created : tvTam (23/02/2023)
@@ -253,50 +311,59 @@ export default {
       }
       if (
         event.code == "ArrowDown" &&
-        this.numberArrowIndext < this.listData.data.length    
+        this.numberArrowIndext < this.listData.data.length
       ) {
-        if(this.isShift){
-          this.isRechange = false;   
-          if (this.numberArrowIndext<this.listData.data.length - 1) {
-            
-            this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
-          }       
-          this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+        if (this.isShift) {
+          this.isRechange = false;
+          if (this.numberArrowIndext < this.listData.data.length - 1) {
+            this.changeDataId([
+              this.listData.data[this.numberArrowIndext + 1].fixed_asset_id,
+              true,
+            ]);
+          }
+          this.changeDataId([
+            this.listData.data[this.numberArrowIndext].fixed_asset_id,
+            true,
+          ]);
         }
-        if(this.numberArrowIndext >= this.listData.data.length - 1){
+        if (this.numberArrowIndext >= this.listData.data.length - 1) {
           console.log();
           this.numberArrowIndext = this.listData.data.length - 1;
-        }
-        else{
-
+        } else {
           this.numberArrowIndext++;
-            if(this.isShift){
-            this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
-
+          if (this.isShift) {
+            this.changeDataId([
+              this.listData.data[this.numberArrowIndext].fixed_asset_id,
+              true,
+            ]);
+          }
         }
-        }
-      
       }
       if (event.code == "ArrowUp" && this.numberArrowIndext >= 0) {
-
-        if(this.isShift){
+        if (this.isShift) {
           this.isRechange = true;
-          if (this.numberArrowIndext>0) {
-            
-            this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
+          if (this.numberArrowIndext > 0) {
+            this.changeDataId([
+              this.listData.data[this.numberArrowIndext - 1].fixed_asset_id,
+              true,
+            ]);
           }
-          this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+          this.changeDataId([
+            this.listData.data[this.numberArrowIndext].fixed_asset_id,
+            true,
+          ]);
         }
-        if(this.numberArrowIndext <=0){
-             this.numberArrowIndext ==0
-      }
-      else{
+        if (this.numberArrowIndext <= 0) {
+          this.numberArrowIndext == 0;
+        } else {
           this.numberArrowIndext--;
-           if(this.isShift){
-            this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
-
+          if (this.isShift) {
+            this.changeDataId([
+              this.listData.data[this.numberArrowIndext].fixed_asset_id,
+              true,
+            ]);
+          }
         }
-      }
       }
       this.itemId = this.listData.data[this.numberArrowIndext].fixed_asset_id;
     },
@@ -310,7 +377,7 @@ export default {
         this.isShift = false;
       }
       if (event.code == "ArrowUp" || event.code == "ArrowDown") {
-                this.numberItem = this.numberArrowIndext
+        this.numberItem = this.numberArrowIndext;
       }
     },
     /**
@@ -320,8 +387,8 @@ export default {
      */
     async loadDataTable(pageNumber) {
       this.isReloadData = false;
-      this.stateAll = false;
-      this.clearData();
+      // this.stateAll = false;
+      // this.clearData();
       this.totalCost = 0;
       this.totalQuantity = 0;
       this.totalAtrophy = 0;
@@ -344,6 +411,7 @@ export default {
           this.valueRemaining = this.totalCost - this.totalAtrophy;
           this.hideNumberPage();
           this.isReloadData = true;
+          this.isCheckAllUpdate();
         },
         (erro) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -362,7 +430,6 @@ export default {
      * đến trang phía sau-trước
      */
     changePage(state) {
-       this.clearData()
       if (state == 1) {
         this.priorityFilter.pageNumber = this.priorityFilter.pageNumber - 1;
         this.loadDataTable(this.priorityFilter.pageNumber);
@@ -442,7 +509,6 @@ export default {
     selectNumber(numberPage) {
       this.priorityFilter.pageNumber = Number(numberPage);
       this.loadDataTable(this.priorityFilter.pageNumber);
-      this.clearData()
     },
 
     /**
@@ -456,12 +522,23 @@ export default {
       } else {
         this.listIdSelection.delete(id[0]);
       }
-      if (this.listIdSelection.size === this.listData.data.length) {
-        this.stateAll = true;
-      } else {
-        this.stateAll = false;
-      }
       this.sendDataDelete();
+      this.isCheckAllUpdate();
+    },
+
+    /**
+     * Author: TVTam
+     * created : tvTam (23/02/2023)
+     * Cập nhập lại trạng thái checkbox chọn tất cả khi thay đổi số lượng item chọn
+     */
+    isCheckAllUpdate() {
+      this.stateAll = true;
+      this.listData.data.forEach((element) => {
+        if (!this.listIdSelection.has(element.fixed_asset_id)) {
+          this.stateAll = false;
+          return;
+        }
+      });
     },
     /**
      * Author: TVTam
@@ -469,7 +546,9 @@ export default {
      * xóa tất cả phần tử được chọn
      */
     clearData() {
-      this.listIdSelection.clear();
+      this.listData.data.forEach((element) => {
+        this.listIdSelection.delete(element.fixed_asset_id);
+      });
     },
 
     /**
@@ -478,7 +557,6 @@ export default {
      * chọn tất cả
      */
     selectAll() {
-      this.listIdSelection.clear();
       this.listData.data.forEach((element) => {
         this.listIdSelection.add(element.fixed_asset_id);
       });
@@ -521,6 +599,7 @@ export default {
      */
     setPageSize(size) {
       this.priorityFilter.pageSize = size;
+      this.priorityFilter.pageNumber = 1;
       this.showHideDrop();
       this.loadDataTable(1);
     },
@@ -558,24 +637,30 @@ export default {
      * ham : định dạng tiền
      */
 
-    FormatMoney(dataFormat) {
-      return FormatMoney(dataFormat);
+    formatMoney(dataFormat) {
+      return formatMoney(dataFormat);
     },
   },
   watch: {
-    isRechange(value){
+    isRechange(value) {
       this.clearData()
-              this.changeDataId([this.listData.data[this.numberArrowIndext].fixed_asset_id, true]);
+      this.changeDataId([
+        this.listData.data[this.numberArrowIndext].fixed_asset_id,
+        true,
+      ]);
 
-      if(value){
-        this.changeDataId([this.listData.data[this.numberArrowIndext+1].fixed_asset_id, true]);
-
+      if (value) {
+        this.changeDataId([
+          this.listData.data[this.numberArrowIndext + 1].fixed_asset_id,
+          true,
+        ]);
+      } else {
+        this.changeDataId([
+          this.listData.data[this.numberArrowIndext - 1].fixed_asset_id,
+          true,
+        ]);
       }
-      else{
-          this.changeDataId([this.listData.data[this.numberArrowIndext-1].fixed_asset_id, true]);
-
-      }
-    }
+    },
   },
 };
 </script>

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { FormatMoney } from "@/assets/js/Format";
+import { formatMoney } from "@/common/helper/format";
 export default {
   name: "BaseInput",
   props: {
@@ -143,8 +143,7 @@ export default {
     }
     else{
       this.valueInput = this.valueInputFisrt
-    }
-    
+    }    
   },
 
   data() {
@@ -209,7 +208,7 @@ export default {
      * ham : định dạng tiền
      */
     formatMoney(dataFormat) {
-      return FormatMoney(dataFormat);
+      return formatMoney(dataFormat);
     },
    
     /**

@@ -15,11 +15,13 @@
     background-color: #9E9E9E;
     border-radius: 4px;
 }
-table th:hover{
+/* table th:hover{
   resize: horizontal;
-  overflow: auto;
+  overflow: hidden;
+} */
+.disabled-next{
+  cursor: not-allowed !important;
 }
-
 th,
 td {
   text-align: left;
@@ -29,9 +31,7 @@ td {
 
 tr {
     border: 0.5px solid #afafaf;
-
 }
-
 .center {
   text-align: center;
 }
@@ -39,10 +39,19 @@ tr {
 .right {
   text-align: right;
 }
-
 .first-column {
+  
+  border-left-width: 0px;
+  border-right-width: 0px;
+
   left: 0px;
   position: sticky;
+}
+.header-table .first-column{
+  background-color: #f5f5f5;
+  z-index: 10;  
+  border-left-width: 0px;
+  border-right-width: 0px;
 }
 
 

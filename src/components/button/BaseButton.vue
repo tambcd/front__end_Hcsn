@@ -48,7 +48,4 @@ export default {
     background-color: #1aa4c8;
     border: 0px;
 }
-
-
-
 </style>

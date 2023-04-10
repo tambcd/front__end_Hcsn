@@ -207,10 +207,7 @@ export default {
             this.selectItemFocus < this.dataArray.length - 1 &&
             this.selectItemFocus >= 0
           ) {
-            // this.$refs.thisdataArray[this.selectItemFocus++].focus();
             this.selectItemFocus++;
-
-            // console.log(this.$refs[].focus());
           } else {
             this.selectItemFocus = 0;
           }
@@ -261,7 +258,6 @@ export default {
         }
       });
 
-      // this.dataArray = this.dataRoot.filter(item => item.includes(txt))
     },
     DataCombobox: function (newData) {
       this.dataRoot = newData;

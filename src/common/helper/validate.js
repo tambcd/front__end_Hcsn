@@ -15,8 +15,14 @@ export function validateDay(dateData) {
 * Last Edited: 5/3/2023           
 */
 export function isEmpty(data) {
-    if (data.trim().length()===0) {
+    if ( typeof data == "string" && data.trim() == "") {        
         return true;
-    }
-    return false;
+      }
+      if (data == null) {       
+        return true;
+      }
+      return false;
  }
+
+
+ 

@@ -1,7 +1,7 @@
 <template>
   <div class="toolbar">
     <div class="toolbar-filter">
-      <the-input
+      <the-input style="margin-right: 10px;"
         @keyDownbaseInput="searchInputEnter()"
         heightInput="35"
         widthInput="179"
@@ -14,7 +14,7 @@
         "
         @searchInput="searchInput()"
       />
-      <the-combobox
+      <the-combobox style="margin-right: 10px;"
         @selectItemCombobox="
           (data, key, text) => {
             getIdCategory(data, key, text);
@@ -74,7 +74,7 @@
       </BaseTooltip>
     </div>
   </div>
-  <data-table @updateListId="updateListIdDelete" />
+  <BaseDataTable @updateListId="updateListIdDelete" :modelHeaderTable="headerTable" />
 
   <DialogAssets
     v-if="showHideDialog"
@@ -95,25 +95,28 @@
 </template>
 
 <script>
-import DataTable from "@/components/table/DataTable.vue";
+import DataObject from "@/common/dataobject/model";
 import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
-import { get, getById, deleteManyAssets } from "@/api/api.js";
-import Resource from "@/resource/Resource";
-import { toast } from "vue3-toastify";
-import MISAEnum from "@/enums/enums";
+import BaseDataTable from '@/components/table/BaseDataTable.vue';
 import DialogAssets from "@/components/dialog/DialogAssets.vue";
+import Resource from "@/common/resource/Resource";
+import MISAEnum from "@/common/enums/enums";
+import { get, getById, deleteManyAssets } from "@/common/api/api.js";
+import { toast } from "vue3-toastify";
+import _ from 'lodash';
+
 
 export default {
   name: "TheAssets",
-  components: { DataTable, TheInput, TheCombobox, DialogAssets },
-  async created() {
+  components: {  TheInput, TheCombobox, DialogAssets, BaseDataTable },
+  created() {
     /**
      * Author: TVTam
      * created : tvTam (22/02/2023)
      * Lấy dữ liệu phòng ban
      */
-    await get(
+     get(
       "Departments",
       (response) => {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
@@ -133,7 +136,7 @@ export default {
      * created : tvTam (22/02/2023)
      * Lấy dữ liệu loại tài sản
      */
-    await get(
+     get(
       "AssetCategorys",
       (response) => {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
@@ -151,6 +154,7 @@ export default {
   },
   data() {
     return {
+      headerTable :DataObject.headerTable,
       itemAsset: {},
       typeDialog: 1,
       showHideDialog: false,
@@ -241,7 +245,10 @@ export default {
      */
     showDialogAsset() {
       this.showHideDialog = true;
-      (this.typeDialog = 1), (this.itemAsset = {});
+      this.typeDialog = 1,
+       this.itemAsset = {    
+
+       };
     },
 
     /**
@@ -287,6 +294,9 @@ export default {
       if (this.listIdDelete.size < 1 || !this.listIdDelete.size) {
         this.typeMessagepp = 1;
         this.isDeleteMany = Resource.VN_NotDataDelete;
+        this.titleMessageheader=""
+        this.titleMessagebottom = "";
+
       }
       if (this.listIdDelete.size == 1) {
         this.typeHighligh = 2;
@@ -390,7 +400,7 @@ export default {
       if (key == MISAEnum.typeCombobox.category) {
         if (data === null) {
           this.category.idCategory = "";
-          this.category.nameCategory = "134";
+          this.category.nameCategory = "";
         } else {
           this.category.idCategory = data[key + "_id"];
           this.category.nameCategory = text;
@@ -411,6 +421,11 @@ export default {
         this.category.idCategory,
       ]);
     },
+  },
+  watch: {
+    txtSreach: _.debounce(function(){
+        this.searchInput()
+    },700)
   },
 };
 </script>

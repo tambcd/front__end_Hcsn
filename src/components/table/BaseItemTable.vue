@@ -3,13 +3,12 @@
     @dblclick="updateAsset(dataItem)" 
     class="item-table"
     :class="{
-      row__selected: ischeckItem || stateIsAll.has(dataItem.fixed_asset_id) ||dataItem.fixed_asset_id == selectClick  }"
+      row__selected: ischeckItem  || dataItem.fixed_asset_id == selectClick  }"
   >
     <td class="center first-column input-checkbox"  style="width: 50px">
       <input
         type="checkbox"
         v-model="ischeckItem"
-        :checked="stateIsAll.has(dataItem.fixed_asset_id)"
         @change="sendCheckEmp(ischeckItem, dataItem.fixed_asset_id)"
       />
     </td>
@@ -19,19 +18,19 @@
     <td>{{ dataItem.fixed_asset_category_name }}</td>
     <td >{{ dataItem.department_name }}</td>
     <td class="right">
-      {{ FormatMoney(dataItem.quantity.toString()) }}
+      {{ formatMoney(dataItem.quantity.toString()) }}
     </td>
     <td class="right" >
-      {{ FormatMoney(dataItem.cost.toString()) }}
+      {{ formatMoney(dataItem.cost.toString()) }}
     </td>
     <td class="right" >
       {{
-        FormatMoney(Math.round(depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
+        formatMoney(Math.round(depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString())
       }}
     </td>
     <td class="right" >
       {{
-        Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)) > 0 ? FormatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString()) : 0
+        Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)) > 0 ? formatMoney(Math.round(dataItem.cost - depreciationValue(dataItem.production_year , dataItem.depreciation_value)).toString()) : 0
 
       }}
     </td>
@@ -54,11 +53,14 @@
 </template>
 
 <script>
-import { FormatMoney } from "../../assets/js/Format";
+import { formatMoney } from "@/common/helper/format";
 
 export default {
   name: "ItemTable",
   props: {
+    isCheck:{
+      default:false
+    },
     selectClick:{
       default:""
     },
@@ -67,15 +69,17 @@ export default {
     },
     dataItem: {},
     stateIsAll: {
-      default: false,
-    },
+      default:false
+    }
   },
-  created() {},
+  created() {
+    this.ischeckItem = this.stateIsAll
+  },
   data() {
     return {
       isClick:"",
       ischeckItem: false,
-      ItemSelect: ["", false],
+      itemSelect: [],
     };
   },
   methods: {
@@ -86,7 +90,6 @@ export default {
      * create day : 19/02/2023
      * ham : hàm tính giá trị hao mon lũy kết
      */
-
     depreciationValue(productionYear,depreciationValueYear) {
         
         return ((new Date().getFullYear()- new Date(productionYear).getFullYear())*12 + new Date().getMonth()- new Date(productionYear).getMonth())*(depreciationValueYear/12)
@@ -97,8 +100,8 @@ export default {
      * ham : định dạng tiền
      */
 
-    FormatMoney(dataFormat) {
-      return FormatMoney(dataFormat);
+    formatMoney(dataFormat) {
+      return formatMoney(dataFormat);
     },
 
     /**
@@ -107,14 +110,10 @@ export default {
      * ham : chon check box hàng
      */
     sendCheckEmp(state, id) {
-      if (state) {
-        this.ItemSelect[0] = id;
-        this.ItemSelect[1] = true;
-      } else {
-        this.ItemSelect[0] = id;
-        this.ItemSelect[1] = false;
-      }
-      this.$emit("changeDataSelect", this.ItemSelect);
+     
+        this.itemSelect[0] = id;
+        this.itemSelect[1] = state;      
+      this.$emit("changeDataSelect", this.itemSelect);
     },
     /**
      * create by : MF1270
@@ -135,10 +134,11 @@ export default {
     
   },
   watch: {
-    stateIsAll(state) {
-      if (state === true) this.ischeckItem = state;
-    },
-  },
+    stateIsAll(value){
+        this.ischeckItem = value
+    }
+  },  
+  
 };
 </script>
 
