@@ -125,14 +125,7 @@ export default {
     document.removeEventListener('click',this.close)
   },
   methods: {
-    /**
-     * create by : MF1270
-     * create day : 19/02/2023
-     * ham : đóng mở 
-     */
-    toggleDropdown () {
-       this.showHideItem = !this.showHideItem
-    },
+  
     /**
      * create by : MF1270
      * create day : 19/02/2023

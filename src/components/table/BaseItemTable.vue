@@ -1,6 +1,7 @@
 <template>
   <tr
     @dblclick="updateAsset(dataItem)" 
+    @contextmenu.prevent="openContextMenu(dataItem)"
     class="item-table"
     :class="{
       row__selected: ischeckItem  || dataItem.fixed_asset_id == selectClick  }"
@@ -84,7 +85,15 @@ export default {
   },
   methods: {
 
+    /**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : mở context menu
+     */
+    openContextMenu(data){
+      this.$emit("openContextMenu", data,event.pageX,event.pageY);     
 
+    },
      /**
      * create by : MF1270
      * create day : 19/02/2023

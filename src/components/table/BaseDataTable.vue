@@ -1,6 +1,17 @@
 <template>
   <!-- @mousemove="reSizeColumn($event)"
  @mousedown="getPositionCurrent($event)" -->
+  <base-context-menu
+    v-if="isContextMenu"
+    :positionTop="positionContextMenuY"
+    :positionleft="positionContextMenuX"
+    :asset="dataContextMenu"
+    @openAdd="showAddNewAsset()"
+    @openUpdate="(dataAsset)=>showUpdateAsset(dataAsset)"
+    @openDelete="(dataAsset)=>showDeleteAsset(dataAsset)"
+    @openReplication="(dataAsset)=>showReplicationAsset(dataAsset)"
+    @closeContextMenu="closeContextMenu()"
+  />
   <div
     @mouseup="noReSizeColumn()"
     class="table"
@@ -44,6 +55,7 @@
       </tr>
       <tbody>
         <item-table
+          @openContextMenu="(asset, x, y) => openContextMenu(asset, x, y)"
           @click="selectItem(item.fixed_asset_id, index)"
           :selectClick="itemId"
           :stateIsAll="listIdSelection.has(item.fixed_asset_id)"
@@ -180,13 +192,14 @@ import { toast } from "vue3-toastify";
 import { formatMoney } from "@/common/helper/format";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
+import BaseContextMenu from "../contextmenu/BaseContextMenu.vue";
 
 export default {
   name: "DataTable",
-  props:{
-    modelHeaderTable: []
+  props: {
+    modelHeaderTable: [],
   },
-  components: { ItemTable, TheLoading },
+  components: { ItemTable, TheLoading, BaseContextMenu },
   async created() {
     this.listIdSelection = new Set();
     await this.loadDataTable(1);
@@ -194,11 +207,15 @@ export default {
 
   data() {
     return {
+      isContextMenu:false,
+      positionContextMenuX: 110,
+      positionContextMenuY: 110,
+      dataContextMenu: {},
       curCol: undefined,
       nxtCol: undefined,
       pageX: undefined,
       nxtColWidth: undefined,
-      curColWidth: undefined,      
+      curColWidth: undefined,
       isRechange: false,
       selectStart: 0,
       selectEnd: 0,
@@ -260,6 +277,65 @@ export default {
   },
 
   methods: {
+     /**
+     * Author: TVTam
+     * created : tvTam (09/04/2023)
+     * Xác định vị trí và mở context menu
+     */
+    openContextMenu(asset, x, y) {
+      if (x > 1245) {
+        this.positionContextMenuX = x - 250;
+      } else {
+        this.positionContextMenuX = x;
+      }
+      if (y > 460) {
+        this.positionContextMenuY = y - 200;
+      } else {
+        this.positionContextMenuY = y;
+      }
+      this.dataContextMenu = asset;
+      this.isContextMenu = true
+    },
+
+    closeContextMenu(){
+      this.isContextMenu = false
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * Mở form thêm mới từ context menu
+     */
+    showAddNewAsset(){
+        this.$emit("openFormAddNew");
+         this.isContextMenu = false
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * Mở form sửa tài sản từ context menu
+     */
+    showUpdateAsset(data){
+        this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 2 });
+         this.isContextMenu = false
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * Mở xác nhận xóa sản từ context menu
+     */
+    showDeleteAsset(data){
+         this.$emit("deleteAssetContextMenu",data);
+         this.isContextMenu = false
+    },
+     /**
+     * Author: TVTam
+     * created : tvTam (3/03/2023)
+     * Mở form nhân bản tài sản từ context menu
+     */
+    showReplicationAsset(data){
+        this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 3 });
+         this.isContextMenu = false
+    },
     /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
@@ -288,7 +364,7 @@ export default {
         this.curCol.style.width = this.curColWidth + diffX + "px";
       }
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
      * sự kiện thả chuột thì bỏ thay đổi chiểu rộng
@@ -643,7 +719,7 @@ export default {
   },
   watch: {
     isRechange(value) {
-      this.clearData()
+      this.clearData();
       this.changeDataId([
         this.listData.data[this.numberArrowIndext].fixed_asset_id,
         true,

@@ -38,7 +38,18 @@
         empty:1,
         cost:2
 
-    }
+    },
+     /** kiểu validate
+     * @ allDelete =  1 : xóa tất cả 
+     * @ delete = 2 : xóa 1
+     * 
+     * */ 
+     typeDelete:{
+        allDelete:1,
+        delete:2
+
+    },
+
     
 }
 export default MISAEnum;

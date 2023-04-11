@@ -1,7 +1,8 @@
 <template>
   <div class="toolbar">
     <div class="toolbar-filter">
-      <the-input style="margin-right: 10px;"
+      <the-input
+        style="margin-right: 10px"
         @keyDownbaseInput="searchInputEnter()"
         heightInput="35"
         widthInput="179"
@@ -14,7 +15,8 @@
         "
         @searchInput="searchInput()"
       />
-      <the-combobox style="margin-right: 10px;"
+      <the-combobox
+        style="margin-right: 10px"
         @selectItemCombobox="
           (data, key, text) => {
             getIdCategory(data, key, text);
@@ -74,7 +76,12 @@
       </BaseTooltip>
     </div>
   </div>
-  <BaseDataTable @updateListId="updateListIdDelete" :modelHeaderTable="headerTable" />
+  <BaseDataTable
+    @updateListId="updateListIdDelete"
+    :modelHeaderTable="headerTable"
+    @openFormAddNew="showDialogAsset()"
+    @deleteAssetContextMenu="(data) => deleteContextMenu(data)"
+  />
 
   <DialogAssets
     v-if="showHideDialog"
@@ -98,25 +105,29 @@
 import DataObject from "@/common/dataobject/model";
 import TheInput from "@/components/input/BaseInput.vue";
 import TheCombobox from "@/components/combobox/BaseCombobox.vue";
-import BaseDataTable from '@/components/table/BaseDataTable.vue';
+import BaseDataTable from "@/components/table/BaseDataTable.vue";
 import DialogAssets from "@/components/dialog/DialogAssets.vue";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
-import { get, getById, deleteManyAssets } from "@/common/api/api.js";
+import {
+  get,
+  getById,
+  deleteManyAssets,
+  deleteAssets,
+} from "@/common/api/api.js";
 import { toast } from "vue3-toastify";
-import _ from 'lodash';
-
+import _ from "lodash";
 
 export default {
   name: "TheAssets",
-  components: {  TheInput, TheCombobox, DialogAssets, BaseDataTable },
+  components: { TheInput, TheCombobox, DialogAssets, BaseDataTable },
   created() {
     /**
      * Author: TVTam
      * created : tvTam (22/02/2023)
      * Lấy dữ liệu phòng ban
      */
-     get(
+    get(
       "Departments",
       (response) => {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
@@ -136,7 +147,7 @@ export default {
      * created : tvTam (22/02/2023)
      * Lấy dữ liệu loại tài sản
      */
-     get(
+    get(
       "AssetCategorys",
       (response) => {
         // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
@@ -154,7 +165,9 @@ export default {
   },
   data() {
     return {
-      headerTable :DataObject.headerTable,
+      idDeleteContext: "",
+      typeDelete: 1,
+      headerTable: DataObject.headerTable,
       itemAsset: {},
       typeDialog: 1,
       showHideDialog: false,
@@ -201,6 +214,26 @@ export default {
   methods: {
     /**
      * Author: TVTam
+     * Last Edited: 9/04/2023
+     * xóa tài sản từ context menu
+     */
+    deleteContextMenu(asset) {
+      this.idDeleteContext = asset.fixed_asset_id;
+      this.typeDelete = MISAEnum.typeDelete.delete;
+      this.typeHighligh = 2;
+      this.titleMessageheader = Resource.VN_DeleteTxt + " ";
+      this.isDeleteMany =
+        "<<" +
+        asset.fixed_asset_code +
+        " - " +
+        asset.fixed_asset_name +
+        ">>" +
+        this.titleMessagebottom +
+        "  ?";
+      this.isMessageDelete = true;
+    },
+    /**
+     * Author: TVTam
      * Last Edited: 5/2/2023
      * Lấy thông tài sản theo ID
      */
@@ -245,10 +278,7 @@ export default {
      */
     showDialogAsset() {
       this.showHideDialog = true;
-      this.typeDialog = 1,
-       this.itemAsset = {    
-
-       };
+      (this.typeDialog = 1), (this.itemAsset = {});
     },
 
     /**
@@ -290,13 +320,13 @@ export default {
      * Last Edited: 28/02/2023
      */
     deleteAssets() {
+      this.typeDelete = MISAEnum.typeDelete.allDelete;
       this.typeMessagepp = 2;
       if (this.listIdDelete.size < 1 || !this.listIdDelete.size) {
         this.typeMessagepp = 1;
         this.isDeleteMany = Resource.VN_NotDataDelete;
-        this.titleMessageheader=""
+        this.titleMessageheader = "";
         this.titleMessagebottom = "";
-
       }
       if (this.listIdDelete.size == 1) {
         this.typeHighligh = 2;
@@ -326,6 +356,30 @@ export default {
     async deleteYes() {
       try {
         // xóa nhiều thì mảng xóa đc cập nhập data
+        if (this.typeDelete == MISAEnum.typeDelete.delete) {
+          await deleteAssets(
+            "Assets",
+            this.idDeleteContext,
+            () => {
+              toast.success(Resource.VN_DeleteSuccess, {
+                autoClose: 2000,
+                position: "bottom-right",
+              });
+              // chuyền thông báó xóa thành công để clear mảng xóa nhiều
+              this.emitter.emit("LoadingDataDelete");
+              this.isMessageDelete = false;
+            },
+            (error) => {
+              // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
+              toast.error(Resource.VN_DeleteFailure, {
+                autoClose: 2000,
+                position: "bottom-right",
+              });
+              console.log(error);
+            }
+          );
+          return;
+        } 
         await deleteManyAssets(
           "Assets",
           { data: Array.from(this.listIdDelete) },
@@ -423,9 +477,9 @@ export default {
     },
   },
   watch: {
-    txtSreach: _.debounce(function(){
-        this.searchInput()
-    },700)
+    txtSreach: _.debounce(function () {
+      this.searchInput();
+    }, 700),
   },
 };
 </script>
