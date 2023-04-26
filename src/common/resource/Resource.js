@@ -49,7 +49,7 @@ export  const Resource = {
         cost:"nguyên giá ",
         quantity:"số lượng ",
         depreciation_value:"giá trị hao mòn ",
-        depreciation_rate: "tỷ lẹ hao mòn năm ",
+        depreciation_rate: "tỷ lệ hao mòn năm ",
         tracked_year:"năm sử dụng",
         life_time :"năm theo dõi ",
         production_year :"ngày bắt đầu sử dụng "

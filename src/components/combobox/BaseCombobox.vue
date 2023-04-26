@@ -233,6 +233,9 @@ export default {
     },
   },
   watch: {
+    valueSelect(value){
+        this.dataCombobox = value
+    },
     dataCombobox(txtSearch) {
       this.showHideItem = true;
       this.dataArray = [];

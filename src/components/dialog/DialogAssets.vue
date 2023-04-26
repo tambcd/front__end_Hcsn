@@ -66,7 +66,7 @@
                 iconCombobox="2"
                 marginCombobox="8px"
                 contentComboxbox="Chọn mã bộ phận sử dụng "
-                titleCombobox=" Mã bộ phần sử dụng "
+                titleCombobox=" Mã bộ phận sử dụng "
                 requiredCombobox="true"
               />
             </div>
@@ -76,7 +76,7 @@
                 disabledInput="true"
                 heightInput="35px"
                 widthInput="100%"
-                titleInput="Tên bộ phân sử dụng "
+                titleInput="Tên bộ phận sử dụng "
                 marginInput="8px"
                 @sendValueInput="
                   (e) => {
@@ -318,7 +318,7 @@
 <script>
 import TheCombobox from "../combobox/BaseCombobox.vue";
 import TheInput from "../input/BaseInput.vue";
-import { getNewAssetsCode, get, post, put } from "@/common/api/api.js";
+import { getNewCode, get, post, put } from "@/common/api/api.js";
 import { toast } from "vue3-toastify";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
@@ -506,7 +506,7 @@ export default {
      * ham : lấy mã tự động
      */
      newAssetCode() {
-       getNewAssetsCode(
+       getNewCode(
         "Assets/NewAutoCode",
         (response) => {
           // Trường hợp thành công gán giá trị cho  AssetCode
@@ -579,6 +579,7 @@ export default {
      */
     ischange() {
       if (
+         this.asset.fixed_asset_code !== this.assetItem.fixed_asset_code||
         this.asset.fixed_asset_name !== this.assetItem.fixed_asset_name ||
         this.asset.department_id !== this.assetItem.department_id ||
         this.asset.fixed_asset_category_id !==
@@ -821,7 +822,7 @@ export default {
 <style >
  /* cover css datetime thư viện */
 .date-input {
-  width: 260px !important;
+  width: 100% !important;
   height: 36px !important;
   margin-top: 8px;
   border: none !important;
@@ -829,9 +830,7 @@ export default {
 .mx-datepicker-popup {
   z-index: 10000000 !important;
 }
-.btn-save {
-  margin-left: 10px;
-}
+
 .mx-table-date td,
 .mx-table-date th {
   text-align: center;

@@ -47,6 +47,11 @@ export default {
       default: 452,
     },
   },
+  /**
+     * Author: TVTam
+     * created : tvTam (09/04/2023)
+     * click out
+     */
    mounted() {
      document.addEventListener('click', this.close)
   },

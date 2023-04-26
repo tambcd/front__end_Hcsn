@@ -13,6 +13,25 @@ export function reverse(string) {
   return strRev;
 }
 
+/**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : định dạng số thập phân
+     */
+export function formatDouble(string) {
+ 
+  return string.replaceAll(".",",");
+}
+/**
+     * create by : MF1270
+     * create day : 19/02/2023
+     * ham : định dạng số thập phân
+     */
+export function Doubletonumber(string) {
+ 
+  return Number(string.replaceAll(",",""));
+}
+
 
 /**
      * create by : MF1270
@@ -122,4 +141,38 @@ export function dateToString(dateNew) {
     return Number(money.replaceAll(".", ""));
   }
   return Number(money);
+}
+    /**
+     * @create by : MF1270
+     * @create day : 18/04/2023
+     * ham : định dạng ngày tháng hiện thị
+     */
+export function dateToStringShow(dateNew){
+  if (new Date(dateNew).getMonth() + 1 < 10) {
+    if (new Date(dateNew).getDate() < 10) {
+      return (
+        "0" + new Date(dateNew).getDate().toString() + "/0" +
+        (new Date(dateNew).getMonth() + 1).toString() + "/"+
+        new Date(dateNew).getFullYear().toString()         
+      );
+    }
+    return (
+       new Date(dateNew).getDate().toString() + "/0" +
+        (new Date(dateNew).getMonth() + 1).toString() + "/"+
+        new Date(dateNew).getFullYear().toString()      
+    );
+  } else {
+    if (new Date(dateNew).getDate() < 10) {
+      return (
+        "0" + new Date(dateNew).getDate().toString() + "/" +
+        (new Date(dateNew).getMonth() + 1).toString() + "/"+
+        new Date(dateNew).getFullYear().toString()
+      );
+    }
+    return (
+       new Date(dateNew).getDate().toString() + "/" +
+        (new Date(dateNew).getMonth() + 1).toString() + "/"+
+        new Date(dateNew).getFullYear().toString()
+    );
+  }
 }

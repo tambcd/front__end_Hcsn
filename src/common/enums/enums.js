@@ -1,4 +1,18 @@
  const MISAEnum = {
+    typeDisplay:{
+        row:1,
+        column:2
+    },
+    /**kiểu của form nhập liệu 
+     * @ add =  1 : thêm
+     * @ update = 2 : sửa 
+     * @ Replication = 3 : nhân bản 
+     * */ 
+    stateAction : {
+        add :1, 
+        update:2 ,
+        delete:3
+    },
     /**kiểu của form nhập liệu 
      * @ add =  1 : thêm
      * @ update = 2 : sửa 
@@ -49,6 +63,17 @@
         delete:2
 
     },
+/** kiểu dữ liệu
+     * @text =  1 : chữ
+     * @date = 2 : ngày tháng 
+     * @number = 3  : số 
+     * 
+     * */
+    typeData:{
+        text : 1,
+        date : 2,
+        number : 3,
+    }
 
     
 }

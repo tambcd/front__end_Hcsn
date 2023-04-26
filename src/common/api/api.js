@@ -27,6 +27,19 @@ export const getByFilter = (route = '',param ,success, errorHandler) => {
             
         })
 }
+/** 
+ * Description: Hàm để lấy dữ liệu có tham số.
+ * created : tvTam (22/02/2023)
+ */
+export const postByFilter = (route = '',param ,success, errorHandler) => {
+        return  Axios.post(API + route, {params: param}).then(
+            (response) => success(response)
+
+        ).catch(error => {
+            errorHandler(error);
+            
+        })
+}
 /**
  * Description: Hàm để get dữ liệu có tham số nhưng được gán vào link. * 
  * created : tvTam (22/02/2023)
@@ -74,7 +87,7 @@ export const deleteManyAssets = (route = '', data, success, errorHandler) =>{
  * Description: Hàm để lấy về mã số nhân viên mới.
  * created : tvTam (22/02/2023)
  */
-export const getNewAssetsCode = (route ='', success, errorHandler) =>{
+export const getNewCode = (route ='', success, errorHandler) =>{
     return  Axios.get(API + route).then(
         (response) => success(response)
     ).catch(error => {

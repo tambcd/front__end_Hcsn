@@ -11,7 +11,8 @@ th{
 
 .paging-table{
   border-collapse: collapse;
-  width: 100%;
+  width: calc(100% - 3px) ;
+  padding-right: 6px;
 }
 .paging{
   height: 50px;
@@ -43,17 +44,13 @@ th{
 .header-actions{
   background-color: #f5f5f5;
 }
-.The-actions {
+.The-actions1 {
   height: 39px;
   right: 0px;
-  position: sticky;
   /* background-color: #ffffff; */
 
 }
-.The-actions button{
-  display: block;  
-  
-}
+
 
 .Last_row {
   background-color: #FFFFFF;
@@ -66,7 +63,6 @@ th{
 }
 .item-table{
   cursor: pointer;
-
 }
 .item-table:hover ,.item-table:hover .input-checkbox, .item-table:hover .actions__item{
   background-color: #d1edf4;
@@ -74,18 +70,18 @@ th{
 .row__selected .input-checkbox,.row__selected .actions__item,.row__selected  {
   background-color: #d1edf4;
 }
-th:hover .resize-column{
-  display: block;
+
+.resize-column:hover{
+  background-color: #18c8f4;
 }
 .resize-column{
   margin-left: 5px;
-  display: none;
   position: absolute;
   top: 0;
   right: 0;
   cursor: col-resize;
   width: 5px;
-  background-color: #18c8f4;
+  background-color: transparent;
   user-select: none;
   height: calc(100vh - 173px);
 }

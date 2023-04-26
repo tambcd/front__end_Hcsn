@@ -1,17 +1,17 @@
 import {createWebHistory, createRouter} from "vue-router";
 import TheHome from '@/page/TheHome'
 import TheAssets from '@/page/TheAssets'
-import TheLogin from '@/page/login/TheLogin'
+import TheLogin from '@/page/TheLicense/TheLicense'
 
 const routes = [
-    {path:'/',redirect: '/home'},
-    {path:'/login',component:TheLogin},
+    {path:'/',redirect: '/license'},
+    {path:'/license',component:TheLogin},
     {path:'/home',component:TheHome},
     {path:'/assets', component: TheAssets},
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(), 
     routes, 
   })  
   

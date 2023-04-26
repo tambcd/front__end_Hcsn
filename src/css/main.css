@@ -42,3 +42,22 @@ a {
 .flex{
     display: flex;
 }
+/* .splitpanes__splitter{
+    height: 24px !important;
+}
+.default-theme.splitpanes--horizontal>.splitpanes__splitter::after{
+    height: 18px !important;
+    width: 18px !important;
+    background: url(../assets/icon/icons8-divider-18.png) no-repeat ;
+    margin-top: -4px !important;
+    background-color: transparent !important;
+
+
+}
+.default-theme.splitpanes--horizontal>.splitpanes__splitter::before{
+    height: 18px !important;
+    width:18px !important;
+    background: url(../assets/icon/icons8-divider-18.png) no-repeat ;
+    margin-top: -4px !important;
+    background-color: transparent !important;
+} */

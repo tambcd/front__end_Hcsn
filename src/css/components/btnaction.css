@@ -14,13 +14,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    background-color: rgba(26, 164, 200, .2);
 }
 .btn__edit{
+    background-color: rgba(26, 164, 200, .2);
  background-position:  -146px -68px;
  width: 40px;
 }
 .btn__nhanban{
+    background-color: rgba(26, 164, 200, .2);
     width: 40px;
     background-position: -234px -112px;
 }

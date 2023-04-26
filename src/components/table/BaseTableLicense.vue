@@ -5,21 +5,23 @@
     :positionleft="positionContextMenuX"
     :asset="dataContextMenu"
     @openAdd="showAddNewAsset()"
-    @openUpdate="(dataAsset)=>showUpdateAsset(dataAsset)"
-    @openDelete="(dataAsset)=>showDeleteAsset(dataAsset)"
-    @openReplication="(dataAsset)=>showReplicationAsset(dataAsset)"
+    @openUpdate="(dataAsset) => showUpdateAsset(dataAsset)"
+    @openDelete="(dataAsset) => showDeleteAsset(dataAsset)"
+    @openReplication="(dataAsset) => showReplicationAsset(dataAsset)"
     @closeContextMenu="closeContextMenu()"
   />
   <div
+    :class="{ 'table-paging': statePaging }"
     @mouseup="noReSizeColumn()"
-    class="table"
+    class="table-base"
     tabindex="0"
-    @keyup.prevent="noPressShift()"
-    @keydown.prevent="pressShift()"
+    @keyup="noPressShift()"
+    @keydown="pressShift()"
   >
     <table class="table-assets">
       <tr class="header-table weight700">
         <th
+          v-if="stateCheckbox"
           class="first-column center input-checkbox"
           ref="checkBoxAll"
           style="min-width: 50px"
@@ -32,7 +34,7 @@
             'min-width': item.minWith,
             width: item.withBase,
           }"
-          v-for="(item, index) in modelHeaderTable"
+          v-for="(item, index) in headerTable"
           :key="index"
         >
           <BaseTooltip
@@ -43,48 +45,52 @@
             <span>{{ item.nameColumn }} </span>
           </BaseTooltip>
           <span v-else>{{ item.nameColumn }} </span>
-          <div
+          <!-- <div
             :class="{ 'resize-column': item.isResize }"
             @mousedown="getPositionCurrent($event)"
             @mousemove="reSizeColumn($event)"
             @mouseup="noReSizeColumn()"
-          ></div>
+          ></div> -->
         </th>
       </tr>
       <tbody>
-        <item-table
+        <base-item-table-license
+          @selectIdItemTable="(id,type)=>{getId(id,type)}"
+          :keyTable="nameTable"
+          :isCheckbox="stateCheckbox"
+          :showClomn="bodyTable"
           @openContextMenu="(asset, x, y) => openContextMenu(asset, x, y)"
-          @click="selectItem(item.fixed_asset_id, index)"
+          @click="selectItem(item[nameTable + '_id'], index)"
           :selectClick="itemId"
-          :stateIsAll="listIdSelection.has(item.fixed_asset_id)"
+          :stateIsAll="listIdSelection.has(item[nameTable + '_id'])"
           @changeDataSelect="changeDataId"
-          v-for="(item, index) in listData.data"
-          :key="item.fixed_asset_id"
+          v-for="(item, index) in listDataItemTabel"
+          :key="item[nameTable + '_id']"
           :dataItem="item"
           :indexItemTable="index + 1"
         />
       </tbody>
     </table>
   </div>
-  <div class="paging">
+  <div class="paging" v-if="statePaging">
     <table class="paging-table">
       <tr class="Last_row">
-        <td colspan="5" class="first-column" style="min-width: 570px">
+        <td colspan="5" class="first-column">
           <div class="the-paging">
             <div class="total">
               Tổng số:
-              <span class="weight700">{{ listData.totalRecord }}</span> bản ghi
+              <span class="weight700">{{ listData.totalRecord || "0" }}</span>
+              bản ghi
             </div>
             <div class="drop-paging dropdown">
-              <div class="header-dropdown">
+              <div class="header-dropdown"  @click="showHideDrop()">
                 <div class="dropdown-left">
                   <div class="dropdown-value">
                     {{ this.priorityFilter.pageSize }}
                   </div>
                 </div>
                 <button
-                  class="dropdown-icon-right backgrsvg"
-                  @click="showHideDrop()"
+                  class="dropdown-icon-right backgrsvg"                 
                 ></button>
               </div>
               <div class="body-dropdown" :hidden="isDropd">
@@ -155,27 +161,22 @@
         </td>
 
         <td></td>
+
         <td class="right weight700" style="width: 150px">
-          <BaseTooltip position="down" tooltipText="Tổng số lượng">
-            {{ formatMoney(totalQuantity.toString()) }}
-          </BaseTooltip>
+          <span v-show="totalCost">
+            {{ formatMoney(totalCost.toString()) }}</span
+          >
         </td>
         <td class="right weight700" style="width: 150px">
-          <BaseTooltip position="down" tooltipText="Tổng nguyên giá">
-            {{ formatMoney(totalCost.toString()) }}
-          </BaseTooltip>
+          <span v-show="totalAtrophy"
+            >{{ formatMoney(totalAtrophy.toString()) }}
+          </span>
         </td>
         <td class="right weight700" style="width: 150px">
-          <BaseTooltip position="down" tooltipText="Tổng hao mòn lũy kế">
-            {{ formatMoney(totalAtrophy.toString()) }}
-          </BaseTooltip>
+          <span v-show="totalCost && totalAtrophy">
+            {{ formatMoney((totalCost - totalAtrophy).toString()) }}</span
+          >
         </td>
-        <td class="right weight700" style="width: 150px">
-          <BaseTooltip position="down" tooltipText="Tổng giá trị còn lại">
-            {{ formatMoney((totalCost - totalAtrophy).toString()) }}
-          </BaseTooltip>
-        </td>
-        <td class="The-actions center" style="width: 100px"></td>
       </tr>
     </table>
   </div>
@@ -183,29 +184,48 @@
 </template>
 
 <script>
-import ItemTable from "./BaseItemTable.vue";
 import TheLoading from "../Loading/TheLoading.vue";
 import { getByFilter } from "@/common/api/api";
 import { toast } from "vue3-toastify";
 import { formatMoney } from "@/common/helper/format";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
+import BaseItemTableLicense from "./BaseItemTableLicense.vue";
 import BaseContextMenu from "../contextmenu/BaseContextMenu.vue";
 
 export default {
   name: "DataTable",
   props: {
-    modelHeaderTable: [],
+    dataTable: {
+      default: null,
+    },
+    urlApi: {
+      default: "",
+    },
+    objectParamApi: {},
+    nameTable: {
+      default: "",
+    },
+    stateCheckbox: {
+      default: true,
+    },
+    statePaging: {
+      default: true,
+    },
+    headerTable: [],
+    bodyTable: [],
   },
-  components: { ItemTable, TheLoading, BaseContextMenu },
+  components: { TheLoading, BaseContextMenu, BaseItemTableLicense },
   async created() {
     this.listIdSelection = new Set();
+    this.priorityFilter = this.objectParamApi;
     await this.loadDataTable(1);
   },
 
   data() {
     return {
-      isContextMenu:false,
+      listDataItemTabel: [],
+      isContextMenu: false,
       positionContextMenuX: 110,
       positionContextMenuY: 110,
       dataContextMenu: {},
@@ -228,13 +248,7 @@ export default {
       isDropd: true,
       stateAll: false,
       listData: [],
-      priorityFilter: {
-        pageNumber: 1,
-        pageSize: 15,
-        txtSearch: "",
-        DepartmentId: null,
-        AssetCategoryId: null,
-      },
+      priorityFilter: {},
       listpageNumber: [],
       isReloadData: false,
       listIdSelection: null,
@@ -252,30 +266,24 @@ export default {
     // tải lại dữ liêu sau khi thêm - sửa
     this.emitter.on("ReloadData", (state) => {
       this.priorityFilter.txtSearch = "";
-      this.priorityFilter.DepartmentId = "";
-      this.priorityFilter.AssetCategoryId = "";
       if (state === MISAEnum.stateDialog.add) {
         this.loadDataTable(1);
       } else {
         this.loadDataTable(this.priorityFilter.pageNumber);
       }
     });
-    // lọc tài sản
-    this.emitter.on("filterAssets", (data) => {
-      this.priorityFilter.txtSearch = data[0].toString();
-      this.priorityFilter.AssetCategoryId = data[2].toString();
-      this.priorityFilter.DepartmentId = data[1].toString();
-      try {
-        this.loadDataTable(1);
-        this.priorityFilter.pageNumber = 1;
-      } catch (error) {
-        console.log(error);
-      }
-    });
   },
 
   methods: {
-     /**
+    /**
+     * Author: TVTam
+     * created : tvTam (09/04/2023)
+     * Lấy ra id từ item table
+     */
+    getId(id,type) {
+      this.$emit("getIdByTable", id,type);
+    },
+    /**
      * Author: TVTam
      * created : tvTam (09/04/2023)
      * Xác định vị trí và mở context menu
@@ -292,51 +300,51 @@ export default {
         this.positionContextMenuY = y;
       }
       this.dataContextMenu = asset;
-      this.isContextMenu = true
+      this.isContextMenu = true;
     },
-        /**
+    /**
      * Author: TVTam
      * created : tvTam (09/04/2023)
      * đóng context menu
      */
-    closeContextMenu(){
-      this.isContextMenu = false
+    closeContextMenu() {
+      this.isContextMenu = false;
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
      * Mở form thêm mới từ context menu
      */
-    showAddNewAsset(){
-        this.$emit("openFormAddNew");
-         this.isContextMenu = false
+    showAddNewAsset() {
+      this.$emit("openFormAddNew");
+      this.isContextMenu = false;
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
      * Mở form sửa tài sản từ context menu
      */
-    showUpdateAsset(data){
-        this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 2 });
-         this.isContextMenu = false
+    showUpdateAsset(data) {
+      this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 2 });
+      this.isContextMenu = false;
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
      * Mở xác nhận xóa sản từ context menu
      */
-    showDeleteAsset(data){
-         this.$emit("deleteAssetContextMenu",data);
-         this.isContextMenu = false
+    showDeleteAsset(data) {
+      this.$emit("deleteAssetContextMenu", data);
+      this.isContextMenu = false;
     },
-     /**
+    /**
      * Author: TVTam
      * created : tvTam (3/03/2023)
      * Mở form nhân bản tài sản từ context menu
      */
-    showReplicationAsset(data){
-        this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 3 });
-         this.isContextMenu = false
+    showReplicationAsset(data) {
+      this.emitter.emit("showDialog", { dataAsset: data, typeDialog: 3 });
+      this.isContextMenu = false;
     },
     /**
      * Author: TVTam
@@ -349,7 +357,7 @@ export default {
       this.pageX = event.pageX;
       this.curColWidth = this.curCol.offsetWidth;
       if (this.nxtCol) {
-        this.nxtColWidth = this.nxtCol.offsetWidth; 
+        this.nxtColWidth = this.nxtCol.offsetWidth;
       }
     },
     /**
@@ -389,29 +397,34 @@ export default {
       }
       if (
         event.code == "ArrowDown" &&
-        this.numberArrowIndext < this.listData.data.length
+        this.numberArrowIndext < this.listDataItemTabel.length
       ) {
         if (this.isShift) {
           this.isRechange = false;
-          if (this.numberArrowIndext < this.listData.data.length - 1) {
+          if (this.numberArrowIndext < this.listDataItemTabel.length - 1) {
             this.changeDataId([
-              this.listData.data[this.numberArrowIndext + 1].fixed_asset_id,
+              this.listDataItemTabel[this.numberArrowIndext + 1][
+                this.nameTable + "_id"
+              ],
               true,
             ]);
           }
           this.changeDataId([
-            this.listData.data[this.numberArrowIndext].fixed_asset_id,
+            this.listDataItemTabel[this.numberArrowIndext][
+              this.nameTable + "_id"
+            ],
             true,
           ]);
         }
-        if (this.numberArrowIndext >= this.listData.data.length - 1) {
-          console.log();
-          this.numberArrowIndext = this.listData.data.length - 1;
+        if (this.numberArrowIndext >= this.listDataItemTabel.length - 1) {
+          this.numberArrowIndext = this.listDataItemTabel.length - 1;
         } else {
           this.numberArrowIndext++;
           if (this.isShift) {
             this.changeDataId([
-              this.listData.data[this.numberArrowIndext].fixed_asset_id,
+              this.listDataItemTabel[this.numberArrowIndext][
+                this.nameTable + "_id"
+              ],
               true,
             ]);
           }
@@ -422,12 +435,16 @@ export default {
           this.isRechange = true;
           if (this.numberArrowIndext > 0) {
             this.changeDataId([
-              this.listData.data[this.numberArrowIndext - 1].fixed_asset_id,
+              this.listDataItemTabel[this.numberArrowIndext - 1][
+                this.nameTable + "_id"
+              ],
               true,
             ]);
           }
           this.changeDataId([
-            this.listData.data[this.numberArrowIndext].fixed_asset_id,
+            this.listDataItemTabel[this.numberArrowIndext][
+              this.nameTable + "_id"
+            ],
             true,
           ]);
         }
@@ -437,13 +454,16 @@ export default {
           this.numberArrowIndext--;
           if (this.isShift) {
             this.changeDataId([
-              this.listData.data[this.numberArrowIndext].fixed_asset_id,
+              this.listDataItemTabel[this.numberArrowIndext][
+                this.nameTable + "_id"
+              ],
               true,
             ]);
           }
         }
       }
-      this.itemId = this.listData.data[this.numberArrowIndext].fixed_asset_id;
+      this.itemId =
+        this.listDataItemTabel[this.numberArrowIndext][this.nameTable + "_id"];
     },
     /**
      * Author: TVTam
@@ -463,7 +483,7 @@ export default {
      * created : tvTam (23/02/2023)
      * Lấy dữ tài sản
      */
-    async loadDataTable(pageNumber) {
+    async loadDataTable() {
       this.isReloadData = false;
       // this.stateAll = false;
       // this.clearData();
@@ -471,25 +491,30 @@ export default {
       this.totalQuantity = 0;
       this.totalAtrophy = 0;
       await getByFilter(
-        "Assets/getByFilter",
-        {
-          pageNumber: pageNumber,
-          pageSize: this.priorityFilter.pageSize,
-          txtSearch: this.priorityFilter.txtSearch,
-          DepartmentId: this.priorityFilter.DepartmentId,
-          AssetCategoryId: this.priorityFilter.AssetCategoryId,
-        },
+        this.urlApi,
+        this.priorityFilter,
 
         (response) => {
           // Trường hợp thành công nhận về dữ liệu thì gán lại vào mảng Departments
           this.listData = response.data;
-          this.totalCost = response.data.totalCost;
-          this.totalAtrophy = response.data.totalDepreciationValue;
-          this.totalQuantity = response.data.totalQuantity;
-          this.valueRemaining = this.totalCost - this.totalAtrophy;
+          if (response.data.data) {
+            this.listDataItemTabel = response.data.data;
+          } else {
+            this.listDataItemTabel = response.data;
+          }
+          this.$emit("fisrtLoad", this.listDataItemTabel[0]);
+          this.listData.totalPage = Math.ceil(
+            response.data.totalRecord / this.priorityFilter.pageSize
+          );
+
+          this.totalCost = Math.round(response.data.totalCost);
+          this.$emit("getCose", this.totalCost);
+          this.totalAtrophy = Math.round(response.data.totalDepreciationValue);
+          this.totalQuantity = Math.round(response.data.totalQuantity);
+          this.valueRemaining = Math.round(this.totalCost - this.totalAtrophy);
           this.hideNumberPage();
           this.isReloadData = true;
-          this.isCheckAllUpdate();
+          // this.isCheckAllUpdate();
         },
         (erro) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -600,7 +625,7 @@ export default {
       } else {
         this.listIdSelection.delete(id[0]);
       }
-      this.sendDataDelete();
+      this.sendDataChose();
       this.isCheckAllUpdate();
     },
 
@@ -611,8 +636,8 @@ export default {
      */
     isCheckAllUpdate() {
       this.stateAll = true;
-      this.listData.data.forEach((element) => {
-        if (!this.listIdSelection.has(element.fixed_asset_id)) {
+      this.listDataItemTabel.forEach((element) => {
+        if (!this.listIdSelection.has(element[this.nameTable + "_id"])) {
           this.stateAll = false;
           return;
         }
@@ -624,8 +649,8 @@ export default {
      * xóa tất cả phần tử được chọn
      */
     clearData() {
-      this.listData.data.forEach((element) => {
-        this.listIdSelection.delete(element.fixed_asset_id);
+      this.listDataItemTabel.forEach((element) => {
+        this.listIdSelection.delete(element[this.nameTable + "_id"]);
       });
     },
 
@@ -635,8 +660,8 @@ export default {
      * chọn tất cả
      */
     selectAll() {
-      this.listData.data.forEach((element) => {
-        this.listIdSelection.add(element.fixed_asset_id);
+      this.listDataItemTabel.forEach((element) => {
+        this.listIdSelection.add(element[this.nameTable + "_id"]);
       });
     },
 
@@ -651,14 +676,14 @@ export default {
       } else {
         this.clearData();
       }
-      this.sendDataDelete();
+      this.sendDataChose();
     },
     /**
      * Author: TVTam
      * created : tvTam (1/03/2023)
-     * gửi danh sách id chọn để thực hiện xóa
+     * gửi danh sách id chọn
      */
-    sendDataDelete() {
+    sendDataChose() {
       this.$emit("updateListId", this.listIdSelection);
     },
     /**
@@ -688,6 +713,7 @@ export default {
      * ham : danh dấu item khi click
      */
     selectItem(id, index) {
+      this.$emit("senIdLicense", id);
       this.itemId = id;
       if (index >= this.numberItem) {
         this.selectStart = this.numberItem;
@@ -705,7 +731,10 @@ export default {
           index < this.selectEnd + 1;
           index++
         ) {
-          this.changeDataId([this.listData.data[index].fixed_asset_id, true]);
+          this.changeDataId([
+            this.listDataItemTabel[index][this.nameTable + "_id"],
+            true,
+          ]);
         }
       }
     },
@@ -720,21 +749,33 @@ export default {
     },
   },
   watch: {
+    objectParamApi: {
+      handler: function (value) {
+        this.priorityFilter = value;
+        this.loadDataTable(1);
+      },
+      deep: true,
+    },
+
     isRechange(value) {
       this.clearData();
       this.changeDataId([
-        this.listData.data[this.numberArrowIndext].fixed_asset_id,
+        this.listDataItemTabel[this.numberArrowIndext][this.nameTable + "_id"],
         true,
       ]);
 
       if (value) {
         this.changeDataId([
-          this.listData.data[this.numberArrowIndext + 1].fixed_asset_id,
+          this.listDataItemTabel[this.numberArrowIndext + 1][
+            this.nameTable + "_id"
+          ],
           true,
         ]);
       } else {
         this.changeDataId([
-          this.listData.data[this.numberArrowIndext - 1].fixed_asset_id,
+          this.listDataItemTabel[this.numberArrowIndext - 1][
+            this.this.nameTable + "_id"
+          ],
           true,
         ]);
       }
@@ -743,5 +784,32 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.table-base::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+.table-base::-webkit-scrollbar-track {
+  background-color: #f4f7ff;
+}
+.table-base::-webkit-scrollbar-thumb {
+  background-color: #9e9e9e;
+  border-radius: 4px;
+}
+.table-base {
+  height: 98%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  overflow: auto;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+}
+.table-paging {
+  height: calc(100% - 50px) !important;
+}
+.paging tr {
+  border: unset !important;
+}
+.the-paging {
+  padding-left: 0px !important;
+}
 </style>

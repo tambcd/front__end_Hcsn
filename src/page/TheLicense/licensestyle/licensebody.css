@@ -1,0 +1,24 @@
+.license-body{
+    height: calc(100vh - 100px) ;
+    width: 100%;
+    background-color: rgb(14, 159, 46);
+}
+.header-asset-detail{
+    background-color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.maximine-btn{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon-maximaine{
+    background-position: -245px -333px;
+}

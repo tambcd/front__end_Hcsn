@@ -1,5 +1,5 @@
 const DataObject = {   
-   
+
      optionMenu : [
     {
       ItemID: 0,
@@ -157,7 +157,213 @@ const DataObject = {
       nameTooltip: "",
       isResize : false
     }        
+  ],
+
+  TableLicense : {
+    nameTable:'license',
+    stateCheckBox:true,
+    statePaging:true,
+
+  headerTableLicense:[
+    {
+      nameColumn:"STT",
+      alignment: "center",
+      withBase:"",
+      minWith : "50px",
+      directiveTooltip: true,
+      nameTooltip: "Số thứ tự",
+      isResize : true
+    },
+    {
+      nameColumn:"Số chứng từ",
+      alignment: "left",
+      withBase:"",
+      minWith : "100px",
+      directiveTooltip: true,
+      nameTooltip: "",
+      isResize : true
+    },
+    {
+      nameColumn:"Ngày chứng từ",
+      alignment: "center",
+      withBase:"",
+      minWith : "100px",
+      directiveTooltip: true,
+      nameTooltip: "",
+      isResize : true
+    },
+    {
+      nameColumn:"Ngày ghi tăng",
+      alignment: "center",
+      withBase:"",
+      minWith : "100px",
+      directiveTooltip: true,
+      nameTooltip: "",
+      isResize : true
+    },
+    {
+      nameColumn:"Tổng nguyên giá",
+      alignment: "right",
+      withBase:"",
+      minWith : "150px",
+      directiveTooltip: true,
+      nameTooltip: "",
+      isResize : true
+    },
+    {
+      nameColumn:"Nội dung",
+      alignment: "left",
+      withBase:"",
+      minWith : "150px",
+      directiveTooltip: true,
+      nameTooltip: "",
+      isResize : true
+    },
+  ],
+  bodyTableLicense:[
+    
+    {
+      column:"license_code",
+      alignment: "left",
+      typeData:1,
+      color:"blue"
+      
+    },
+    {
+      column:"license_date",
+      alignment: "center", 
+      typeData:2 ,
+      color:"black"    
+    },
+    {
+      column:"increase_date",
+      alignment: "center",  
+      typeData:2 ,
+      color:"black" 
+    },
+    {
+      column:"total_price",
+      alignment: "right", 
+      typeData:3,
+      color:"black"
+     
+    },
+    {
+      column:"note",
+      alignment: "left", 
+      typeData:1 ,
+      color:"black"
+     
+    },
   ]
+},
+TableLicenseAsset : {
+  stateCheckBox:false,
+  statePaging:false,
+  nameTable:'fixed_asset',
+headerTable:[
+  {
+    nameColumn:"STT",
+    alignment: "center",
+    withBase:"",
+    minWith : "50px",
+    directiveTooltip: true,
+    nameTooltip: "Số thứ tự",
+    isResize : true
+  },
+  {
+    nameColumn:"Mã tài sản ",
+    alignment: "left",
+    withBase:"",
+    minWith : "100px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+  {
+    nameColumn:"Tên tài sản ",
+    alignment: "left",
+    withBase:"",
+    minWith : "100px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+  {
+    nameColumn:"Bộ phận sử dụng",
+    alignment: "left",
+    withBase:"",
+    minWith : "100px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+  {
+    nameColumn:"Nguyên giá ",
+    alignment: "right",
+    withBase:"150px",
+    minWith : "100px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+  {
+    nameColumn:"Hao mòn năm",
+    alignment: "right",
+    withBase:"150px",
+    minWith : "150px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+  {
+    nameColumn:"Giá trị còn lại",
+    alignment: "right",
+    withBase:"150px",
+    minWith : "150px",
+    directiveTooltip: true,
+    nameTooltip: "",
+    isResize : true
+  },
+],
+bodyTable:[
+  
+  {
+    column:"fixed_asset_code",
+    alignment: "left",
+    typeData:1,
+    
+    
+  },
+  {
+    column:"fixed_asset_name",
+    alignment: "left",
+    typeData:1
+    
+  },
+  {
+    column:"department_name",
+    alignment: "left", 
+    typeData:1     
+  },
+  {
+    column:"cost",
+    alignment: "right",  
+    typeData:3  
+  },
+  {
+    column:"depreciation_value",
+    alignment: "right", 
+    typeData:3
+   
+  },
+  {
+    column:"value_end",
+    alignment: "right", 
+    typeData:3    
+  },
+]
+},
 
 }
   export default DataObject;

@@ -98,7 +98,7 @@ export default {
     /**
      * check forcus khi mở thông báo
      * Author: TVTam
-     * Last Edited: 28/02/2023  *
+     * Last Edited: 28/02/2023 *
      */
     this.$refs["Close-error"].querySelector("button").focus();
   },

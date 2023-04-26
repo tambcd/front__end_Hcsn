@@ -6,6 +6,7 @@ import {requiredComponents} from './globalComponents'
 import 'vue3-toastify/dist/index.css';
 import 'vue-datepicker-next/index.css';
 import 'vue-datepicker-next/locale/vi';
+import 'splitpanes/dist/splitpanes.css'
 
 // event bus
 const emitter = mitt();

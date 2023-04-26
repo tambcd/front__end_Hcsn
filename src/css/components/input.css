@@ -19,7 +19,16 @@ input[type="text"]
     font-weight: 400;
     font-size: 14px;
 }
+input::placeholder {
+    color: gray;
+    font-style: italic;
+    }
+
+.input-search .toolbar-filter-text{
+    margin-left: 20px;
+}
 .toolbar-filter-text {
+    
     height: 35px;
     background-color: #ffffff;
     border-radius: 2.5px;
@@ -35,7 +44,7 @@ input[type="text"]
 }
 
 .input-icon-sreach {
-    margin-left: 6px;
+    margin-left: 15px;
     background-position: -243px -20px;
 }
 .input__icon__filter {

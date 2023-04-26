@@ -25,7 +25,8 @@ export default {
     width: 100px;
 }
 .btn__dark{
-    border: 1px solid #111;
+    border: 1px solid #afafaf;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .16);
     background-color: #fff;
 }
 
@@ -44,6 +45,7 @@ export default {
     background-color: #0cc3f0 ;
 }
 .btn__color{
+    border: 1px solid #afafaf;
     color: #fff;
     background-color: #1aa4c8;
     border: 0px;
