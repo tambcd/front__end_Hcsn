@@ -42,6 +42,16 @@ a {
 .flex{
     display: flex;
 }
+.default-theme.splitpanes--horizontal>.splitpanes__splitter, .default-theme .splitpanes--horizontal>.splitpanes__splitter{
+    height: 4px !important;
+}
+table , tr , th , td{
+    outline: none;
+}
+.box-shadowbl{
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .16);
+
+}
 /* .splitpanes__splitter{
     height: 24px !important;
 }

@@ -29,8 +29,8 @@
      * 
      * */ 
     typeMessage:{
-        delete:1,
-        erro:2
+        delete:2,
+        erro:1
 
     },
     /** Key combobox 

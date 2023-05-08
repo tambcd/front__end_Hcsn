@@ -1,4 +1,17 @@
 export  const Resource = {
+    Vn_LisenceCode:"Mã chứng từ ",
+    Vn_AssetZeros:"Phải chọn ít nhất một tài sản để thực hiện ghi tăng ",
+    Vn_SourceCostEmp:"Nguồn kinh phí không được để trống",
+    Vn_SourceCostSame:"Nguồn kinh phí đã tồn tại",
+    Vn_CostEmp:"Vui lòng nhập số tiền",
+    deleteAssetError:" tài sản được chọn không thể xóa. Vui lòng kiểm tra lại tài sản trước khi thực hiện xóa.  ",
+    deleteAssetErrorOne:"Không thể xóa tài sản này vì đã có chứng từ phát sinh.",
+    typeLicensetxt:{
+        add:"Thêm chứng từ ghi tăng",
+        update:"Sửa chứng từ ghi tăng "
+    },
+    VN_Maximaine:"Phóng to",
+    VN_Minimaine:"Thu nhỏ",
     VN_DepartmentValidate : "Dữ liệu đơn vị không có trong danh mục",
     /**lỗi lấy dữ liệu*/ 
     VN_ErroData : "Lỗi lấy dữ liệu",
@@ -14,6 +27,7 @@ export  const Resource = {
     VN_DeleteSuccess : "Xóa thành công",   
      /**Xóa thành công*/ 
     VN_DeleteEmpty : "Vui lòng chọn tài sản",   
+    VN_DeleteEmptyLicense : "Vui lòng chọn chứng từ",   
     /**Xóa thất bại */ 
     VN_DeleteFailure : "Xóa thất bại vui lòng thử lại", 
     /**Thêm thất bại */ 
@@ -36,7 +50,9 @@ export  const Resource = {
     VN_NotDataDelete :"Vui lòng chọn bản ghi để xóa",
 
     VN_DeleteTxt : "Bạn có muốn xóa tài sản ",
+    VN_DeleteLicense : "Bạn có muốn xóa chứng từ  ",
     VN_ManyDeleteTxt : ' tài sản bạn đã chọn bạn có muôn xóa các tài sản khỏi danh sách không ?',
+    VN_ManyDeleteLicense : ' chứng từ bạn đã chọn bạn có muốn xóa các chứng từ khỏi danh sách không ?',
 
     MapNameAsset : {
         fixed_asset_code : "mã tài sản ",

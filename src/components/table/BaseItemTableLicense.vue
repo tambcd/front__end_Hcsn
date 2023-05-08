@@ -17,7 +17,7 @@
     :style="{color : item.color  }">
         {{ item.typeData == 1?dataItem[item.column] : item.typeData == 2 ? formatDateShow(dataItem[item.column]) : formatMoney(dataItem[item.column])}}
         </td>
-    <div class="The-actions actions__item" style="" >
+    <div class="The-actions actions__item" v-show="typeTable" >
 
       <BaseTooltip position="left" tooltipText="Sửa">
         <button class="btn__edit btn__action backgrsvg"
@@ -41,7 +41,9 @@ import { formatMoney,dateToStringShow } from "@/common/helper/format";
 export default {
   name: "ItemTableLicense",
   props: {
-    
+    typeTable:{
+      default:true
+    },
     keyTable:{
       default:""
     },

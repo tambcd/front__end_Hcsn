@@ -1,8 +1,8 @@
 <template>
   <router-link :to="isRouter">
-    <div class="menu-item" :class="{ 'menu-item__bottom': isBottom }">
+    <div class="menu-item" :class="{ 'menu-item__bottom': isBottom }" >
       <div
-        class="menu-item__all menu-item-overview"
+        class="menu-item__all menu-item-overview" :style="{height : heightMenu}"
         :class="{ menu__select: seletionItem }"
       >
         <div
@@ -30,6 +30,7 @@ import BaseTooltip from '@/components/tooltip/BaseTooltip.vue';
 export default {
   components: { BaseTooltip },
   props: {
+    heightMenu:{default:"44px"},
     isTypeMenu: {
       default: true,
     },

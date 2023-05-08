@@ -638,7 +638,7 @@ export default {
     saveAsset() {
       this.isValidateEmpty();
       if (this.isValidate.stateValide) {
-        this.typeMessage = 1;
+        this.typeMessage = MISAEnum.typeDelete.delete;
         this.ContentMessage = Resource.VN_Please + Resource.MapNameAsset[this.isValidate.isfocus];
         this.isMessage = true;
         return;
@@ -664,7 +664,7 @@ export default {
         }
       } catch (error) {
         this.isValidate.isfocus = "fixed_asset_code";
-        this.typeMessage = 1;
+        this.typeMessage = MISAEnum.typeMessage.delete;
         this.ContentMessage = Resource.VN_AddFailure;
         this.isMessage = true;
         console.log(error);
@@ -690,7 +690,7 @@ export default {
           this.closeDialog();
 
           /// đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
           //load lại data
           this.emitter.emit("ReloadData", MISAEnum.stateDialog.update);
         },
@@ -710,7 +710,7 @@ export default {
           this.typeMessage = 1;
           this.isMessage = true;
           // đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
         }
       );
     },
@@ -734,7 +734,7 @@ export default {
           this.closeDialog();
 
           /// đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
           //load lại data
           this.emitter.emit("ReloadData", MISAEnum.stateDialog.add);
         },
@@ -750,10 +750,10 @@ export default {
             this.isValidate.isfocus = "cost";
           }
 
-          this.typeMessage = 1;
+          this.typeMessage = MISAEnum.stateDialog.add;
           this.isMessage = true;
           // đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
         }
       );
     },

@@ -353,36 +353,12 @@ export default {
      * Last Edited: 28/02/2023
      */
 
-    async deleteYes() {
-      try {
-        // xóa nhiều thì mảng xóa đc cập nhập data
-        if (this.typeDelete == MISAEnum.typeDelete.delete) {
-          await deleteAssets(
-            "Assets",
-            this.idDeleteContext,
-            () => {
-              toast.success(Resource.VN_DeleteSuccess, {
-                autoClose: 2000,
-                position: "bottom-right",
-              });
-              // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-              this.emitter.emit("LoadingDataDelete");
-              this.isMessageDelete = false;
-            },
-            (error) => {
-              // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-              toast.error(Resource.VN_DeleteFailure, {
-                autoClose: 2000,
-                position: "bottom-right",
-              });
-              console.log(error);
-            }
-          );
-          return;
-        } 
-        await deleteManyAssets(
+    deleteYes() {
+      // xóa nhiều thì mảng xóa đc cập nhập data
+      if (this.typeDelete == MISAEnum.typeDelete.delete) {
+        deleteAssets(
           "Assets",
-          { data: Array.from(this.listIdDelete) },
+          this.idDeleteContext,
           () => {
             toast.success(Resource.VN_DeleteSuccess, {
               autoClose: 2000,
@@ -401,14 +377,57 @@ export default {
             console.log(error);
           }
         );
-      } catch (error) {
-        toast.error(Resource.VN_DeleteEmpty, {
-          autoClose: 2000,
-          position: "bottom-right",
-        });
-        console.log(error);
-        this.$emit("hideMessage");
+        return;
+      } else {
+        deleteManyAssets(
+          "Assets",
+          { data: Array.from(this.listIdDelete) },
+          () => {
+            toast.success(Resource.VN_DeleteSuccess, {
+              autoClose: 2000,
+              position: "bottom-right",
+            });
+            // chuyền thông báó xóa thành công để clear mảng xóa nhiều
+            this.emitter.emit("LoadingDataDelete");
+            this.isMessageDelete = false;
+          },
+          (error) => {
+            console.log(
+              `${error.response.data.devMsg}: ${error.response.data.erros}`
+            );
+
+            this.messageDeleteError(error.response.data.erros);
+          }
+        );
       }
+    },
+
+    /**
+     * Description:  cập nhập id chọn tại table
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+
+    messageDeleteError(number) {
+      this.typeMessagepp = 1;
+      this.typeHighligh = 1;
+      if(Number(number)==1 && Array.from(this.listIdDelete).length == 1 ){
+        this.titleMessageheader = "";
+        this.isDeleteMany = Resource.deleteAssetErrorOne;
+        this.titleMessagebottom = "";
+      }
+      else {
+        if(Number(number)<10){
+
+          this.titleMessageheader = "0"+number;
+        }
+        else{
+           this.titleMessageheader = number;
+
+        }
+        this.isDeleteMany = Resource.deleteAssetError;
+        this.titleMessagebottom = "";
+      } 
     },
     /**
      * Description:  cập nhập id chọn tại table

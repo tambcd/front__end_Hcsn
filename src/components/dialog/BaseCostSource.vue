@@ -2,7 +2,7 @@
   <div class="base-cost">
     <div class="cost-source">
       <div class="cost-combobox">
-        <BaseInput
+        <BaseInput 
           v-if="!isPlus"
           valueInputFisrt="Tổng"
           disabledInput="true"
@@ -11,13 +11,15 @@
           marginInput="8px"
         />
         <TheCombobox
-          v-else    
+        :isValideCombobox="isValidate"
+        :titleVailidateCombobox="titleValidate"
+          v-else
           @selectItemCombobox="
-                  (data, key) => {
-                    getDataComboboxItem(data, key);
-                  }
-                "   
-          :valueSelect="cost_source_code"           
+            (data, key) => {
+              getDataComboboxItem(data, key);
+            }
+          "
+          :valueSelect="cost_source_code"
           :DataCombobox="dataComboboxCost"
           dataContent="cost_source_name"
           keyData="cost_source"
@@ -28,6 +30,8 @@
       </div>
       <div class="cost-value-cost">
         <BaseInput
+          :isValide="isValidateInputCb"
+          :titleValidate="titleValidateCb"
           textalignInput="right"
           :valueInputFisrt="cost"
           :disabledInput="!isPlus"
@@ -45,8 +49,12 @@
       </div>
     </div>
     <div class="cost-value" v-show="isPlus">
-      <button class="btn btnadd backgrsvg" @click="addNewItem()"></button>
-      <button class="btn btndelete backgrsvg" @click="deleteItem()"></button>
+      <BaseTooltip position="down" tooltipText="Thêm nguồn chi phí">
+        <button class="btn btnadd backgrsvg" @click="addNewItem()"></button>
+      </BaseTooltip>
+      <BaseTooltip position="down" tooltipText="Bỏ nguồn chi phí" v-show="isSource">
+        <button class="btn btndelete backgrsvg" @click="deleteItem()"></button>
+      </BaseTooltip>
     </div>
   </div>
 </template>
@@ -55,30 +63,34 @@
 import TheCombobox from "../combobox/BaseCombobox.vue";
 export default {
   props: {
-    dataComboboxCost:[],
+
+    titleValidateCb:{default:""},
+    isValidateInputCb:{default:false},
+    titleValidate:{default:""},
+    isValidate:{default:false},
+    isSource:{default:true},
+    dataComboboxCost: [],
     isPlus: {
       default: true,
     },
     valueCost: {
-      default: "0",
+      default: "",
     },
     codeSource: {
       default: "",
     },
   },
   created() {
-    this.getNameCost()
+    this.getNameCost();
     this.cost = this.valueCost;
-    
   },
   name: "BaseCostSource",
   components: { TheCombobox },
   data() {
     return {
-      cost_source_code:"",
+      cost_source_code: "",
       sumCost: 0,
-      cost: "0",
-      
+      cost: "",
     };
   },
   methods: {
@@ -87,20 +99,21 @@ export default {
      * @create by : MF1270
      * @@create day : 1/03/2023
      */
-    getNameCost(){
-      if (this.dataComboboxCost || this.dataComboboxCost>0) {
-        this.cost_source_code = this.dataComboboxCost.find(obj => obj.cost_source_code === this.codeSource)?.cost_source_name;
+    getNameCost() {
+      if (this.dataComboboxCost || this.dataComboboxCost > 0) {
+        this.cost_source_code = this.dataComboboxCost.find(
+          (obj) => obj.cost_source_code === this.codeSource
+        )?.cost_source_name;
       }
     },
-    
+
     /**
      * lấy ra giá trị của combobox
      * @create by : MF1270
      * @@create day : 1/03/2023
      */
-    getDataComboboxItem(data, key){
-      this.$emit("getDataCobobox",data, key)
-    
+    getDataComboboxItem(data, key) {
+      this.$emit("getDataCobobox", data, key);
     },
     /**
      * nhấn btn xóa
@@ -146,15 +159,15 @@ export default {
     valueCost(value) {
       this.cost = value;
     },
-    codeSource(){
-           this.getNameCost()
-    }
-    
+    codeSource() {
+      this.getNameCost();
+    },
   },
 };
 </script>
 
 <style scoped>
+
 .btn {
   margin-left: 10px;
   border: unset;

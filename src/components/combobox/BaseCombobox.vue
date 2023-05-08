@@ -1,8 +1,9 @@
 <template>
-  <div class="combobox" >
-    <a ref="#" >
+  <div class="combobox"  :ref="'combobox'+ refCombobox">
     
     <the-input
+      :isValide="isValideCombobox"
+      :titleValidate="titleVailidateCombobox"
       @click="showhideItemCombobox"
       @keyDownbaseInput="keyAutoCombobox()"
       :valueInputFisrt="dataCombobox"
@@ -51,7 +52,6 @@
         </div>
       </div>
     </div>
-    </a>
   </div>
 </template>
 
@@ -61,6 +61,9 @@ export default {
    name:'BaseCombobox',
   components: { TheInput },
   props: {
+    refCombobox:{default:"combobox"},
+    titleVailidateCombobox:{default:""},
+    isValideCombobox:{default:false},
     allItem:{
       default:false,
     },

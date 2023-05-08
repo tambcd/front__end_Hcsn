@@ -11,7 +11,7 @@
 .display-icon{
     width: 20px;
     height: 15px;
-    background-position: -66px -421px;
+    background-position: -22px -421px;
 }
 .delete-icon{
     width: 18px;
@@ -46,6 +46,7 @@
     position: relative;
 }
 .display-icon-y{
+    border-radius: 4px;
     position: absolute;
     height: 36px;
     width: 36px;
@@ -56,7 +57,6 @@
     align-items: center;
 }
 .icon-display-y{
-    background-color: #ffffff;
     z-index: 1000;
     width: 20px;
 	height: 15px;

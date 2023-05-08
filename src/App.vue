@@ -7,6 +7,8 @@
       <the-body />
     </div>
   </div>
+    <TheLoading v-show="isReloadData" />
+
 </template>
 
 <script>
@@ -21,8 +23,14 @@ export default {
     TheBody,
     TheMenu,
   },
+  mounted() {
+    this.emitter.on("showLoading", (state) => {
+      this.isReloadData = state;
+    });
+  },
   data() {
     return {
+      isReloadData: false,
       isShift:false,
       isTypeMenu:false
     }

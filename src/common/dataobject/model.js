@@ -1,6 +1,6 @@
 const DataObject = {   
 
-     optionMenu : [
+  optionMenu : [
     {
       ItemID: 0,
       ItemTxt: "MISA QLTS",
@@ -8,6 +8,7 @@ const DataObject = {
       itemBg: "menu-item-overview",
       path: "/home",
       isheader: true,
+      heightMenu:"44px"
     },
     {
       ItemID: 1,
@@ -15,6 +16,7 @@ const DataObject = {
       item_icon: "menu-item-overview__icon",
       itemBg: "menu-item-overview",
       path: "/home",
+      heightMenu:"44px"
     },
     {
       ItemID: 2,
@@ -22,48 +24,157 @@ const DataObject = {
       item_icon: "menu-item-assets__icon",
       itemBg: "menu-item-assets",
       path: "/assets",
+      heightMenu:"44px"
     },
     {
       ItemID: 3,
+      ItemTxt: "Ghi tăng",
+      item_icon: "",
+      itemBg: "menu-item-assets",
+      path: "/",
+      heightMenu:"30px"
+    },
+    {
+      ItemID: 4,
+      ItemTxt: "Thay đổi thông tin",
+      item_icon: "",
+      itemBg: "menu-item-assets",
+      path: "/assets",
+      heightMenu:"30px"
+    },
+    {
+      ItemID: 5,
+      ItemTxt: "Đánh giá lại",
+      item_icon: "",
+      itemBg: "menu-item-assets",
+      path: "/assets",
+      heightMenu:"30px"
+    },
+    {
+      ItemID: 6,
+      ItemTxt: "Tính hao mòn",
+      item_icon: "",
+      itemBg: "menu-item-assets",
+      path: "/assets",
+      heightMenu:"30px"
+    },
+    {
+      ItemID: 7,
+      ItemTxt: "Điều chuyển tài sản",
+      item_icon: "",
+      itemBg: "menu-item-assets",
+      path: "/assets",
+      heightMenu:"30px"
+    },
+    {
+      ItemID: 8,
       ItemTxt: "Tài sản HT_DB",
       item_icon: "menu-item-assets--HTDB__icon",
       itemBg: "menu-item-assets--HTDB",
       path: "/login",
+      heightMenu:"44px"
     },
     {
-      ItemID: 4,
+      ItemID: 9,
       ItemTxt: "Công cụ dụng cụ",
       item_icon: "menu-item-tools__icon",
       itemBg: "menu-item-tools",
       path: "/login",
+      heightMenu:"44px"
     },
     {
-      ItemID: 5,
+      ItemID: 10,
       ItemTxt: "Danh mục",
       item_icon: "menu-item-catagory__icon",
       itemBg: "menu-item-catagory",
       path: "/",
+      heightMenu:"44px"
     },
+    
     {
-      ItemID: 6,
-      ItemTxt: "Tra cứu",
-      item_icon: "menu-item-search__icon",
-      itemBg: "menu-item-search",
-      path: "/",
-    },
-    {
-      ItemID: 7,
+      ItemID: 11,
       ItemTxt: "Báo cáo",
       item_icon: "menu-item-repost__icon",
       itemBg: "menu-item-repost",
       path: "/",
+      heightMenu:"44px"
     },
     {
-      ItemID: 8,
+      ItemID: 12,
       ItemTxt: "Thu gọn",
       item_icon: "botton__menu",
       itemBg: "menu-item-repost",
       isbottom: true,
+      heightMenu:"44px"
+    },
+  ],
+  optionMenuMini : [
+    {
+      ItemID: 0,
+      ItemTxt: "MISA QLTS",
+      item_icon: "menu-item-home__icon",
+      itemBg: "menu-item-overview",
+      path: "/home",
+      isheader: true,
+      heightMenu:"44px"
+    },
+    {
+      ItemID: 1,
+      ItemTxt: "Tổng quan",
+      item_icon: "menu-item-overview__icon",
+      itemBg: "menu-item-overview",
+      path: "/home",
+      heightMenu:"44px"
+    },
+    {
+      ItemID: 2,
+      ItemTxt: "Tài sản",
+      item_icon: "menu-item-assets__icon",
+      itemBg: "menu-item-assets",
+      path: "/assets",
+      heightMenu:"44px"
+    },
+    
+    {
+      ItemID: 8,
+      ItemTxt: "Tài sản HT_DB",
+      item_icon: "menu-item-assets--HTDB__icon",
+      itemBg: "menu-item-assets--HTDB",
+      path: "/login",
+      heightMenu:"44px"
+    },
+    {
+      ItemID: 9,
+      ItemTxt: "Công cụ dụng cụ",
+      item_icon: "menu-item-tools__icon",
+      itemBg: "menu-item-tools",
+      path: "/login",
+      heightMenu:"44px"
+    },
+    {
+      ItemID: 10,
+      ItemTxt: "Danh mục",
+      item_icon: "menu-item-catagory__icon",
+      itemBg: "menu-item-catagory",
+      path: "/",
+      heightMenu:"44px"
+    },
+    
+    {
+      ItemID: 11,
+      ItemTxt: "Báo cáo",
+      item_icon: "menu-item-repost__icon",
+      itemBg: "menu-item-repost",
+      path: "/",
+      heightMenu:"44px"
+    },
+    {
+      ItemID: 12,
+      ItemTxt: "Thu gọn",
+      item_icon: "botton__menu",
+      itemBg: "menu-item-repost",
+      isbottom: true,
+      heightMenu:"44px"
     },
   ],
   headerTable :[
@@ -205,7 +316,7 @@ const DataObject = {
       nameColumn:"Tổng nguyên giá",
       alignment: "right",
       withBase:"",
-      minWith : "150px",
+      minWith : "100px",
       directiveTooltip: true,
       nameTooltip: "",
       isResize : true
@@ -213,7 +324,7 @@ const DataObject = {
     {
       nameColumn:"Nội dung",
       alignment: "left",
-      withBase:"",
+      withBase:"250px",
       minWith : "150px",
       directiveTooltip: true,
       nameTooltip: "",

@@ -6,6 +6,8 @@
         <div class="license-body-dialog-input-top">
           <div class="input-license">
             <BaseInput
+              :isValide="isCodeCt"
+              maxlengthBaseInput="100"
               contentInput="GT0001"
               titleInput="Mã chứng từ  "
               required="True"
@@ -105,7 +107,13 @@
 import BaseTableLicense from "@/components/table/BaseTableLicense.vue";
 import BaseDialog from "./BaseDialog.vue";
 import DataObject from "@/common/dataobject/model.js";
-import { getNewCode, post, getById } from "@/common/api/api.js";
+import {
+  getNewCode,
+  post,
+  getById,
+  getByFilter,
+  putlc,
+} from "@/common/api/api.js";
 import { getNowday } from "@/common/helper/format";
 import { toast } from "vue3-toastify";
 import Resource from "@/common/resource/Resource";
@@ -141,6 +149,8 @@ export default {
   },
   data() {
     return {
+      isCodeCt: false,
+      rootlistId: [],
       paramApiLicenseDetail: {
         codes: "''",
         pageNumber: 1,
@@ -155,8 +165,8 @@ export default {
         bodyTableLicense: DataObject.TableLicenseAsset.bodyTable,
         NameTable: DataObject.TableLicenseAsset.nameTable,
       },
-      dateUser:getNowday(),
-      dateLicense:getNowday(),
+      dateUser: getNowday(),
+      dateLicense: getNowday(),
       txtSreach: "",
       listIdSelect: null,
       dataLicense: {
@@ -169,9 +179,24 @@ export default {
         },
         ids: [],
       },
+      dataUpdate: {
+        license: null,
+        guidsDelete: [],
+        guidsUpdate: [],
+      },
     };
   },
   methods: {
+    /**
+     * Description: mở form sửa nguyên giá
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+    updateCost(id, type) {
+      if (type == MISAEnum.stateAction.update) {
+        this.$emit("updateCostAsset", id);
+      }
+    },
     /**
      * Description: Tìm kiếm text
      * Author: TVTam
@@ -211,8 +236,37 @@ export default {
     getTotalCose(sumCost) {
       this.dataLicense.license.total_price = sumCost;
     },
+
+    /**
+     * @create by : MF1270
+     * @create day : 24/04/2023
+     * ham : đóng form
+     */
     closeDialog() {
       this.$emit("closeDialogLicense");
+    },
+
+    /**
+     * @create by : MF1270
+     * @create day : 08/05/2023
+     * ham : validate chứng từ
+     */
+    validateLicense() {
+      let txtMessage = "";
+      let isValidate = true;
+      if (this.dataLicense.license.license_code.trim == "") {
+        txtMessage += Resource.Vn_LisenceCode + Resource.VN_EmptyData;
+        this.isCodeCt = true;
+        isValidate = false;
+      }
+      if (this.dataLicense.ids.length == 0) {
+        txtMessage += Resource.Vn_AssetZeros;
+        isValidate = false;
+      }
+      if (!isValidate) {
+        this.$emit("erroInsertLicense", txtMessage);
+      }
+      return isValidate;
     },
     /**
      * @create by : MF1270
@@ -220,12 +274,14 @@ export default {
      * ham : thêm chứng từ
      */
     btnSave() {
-      this.dataLicense.license.increase_date = new Date(this.dateLicense );
-      this.dataLicense.license.license_date = new Date(this.dateUser);
-      if (this.typeDialog === MISAEnum.stateDialog.add) {
-        this.addLicense();
-      } else if (this.typeDialog === MISAEnum.stateDialog.update) {
-        this.updateLicense();
+      if (this.validateLicense) {
+        this.dataLicense.license.increase_date = new Date(this.dateLicense);
+        this.dataLicense.license.license_date = new Date(this.dateUser);
+        if (this.typeDialog === MISAEnum.stateDialog.add) {
+          this.addLicense();
+        } else if (this.typeDialog === MISAEnum.stateDialog.update) {
+          this.updateLicense();
+        }
       }
     },
     /**
@@ -245,22 +301,18 @@ export default {
           });
 
           this.closeDialog();
-
           /// đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
           //load lại data
           this.emitter.emit("ReloadData", MISAEnum.stateDialog.update);
         },
         (error) => {
-          
-          // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.\
-
-          console.log(
-            `${error.response.data.devMsg}: ${error.response.data.erros}`
-          );
-          this.$emit("erroInsertLicense",error.response.data.erros)
+          this.isCodeCt = true;
+          // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
+          console.log(error.response.data);
+          this.$emit("erroInsertLicense", error.response.data.erros);
           // đóng loading
-          this.emitter.emit("showLoading", true);
+          this.emitter.emit("showLoading", false);
         }
       );
     },
@@ -270,8 +322,63 @@ export default {
      * ham : sửa chứng từ
      */
     updateLicense() {
-      this.closeDialog();
-      // alert("Sửa thành công !!!!!")
+      getByFilter(
+        "Assets/getByLicense",
+        { id: this.idLicenseUpdate },
+        (response) => {
+          this.rootlistId = response.data.map((obj) => obj.fixed_asset_id);
+          this.dataUpdate.guidsDelete = this.rootlistId.filter(
+            (x) => !this.dataLicense.ids.includes(x)
+          );
+          this.dataUpdate.guidsUpdate = this.dataLicense.ids.filter(
+            (x) => !this.rootlistId.includes(x)
+          );
+          this.dataUpdate.license = this.dataLicense.license;
+          console.log(this.dataUpdate);
+          this.putLicense();
+        },
+        (erro) => {
+          // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
+          toast.error(Resource.VN_ErroData, {
+            autoClose: 2000,
+            position: "top-center",
+          });
+          console.log(erro);
+          this.isReloadData = true;
+        }
+      );
+    },
+    /**
+     * gọi api sửa
+     * @created : tvt
+     * @creatday:20/04/2023
+     */
+    putLicense() {
+      this.emitter.emit("showLoading", true);
+      putlc(
+        `Licenses/Detail`,
+        this.dataUpdate,
+        () => {
+          // Trường hợp thành công nhận về dữ liệu thì toast thông báo
+          toast.success(Resource.VN_UpdateSuccess, {
+            autoClose: 2000,
+            position: "bottom-right",
+          });
+          this.closeDialog();
+
+          /// đóng loading
+          this.emitter.emit("showLoading", false);
+          //load lại data
+          this.emitter.emit("ReloadData", MISAEnum.stateDialog.add);
+        },
+        (error) => {
+          console.log(
+            `${error.response.data.devMsg}: ${error.response.data.erros}`
+          );
+          this.$emit("erroInsertLicense", error.response.data.erros);
+          this.emitter.emit("showLoading", false);
+        }
+      );
     },
     /**
      * lấy ra id từ table
@@ -280,6 +387,7 @@ export default {
      */
     getIdItemTable(id, type) {
       if (type === MISAEnum.stateAction.delete) this.$emit("deleteItem", id);
+      this.updateCost(id, type);
     },
     /**
      * mở dialog chọn tải sản
@@ -332,7 +440,7 @@ export default {
 
 <style scoped>
 .dialog-table {
-  height: 300px;
+  height: 250px;
 }
 .btn-select {
   height: 35px;

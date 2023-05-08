@@ -1,24 +1,29 @@
 <template>
-  <BaseDialog :contentForm="contextForm" @saveDialog="saveDialog()" bgMain="#ffffff" txtfocus="button" rootFocus="dialog__footer" >
+  <BaseDialog
+    :contentForm="contextForm"
+    @saveDialog="saveDialog()"
+    bgMain="#ffffff"
+    txtfocus="button"
+    rootFocus="dialog__footer"
+  >
     <div class="cost-body-dialog">
       <div class="cost-header">
         <div class="input-cost">
           <BaseInput
-          tabindex="-1"
-          :valueInputFisrt="depart_name"
-          disabledInput="true"
-          heightInput="35px"
-          widthInput="100%"
-          titleInput="Bộ phận sử dụng "
-          marginInput="8px"
-          @sendValueInput="
-            (e) => {
-              this.depart_name = e;
-            }
-          "
-        />
+            tabindex="-1"
+            :valueInputFisrt="depart_name"
+            disabledInput="true"
+            heightInput="35px"
+            widthInput="100%"
+            titleInput="Bộ phận sử dụng "
+            marginInput="8px"
+            @sendValueInput="
+              (e) => {
+                this.depart_name = e;
+              }
+            "
+          />
         </div>
-        
       </div>
       <div class="title-cost">Nguyên giá</div>
       <div class="title-cost_update">
@@ -28,25 +33,32 @@
         </div>
         <div class="title-value"></div>
       </div>
-      <div class="cost-update"  >
-        <BaseCostSource 
-          @getDataCobobox="
-            (data, key) => {
-              getDataCobobox(data, key, index);
-            }
-          "
-          :dataComboboxCost="costCources"
-          v-for="(item, index) in listDatacost"
-          :key="index"
-          :valueCost="item.costValue"
-          :codeSource="item.codeSource"
-          @addItem="addItem"
-          @deleteItem="deleteItem(index)"
-          @dataInput="(data) => updateDataCost(data, index)"
-        />
-      </div>
-      <div class="cost-bottom">
-        <BaseCostSource :isPlus="false" :valueCost="sumCost" />
+      <div class="list-value">
+        <div class="cost-update">
+          <BaseCostSource
+            @getDataCobobox="
+              (data, key) => {
+                getDataCobobox(data, key, index);
+              }
+            "           
+            :isValidateInputCb="listError[index].isInputValidate"
+            :titleValidateCb="listError[index].messageInputValidate"
+            :isValidate="listError[index].isValidate"
+            :titleValidate="listError[index].messageValidate"
+            :dataComboboxCost="costCources"
+            :isSource="isOneSource"
+            v-for="(item, index) in listDatacost"
+            :key="index"
+            :valueCost="item.costValue"
+            :codeSource="item.codeSource"
+            @addItem="addItem"
+            @deleteItem="deleteItem(index)"
+            @dataInput="(data) => updateDataCost(data, index)"
+          />
+        </div>
+        <div class="cost-bottom">
+          <BaseCostSource :isPlus="false" :valueCost="sumCost" />
+        </div>
       </div>
     </div>
   </BaseDialog>
@@ -57,7 +69,7 @@ import BaseCostSource from "./BaseCostSource.vue";
 import BaseDialog from "./BaseDialog.vue";
 import { get, getById, put } from "@/common/api/api.js";
 import Resource from "@/common/resource/Resource";
-// import MISAEnum from "@/common/enums/enums";
+import MISAEnum from "@/common/enums/enums";
 import { toast } from "vue3-toastify";
 import { formatMoney, moneyToNumber } from "@/common/helper/format";
 
@@ -90,52 +102,89 @@ export default {
     );
     this.getByIdAssetCost();
   },
-  mounted() {
-  },
+
   data() {
     return {
-      contextForm:"",
+      isOneSource: true,
+      contextForm: "",
       depart_name: "",
       sumCost: "",
       listDatacost: [],
       costCources: [],
+      listError: [],
     };
   },
   methods: {
     /**
-     * validate cập nhập tài sản 
+     * validate cập nhập tài sản
      * @create by : MF1270
      * @create day : 1/03/2023
      */
-    validate() {},
+    validate() {
+      let isValidate = true;
+      console.log(this.listDatacost);
+
+      for (let i = 0; i < this.listDatacost.length; i++) {
+        if (this.listDatacost[i].codeSource == "") {
+          this.listError[i].isValidate = true;
+          this.listError[i].messageValidate = Resource.Vn_SourceCostEmp;
+          isValidate = false;
+        }
+        if(i>0){
+          for (let index = 0; index < i; index++) {
+            if(this.listDatacost[i].codeSource == this.listDatacost[index].codeSource){
+              this.listError[i].isValidate = true;
+              this.listError[i].messageValidate = Resource.Vn_SourceCostSame;
+              isValidate = false;
+            }
+            
+          }
+        }
+        if (this.listDatacost[i].costValue == "0") {
+          this.listError[i].isInputValidate = true;
+          this.listError[i].messageInputValidate = Resource.Vn_CostEmp;
+          isValidate = false;
+          
+        }
+      }
+      return isValidate;
+    },
     /**
-     * Cập nhập đơn giá 
+     * Cập nhập đơn giá
      * @create by : MF1270
      * @create day : 1/03/2023
      */
     updateCost(sumCost) {
-      put(
-        `Assets`,
-        "UpdateByCost",
-        {
-          idAsset: this.idAsset,
-          idLicense: "e01d5518-ca59-4082-b8b3-bbe2c768de94",
-          cost: this.sumCost,
-          new_cost: sumCost,
-        },
-        () => {
-          // Trường hợp thành công nhận về dữ liệu thì toast thông báo
-          toast.success(Resource.VN_UpdateSuccess, {
-            autoClose: 2000,
-            position: "bottom-right",
-          });
-        },
-        (error) => {
-          console.log(
-            `${error.response.data.devMsg}: ${error.response.data.erros}`
-          );
-        }
-      );
+      if (this.validate()) {
+        this.emitter.emit("showLoading", true);
+        put(
+          `Assets`,
+          "UpdateByCost",
+          {
+            idAsset: this.idAsset,
+            idLicense: this.idLicense,
+            cost: moneyToNumber(this.sumCost),
+            new_cost: sumCost,
+          },
+          () => {
+            // Trường hợp thành công nhận về dữ liệu thì toast thông báo
+            toast.success(Resource.VN_UpdateSuccess, {
+              autoClose: 2000,
+              position: "bottom-right",
+            });
+            /// đóng loading
+            this.emitter.emit("showLoading", false);
+            //load lại data
+            this.emitter.emit("ReloadData", MISAEnum.stateDialog.update);
+            this.$emit("closeDialogUpdate");
+          },
+          (error) => {
+            console.log(
+              `${error.response.data.devMsg}: ${error.response.data.erros}`
+            );
+          }
+        );
+      }
     },
     /**
      * cập nhập nguyên giá
@@ -143,15 +192,7 @@ export default {
      * @create day : 1/03/2023
      */
     saveDialog() {
-      let result = this.listDatacost.reduce((acc, curr, index) => {
-        const { codeSource, costValue } = curr;
-        return (
-          acc +
-          (index > 0 ? "," : "") +
-          `${codeSource}:${moneyToNumber(costValue)}`
-        );
-      }, "");
-      this.updateCost(result);
+      this.updateCost(JSON.stringify(this.listDatacost));
     },
     /**
      * tổng nguyên giá
@@ -179,16 +220,7 @@ export default {
      * @create day : 1/03/2023
      */
     convertStringToObjectArray(str) {
-      var arr = str.split(",");
-      var objArr = [];
-      for (var i = 0; i < arr.length; i++) {
-        var obj = {};
-        var pair = arr[i].split(":");
-        obj.codeSource = pair[0];
-        obj.costValue = formatMoney(pair[1]);
-        objArr.push(obj);
-      }
-      return objArr;
+      return JSON.parse(str);
     },
     /**
      * lấy tài sản theo ID
@@ -205,6 +237,15 @@ export default {
           );
           this.contextForm = "Sửa tài sản " + res.data.fixed_asset_name;
           this.depart_name = res.data.department_name;
+          this.listError = Array.from(
+            { length: this.listDatacost.length },
+            () => ({
+              isValidate: false,
+              messageValidate: "",
+              isInputValidate: false,
+              messageInputValidate: "",
+            })
+          );
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -226,9 +267,16 @@ export default {
      * @create day : 1/03/2023
      */
     addItem() {
+      this.isOneSource = true;
       this.listDatacost.push({
         codeSource: "",
         costValue: 0,
+      });
+      this.listError.push({
+        isValidate: false,
+        messageValidate: "",
+        isInputValidate: false,
+        messageInputValidate: "",
       });
     },
     /**
@@ -237,21 +285,26 @@ export default {
      * @create day : 1/03/2023
      */
     deleteItem(index) {
-      if (this.listDatacost.length !== 1) {
-        var a = [];
-        this.listDatacost.forEach((item, number) => {
-          if (index !== number) {
-            a.push(item);
-          }
-        });
-        this.listDatacost = a;
+      if (this.listDatacost.length !== 1) {        
+        this.listDatacost.splice(index, 1) 
       }
+      if (this.listDatacost.length === 1) {
+        this.isOneSource = false;
+      }
+      this.listError.splice(index, 1);
+
     },
   },
 };
 </script>
 
 <style scoped>
+.list-value {
+  height: calc(550px - 235px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .source-cost {
   width: 60%;
 }
@@ -264,11 +317,10 @@ export default {
   width: 900px;
 }
 .cost-header {
- 
   height: 80px;
 }
-.input-cost{
- width: 70%;
+.input-cost {
+  width: 70%;
 }
 .title-cost {
   height: 20px;
@@ -294,11 +346,10 @@ export default {
 }
 .cost-update {
   overflow: auto;
-  height: 370px;
+  height: calc(100% - 50px);
   width: 100%;
 }
 .cost-bottom {
-  width: 100%;
   height: 50px;
 }
 </style>

@@ -7,7 +7,7 @@
       class="toolbar-filter-text"
       :class="{
         'toolbar-filter-text-focus': focusInput,
-        'toolbar-filter-text-erro': IscheckEmpty && required,
+        'toolbar-filter-text-erro': (IscheckEmpty && required) || isValide,
         'hide-icon': hideIconInput,
         disabledInput: disabledInput,
         'hide-icon-number': !hideIconInput 
@@ -25,6 +25,7 @@
         @click="btnSearch()"
       ></div>
       <input 
+        :maxlength="maxlengthBaseInput"
         :step= stepInput min="0"
          :max= maxInput
         @keydown="keyDownInput()"
@@ -49,6 +50,9 @@
     <div class="erro" v-if="IscheckEmpty && required">
       Vui lòng nhập {{ titleInput }}
     </div>
+    <div class="erro" v-if="isValide">
+        {{ titleValidate }}
+    </div>
   </div>
 </template>
 
@@ -57,6 +61,13 @@ import { formatMoney } from "@/common/helper/format";
 export default {
   name: "BaseInput",
   props: {
+    maxlengthBaseInput:{default:""},
+    isValide:{
+        default:false
+    },
+    titleValidate:{
+      default:""
+    },
     hideIconInput:{
       default:false
     },

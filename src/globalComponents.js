@@ -4,6 +4,8 @@ import DatePicker from 'vue-datepicker-next'
 import TheButton from '@/components/button/BaseButton.vue'
 import DialogMessage from "@/components/message/DialogMessage.vue";
 import BaseInput from "@/components/input/BaseInput";
+import TheLoading from "@/components/Loading/TheLoading.vue";
+
 
 
 
@@ -11,6 +13,10 @@ export const requiredComponents = [
     {
         componentName: 'DatePicker',
         component: DatePicker,
+    },
+    {
+        componentName: 'TheLoading',
+        component: TheLoading,
     },
      {
         componentName: 'BaseTooltipTable',

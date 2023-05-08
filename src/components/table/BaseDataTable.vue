@@ -179,12 +179,10 @@
       </tr>
     </table>
   </div>
-  <the-loading :hidden="isReloadData" />
 </template>
 
 <script>
 import ItemTable from "./BaseItemTable.vue";
-import TheLoading from "../Loading/TheLoading.vue";
 import { getByFilter } from "@/common/api/api";
 import { toast } from "vue3-toastify";
 import { formatMoney } from "@/common/helper/format";
@@ -197,7 +195,7 @@ export default {
   props: {
     modelHeaderTable: [],
   },
-  components: { ItemTable, TheLoading, BaseContextMenu },
+  components: { ItemTable, BaseContextMenu },
   async created() {
     this.listIdSelection = new Set();
     await this.loadDataTable(1);
@@ -236,7 +234,6 @@ export default {
         AssetCategoryId: null,
       },
       listpageNumber: [],
-      isReloadData: false,
       listIdSelection: null,
     };
   },
@@ -246,9 +243,7 @@ export default {
       this.loadDataTable(1);
     });
 
-    this.emitter.on("showLoading", (state) => {
-      this.isReloadData = state;
-    });
+    
     // tải lại dữ liêu sau khi thêm - sửa
     this.emitter.on("ReloadData", (state) => {
       this.priorityFilter.txtSearch = "";
@@ -464,7 +459,8 @@ export default {
      * Lấy dữ tài sản
      */
     async loadDataTable(pageNumber) {
-      this.isReloadData = false;
+      this.emitter.emit("showLoading", true);
+
       // this.stateAll = false;
       // this.clearData();
       this.totalCost = 0;
@@ -488,7 +484,7 @@ export default {
           this.totalQuantity = response.data.totalQuantity;
           this.valueRemaining = this.totalCost - this.totalAtrophy;
           this.hideNumberPage();
-          this.isReloadData = true;
+          this.emitter.emit("showLoading", false);
           this.isCheckAllUpdate();
         },
         (erro) => {
@@ -498,7 +494,9 @@ export default {
             position: "top-center",
           });
           console.log(erro);
-          this.isReloadData = true;
+          this.emitter.emit("showLoading", false);
+
+          
         }
       );
     },
