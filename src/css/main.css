@@ -35,6 +35,9 @@ body{
     background-image: url(../assets/icon/qlts-icon.svg);
     cursor: pointer;
 }
+.backgrsvg-table {
+    background-image: url(../assets/img/bg_report_nodata.76e50bd8.svg);
+}
 
 a {
     text-decoration: none

@@ -83,11 +83,7 @@ export default {
     },
   },
   mounted() {
-    this.emitter.on("focusError", (state) => {
-      if (state) {
-        this.$refs[this.rootFocus].querySelector(this.txtfocus).focus();
-      }
-    });
+   
     this.$refs[this.rootFocus].querySelector(this.txtfocus).focus();
   },
 

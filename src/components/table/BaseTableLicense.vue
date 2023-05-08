@@ -53,6 +53,26 @@
           ></div> -->
         </th>
       </tr>
+      <td
+        class="not-data"
+        v-if="listDataItemTabel.length == 0 && !stateCheckbox"
+        :colspan="headerTable.length"
+      >
+        <div class="icon-no_data">
+          <div class="icon-data-no backgrsvg-table"></div>
+        </div>
+        <div class="title-not-data">không có dữ liệu</div>
+      </td>
+      <td
+        class="not-data"
+        v-if="listDataItemTabel.length == 0 && stateCheckbox"
+        :colspan="headerTable.length + 1"
+      >
+        <div class="icon-no_data">
+          <div class="icon-data-no backgrsvg-table"></div>
+        </div>
+        <div class="title-not-data">không có dữ liệu</div>
+      </td>
       <tbody>
         <BaseItemTableLicense
           @selectIdItemTable="
@@ -789,6 +809,25 @@ export default {
 </script>
 
 <style scoped>
+.title-not-data {
+  font-size: 14px;
+  font-weight: 700;
+}
+.icon-no_data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-data-no {
+  background-position: 0 0;
+  width: 132px;
+  height: 76px;
+}
+.not-data {
+  text-align: center;
+  width: 100%;
+  height: 76px;
+}
 .table-base::-webkit-scrollbar {
   width: 5px;
   height: 7px;

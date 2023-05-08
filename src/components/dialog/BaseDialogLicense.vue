@@ -4,7 +4,7 @@
       <div class="title-license">Thông tin chứng từ</div>
       <div class="license-body-dialog-input">
         <div class="license-body-dialog-input-top">
-          <div class="input-license">
+          <div class="input-license" ref="codeLiscense">
             <BaseInput
               :isValide="isCodeCt"
               maxlengthBaseInput="100"
@@ -143,6 +143,11 @@ export default {
     this.dataLicense.ids = this.listIds;
   },
   mounted() {
+     this.emitter.on("focusError", (state) => {
+      if (state) {
+        this.$refs['codeLiscense'].querySelector("input").focus();
+      }
+    });
     this.emitter.on("updateListId", (data) => {
       this.listIdSelect = data;
     });
@@ -252,19 +257,23 @@ export default {
      * ham : validate chứng từ
      */
     validateLicense() {
-      let txtMessage = "";
+      let txtMessageLc = "";
       let isValidate = true;
-      if (this.dataLicense.license.license_code.trim == "") {
-        txtMessage += Resource.Vn_LisenceCode + Resource.VN_EmptyData;
+      if (this.dataLicense.license.license_code.trim() == "") {
+        txtMessageLc += Resource.Vn_LisenceCode + Resource.VN_EmptyData;
         this.isCodeCt = true;
         isValidate = false;
       }
       if (this.dataLicense.ids.length == 0) {
-        txtMessage += Resource.Vn_AssetZeros;
+        if (txtMessageLc.trim() !== "") {
+          txtMessageLc += ". " + Resource.Vn_AssetZeros;
+        } else {
+          txtMessageLc += Resource.Vn_AssetZeros;
+        }
         isValidate = false;
       }
       if (!isValidate) {
-        this.$emit("erroInsertLicense", txtMessage);
+        this.$emit("erroInsertLicense", txtMessageLc);
       }
       return isValidate;
     },
@@ -274,7 +283,7 @@ export default {
      * ham : thêm chứng từ
      */
     btnSave() {
-      if (this.validateLicense) {
+      if (this.validateLicense()) {
         this.dataLicense.license.increase_date = new Date(this.dateLicense);
         this.dataLicense.license.license_date = new Date(this.dateUser);
         if (this.typeDialog === MISAEnum.stateDialog.add) {
@@ -310,7 +319,10 @@ export default {
           this.isCodeCt = true;
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
           console.log(error.response.data);
-          this.$emit("erroInsertLicense", error.response.data.erros);
+          this.$emit(
+            "erroInsertLicense",
+            error.response.data.erros.join(", ").replaceAll(".", "")
+          );
           // đóng loading
           this.emitter.emit("showLoading", false);
         }
@@ -372,10 +384,14 @@ export default {
           this.emitter.emit("ReloadData", MISAEnum.stateDialog.add);
         },
         (error) => {
+          this.isCodeCt = true;
           console.log(
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
-          this.$emit("erroInsertLicense", error.response.data.erros);
+          this.$emit(
+            "erroInsertLicense",
+            error.response.data.erros.join(", ").replaceAll(".", "")
+          );
           this.emitter.emit("showLoading", false);
         }
       );

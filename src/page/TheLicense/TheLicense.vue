@@ -384,7 +384,6 @@ export default {
      */
     hideMessage() {
       this.isMessage = false;
-      this.emitter.emit("focusError", true);
     },
 
     /**
@@ -393,7 +392,7 @@ export default {
      * @createday: 20/04/2023
      */
     erroInsertLicense(data) {
-      this.midTitleMessage = data.join(", ").replaceAll(".", "");
+      this.midTitleMessage = data;
       this.isMessage = true;
     },
     /**

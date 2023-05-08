@@ -49,7 +49,7 @@ export function formatMoney(dataFormat) {
       dataFormat[dataFormat.length - index] +
       dataFormat[dataFormat.length - index - 1] +
       dataFormat[dataFormat.length - index - 2] +
-      ".";
+      ",";
     index += 3;
     a--;
   }
@@ -137,8 +137,8 @@ export function dateToString(dateNew) {
      */
   export function moneyToNumber(money) {
   if (money.length > 3) {
-    money.replaceAll(".", "");
-    return Number(money.replaceAll(".", ""));
+    money.replaceAll(",", "");
+    return Number(money.replaceAll(",", ""));
   }
   return Number(money);
 }
