@@ -4,8 +4,9 @@
       <div class="title-license">Thông tin chứng từ</div>
       <div class="license-body-dialog-input">
         <div class="license-body-dialog-input-top">
-          <div class="input-license" ref="codeLiscense">
+          <div class="input-license" >
             <BaseInput
+              ref="codeLiscense"
               :isValide="isCodeCt"
               maxlengthBaseInput="100"
               contentInput="GT0001"
@@ -28,6 +29,8 @@
               <span style="color: red">*</span></label
             >
             <DatePicker
+              :clearable="false"
+              placeholder="dd/MM/yyyy" 
               v-model:value="dateUser"
               format="DD/MM/YYYY"
               class="date-input"
@@ -40,6 +43,8 @@
               {{ "Ngày ghi tăng " }} <span style="color: red">*</span></label
             >
             <DatePicker
+              :clearable="false"
+              placeholder="dd/MM/yyyy"
               v-model:value="dateLicense"
               format="DD/MM/YYYY"
               class="date-input"
@@ -114,7 +119,7 @@ import {
   getByFilter,
   putlc,
 } from "@/common/api/api.js";
-import { getNowday } from "@/common/helper/format";
+import { getNowday ,convertDateTypeEnter} from "@/common/helper/format";
 import { toast } from "vue3-toastify";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
@@ -142,12 +147,8 @@ export default {
     }
     this.dataLicense.ids = this.listIds;
   },
-  mounted() {
-     this.emitter.on("focusError", (state) => {
-      if (state) {
-        this.$refs['codeLiscense'].querySelector("input").focus();
-      }
-    });
+  mounted() {   
+
     this.emitter.on("updateListId", (data) => {
       this.listIdSelect = data;
     });
@@ -192,6 +193,7 @@ export default {
     };
   },
   methods: {
+    convertDateTypeEnter,
     /**
      * Description: mở form sửa nguyên giá
      * Author: TVTam
@@ -437,7 +439,7 @@ export default {
       );
     },
   },
-  watch: {
+  watch: {    
     txtSreach: _.debounce(function (data) {
       this.searchInput(data);
     }, 700),
@@ -489,7 +491,7 @@ export default {
 .license-body-dialog-input {
   background-color: #ffffff;
   height: 150px;
-  margin: 0 10px;
+  padding: 0 10px;
 }
 .license-body-dialog-input-top {
   display: flex;

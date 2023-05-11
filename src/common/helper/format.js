@@ -1,3 +1,10 @@
+export function convertDateTypeEnter(stringDate){
+  if(stringDate.length == 2 || stringDate.length==5){
+    return stringDate+="/";
+  }
+}
+
+
 /**
      * create by : MF1270
      * create day : 19/02/2023
@@ -49,7 +56,7 @@ export function formatMoney(dataFormat) {
       dataFormat[dataFormat.length - index] +
       dataFormat[dataFormat.length - index - 1] +
       dataFormat[dataFormat.length - index - 2] +
-      ",";
+      ".";
     index += 3;
     a--;
   }
@@ -137,8 +144,8 @@ export function dateToString(dateNew) {
      */
   export function moneyToNumber(money) {
   if (money.length > 3) {
-    money.replaceAll(",", "");
-    return Number(money.replaceAll(",", ""));
+    money.replaceAll(".", "");
+    return Number(money.replaceAll(".", ""));
   }
   return Number(money);
 }

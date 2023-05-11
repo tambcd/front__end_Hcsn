@@ -5,6 +5,7 @@
 }
 
 .body-combobox {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .16) ;  
     background-color: #ffffff;
     position: absolute;
     z-index: 10;
@@ -12,9 +13,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     margin-top: 1px;
-    padding-left: 10px;
-    padding-right: -6px;
-    width: calc(100% - 6px);
+    width: 100%;
 
 }
 

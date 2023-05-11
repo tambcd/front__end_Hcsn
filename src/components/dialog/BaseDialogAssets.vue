@@ -147,7 +147,7 @@ export default {
   height: calc(100% - 10px);
 }
 .dialog-table-search {
-  margin: 0 10px;
+  padding: 0 10px;
   background-color: #ffffff;
   height: 50px;
 }

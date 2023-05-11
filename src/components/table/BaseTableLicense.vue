@@ -61,7 +61,7 @@
         <div class="icon-no_data">
           <div class="icon-data-no backgrsvg-table"></div>
         </div>
-        <div class="title-not-data">không có dữ liệu</div>
+        <div class="title-not-data">Không có dữ liệu</div>
       </td>
       <td
         class="not-data"
@@ -71,7 +71,7 @@
         <div class="icon-no_data">
           <div class="icon-data-no backgrsvg-table"></div>
         </div>
-        <div class="title-not-data">không có dữ liệu</div>
+        <div class="title-not-data">Không có dữ liệu</div>
       </td>
       <tbody>
         <BaseItemTableLicense
@@ -215,6 +215,7 @@ import BaseContextMenu from "../contextmenu/BaseContextMenu.vue";
 export default {
   name: "DataTable",
   props: {
+    isSelectDefault: { default: false },
     sizeEndRow: {
       default: "150px",
     },
@@ -525,8 +526,13 @@ export default {
             this.listDataItemTabel = response.data;
           }
           if (this.listDataItemTabel[0]) {
-            this.$emit("fisrtLoad", this.listDataItemTabel[0]);
+            if (this.isSelectDefault) {
+              this.itemId = this.listDataItemTabel[0][this.nameTable + "_id"];
+            }
+          } else {
+            this.itemId = "47b60f82-3d94-4e7d-8f5e-ece35f2828e7";
           }
+          this.$emit("fisrtLoad", this.itemId);
 
           this.listData.totalPage = response.data.totalPage;
 

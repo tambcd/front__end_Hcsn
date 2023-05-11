@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       isMenuMini: false,
-      selectItem: 1,
+      selectItem: 3,
       optionMenu: [],
     };
   },

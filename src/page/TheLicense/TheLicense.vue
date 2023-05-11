@@ -49,12 +49,17 @@
             ></div>
             <div class="display-icon-y" v-if="ischangeDisplay">
               <div class="icon-y" @click="changeDisplay(2)">
-                <div class="icon-display-y backgrsvg"></div>
-                <div class="icon-display-y-title">theo chiều ngang</div>
+                <div class="icon-y_icon">
+                  <div class="icon-display-y backgrsvg"></div>
+                  <div class="icon-display-y-title">theo chiều ngang</div>
+                </div>
               </div>
+
               <div class="icon-y" @click="changeDisplay(1)">
-                <div class="display-icon backgrsvg"></div>
-                <div class="icon-display-y-title">theo chiều dọc</div>
+                <div class="icon-y_icon">
+                  <div class="display-icon backgrsvg"></div>
+                  <div class="icon-display-y-title">theo chiều dọc</div>
+                </div>
               </div>
             </div>
           </div>
@@ -71,7 +76,7 @@
       <splitpanes
         class="default-theme splitpanes-main_license"
         horizontal
-        @resize="paneSize = $event[0].size"
+        @resize="changeSize($event[0])"
       >
         <pane class="table-one" :size="paneSize">
           <div class="license-action">
@@ -91,7 +96,8 @@
               />
             </div>
             <div class="action-btn">
-              <div v-show="isDeleteMany"
+              <div
+                v-show="isDeleteMany"
                 class="icon-display icon36 margin-icon"
                 @click="deleteLicense()"
               >
@@ -111,6 +117,7 @@
           </div>
           <div class="table-license-data">
             <BaseTableLicense
+              :isSelectDefault="true"
               :isLicense="true"
               sizeEndRow="250px"
               @updateListId="listIdSelect"
@@ -203,8 +210,8 @@ export default {
   },
   data() {
     return {
-      rootListId:[],
-      listIdDelete:[],
+      rootListId: [],
+      listIdDelete: [],
       textMinmax: Resource.VN_Maximaine,
       codeLicense: "",
       ischangeDisplay: false,
@@ -247,17 +254,19 @@ export default {
         id: "9aad0b48-ebbd-46e4-a450-a63d1ecb2bd8",
       },
       dataTableLicense: [],
-      isDeleteMany:false,
+      isDeleteMany: false,
       isShowDialogAsset: false,
       isShowDialogLicense: false,
       listCode: "''",
       listId: [],
       listIdLisecen: [],
       titleDialog: Resource.typeLicensetxt.add,
-
     };
   },
   methods: {
+    changeSize(eventS){
+      this.paneSize = eventS.size
+    },
     /**
      * Xoá chứng từ
      * @created : tvt
@@ -274,8 +283,10 @@ export default {
           });
           // chuyền thông báó xóa thành công để clear mảng xóa nhiều
           this.emitter.emit("LoadingDataDelete");
-          this.listIdLisecen=this.listIdLisecen.filter(item => !this.listIdDelete.includes(item));
-          this.togglerDeletebtn()
+          this.listIdLisecen = this.listIdLisecen.filter(
+            (item) => !this.listIdDelete.includes(item)
+          );
+          this.togglerDeletebtn();
           this.isMessageDelete = false;
         },
         (error) => {
@@ -324,7 +335,7 @@ export default {
      */
     listIdSelect(data) {
       this.listIdLisecen = Array.from(data);
-      this.togglerDeletebtn()
+      this.togglerDeletebtn();
     },
     /**
      * danh sach chứng từ chọn bên bảng
@@ -332,11 +343,10 @@ export default {
      * @createday: 20/04/2023
      */
     togglerDeletebtn() {
-      if(this.listIdLisecen.length<1){
-        this.isDeleteMany=false
-      }
-      else{
-        this.isDeleteMany=true
+      if (this.listIdLisecen.length < 1) {
+        this.isDeleteMany = false;
+      } else {
+        this.isDeleteMany = true;
       }
     },
 
@@ -384,6 +394,7 @@ export default {
      */
     hideMessage() {
       this.isMessage = false;
+      this.emitter.emit("focusError");
     },
 
     /**
@@ -450,7 +461,7 @@ export default {
           this.listCode = response.data
             .map((obj) => `'${obj.fixed_asset_id}'`)
             .join(", ");
-            this.rootListId = response.data.map(obj => obj.fixed_asset_id);
+          this.rootListId = response.data.map((obj) => obj.fixed_asset_id);
           this.selectAsset(response.data.map((obj) => obj.fixed_asset_id));
         },
         (erro) => {
@@ -470,9 +481,8 @@ export default {
      * @createday: 20/04/2023
      */
     deleteLicense() {
-      this.listIdDelete = this.listIdLisecen
+      this.listIdDelete = this.listIdLisecen;
       if (this.listIdLisecen.length === 0) {
-        
         this.byTxtMessage(
           Resource.VN_DeleteEmptyLicense,
           "",
@@ -508,11 +518,10 @@ export default {
         this.titleDialog = Resource.typeLicensetxt.update;
         this.ToggleDialog();
         this.typeDialog = MISAEnum.stateDialog.update;
-      }
-      else {
-        this.getEntityById(id)
-        this.listIdDelete = []
-        this.listIdDelete.push(id)
+      } else {
+        this.getEntityById(id);
+        this.listIdDelete = [];
+        this.listIdDelete.push(id);
       }
     },
     /**
@@ -532,7 +541,7 @@ export default {
      * @createday: 20/04/2023
      */
     fisrtLoad(data) {
-      this.paramApiLicenseDetail.id = data.license_id;
+      this.paramApiLicenseDetail.id = data;
     },
     /**
      * danh sách tài sản đã chọn
@@ -568,7 +577,7 @@ export default {
         this.listCode = "''";
       }
     },
-    
+
     /**
      * ẩn hiện form nhập chứng từ
      * @create by : MF1270
@@ -612,7 +621,7 @@ export default {
      * @create by : MF1270
      * @create day : 20/04/2023
      */
-    ToggleDialogAsset() {      
+    ToggleDialogAsset() {
       this.isShowDialogAsset = false;
     },
     /**
@@ -629,6 +638,7 @@ export default {
     paneSize(newValue, oldValue) {
       this.oldpaneSize = oldValue;
       console.log(newValue);
+     
     },
     txtSreach: _.debounce(function (data) {
       this.searchInput(data);
@@ -646,6 +656,12 @@ export default {
 }
 .icon-y {
   width: 100%;
+  height: 40px;
+
+}
+.icon-y_icon {
+  width: 100%;
+  padding: 0 4px;
   height: 40px;
   display: flex;
   align-items: center;

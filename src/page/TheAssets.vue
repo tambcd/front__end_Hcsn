@@ -321,20 +321,20 @@ export default {
      */
     deleteAssets() {
       this.typeDelete = MISAEnum.typeDelete.allDelete;
-      this.typeMessagepp = 2;
+      this.typeMessagepp = MISAEnum.typeDelete.delete;
       if (this.listIdDelete.size < 1 || !this.listIdDelete.size) {
-        this.typeMessagepp = 1;
+        this.typeMessagepp = MISAEnum.typeDelete.allDelete;
         this.isDeleteMany = Resource.VN_NotDataDelete;
         this.titleMessageheader = "";
         this.titleMessagebottom = "";
       }
-      if (this.listIdDelete.size == 1) {
-        this.typeHighligh = 2;
+      if (this.listIdDelete.size == MISAEnum.typeDelete.allDelete) {
+        this.typeHighligh = MISAEnum.typeDelete.delete;
         this.getAssetById(Array.from(this.listIdDelete)[0]);
       }
 
       if (this.listIdDelete.size > 1) {
-        this.typeHighligh = 1;
+        this.typeHighligh = MISAEnum.typeDelete.allDelete;
         if (this.listIdDelete.size < 10) {
           this.titleMessageheader = "0" + this.listIdDelete.size;
           this.isDeleteMany = Resource.VN_ManyDeleteTxt;
@@ -409,8 +409,8 @@ export default {
      */
 
     messageDeleteError(number) {
-      this.typeMessagepp = 1;
-      this.typeHighligh = 1;
+      this.typeMessagepp = MISAEnum.typeDelete.allDelete;
+      this.typeHighligh = MISAEnum.typeDelete.allDelete;
       if(Number(number)==1 && Array.from(this.listIdDelete).length == 1 ){
         this.titleMessageheader = "";
         this.isDeleteMany = Resource.deleteAssetErrorOne;

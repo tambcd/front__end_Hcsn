@@ -122,8 +122,6 @@ export default {
      */
     validate() {
       let isValidate = true;
-      console.log(this.listDatacost);
-
       for (let i = 0; i < this.listDatacost.length; i++) {
         if (this.listDatacost[i].codeSource == "") {
           this.listError[i].isValidate = true;

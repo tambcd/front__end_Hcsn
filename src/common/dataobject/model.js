@@ -337,7 +337,7 @@ const DataObject = {
       column:"license_code",
       alignment: "left",
       typeData:1,
-      color:"blue"
+      color:"#1aa4c8"
       
     },
     {

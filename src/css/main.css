@@ -55,6 +55,14 @@ table , tr , th , td{
     box-shadow: 0 3px 10px rgba(0, 0, 0, .16);
 
 }
+.mx-icon-calendar{
+    cursor: pointer;
+}
+
+.mx-icon-calendar:hover .mx-input{
+    border-color: #5DC750 !important;
+    
+}
 /* .splitpanes__splitter{
     height: 24px !important;
 }
