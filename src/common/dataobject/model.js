@@ -260,6 +260,15 @@ const DataObject = {
       isResize : true
     },
     {
+      nameColumn:"Trạng thái",
+      alignment: "left",
+      withBase:"",
+      minWith : "100px",
+      directiveTooltip:false,
+      nameTooltip: "",
+      isResize : true
+    },
+    {
       nameColumn:"Chức năng",
       alignment: "center The-actions header-actions",
       withBase:"100px",

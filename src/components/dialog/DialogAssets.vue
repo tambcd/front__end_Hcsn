@@ -820,19 +820,5 @@ export default {
 };
 </script>
 <style >
- /* cover css datetime thư viện */
-.date-input {
-  width: 100% !important;
-  height: 36px !important;
-  margin-top: 8px;
-  border: none !important;
-}
-.mx-datepicker-popup {
-  z-index: 10000000 !important;
-}
 
-.mx-table-date td,
-.mx-table-date th {
-  text-align: center;
-}
 </style>

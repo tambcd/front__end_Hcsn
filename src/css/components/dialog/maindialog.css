@@ -26,6 +26,8 @@
     background-color: #f4f7ff;
 }
 .dialog-header{
+    margin-left: -12px;
+    padding-left: 12px;
     background-color: #FFFFFF;
     height: 40px;
     width: 100%;

@@ -7,9 +7,8 @@
               <div class="icon icon48 icon-error"></div>
           </div>
           <div class="message-title">
-            <span :class="{'highligh': typeHighligh==1}">{{ titleMessageheader}}</span>
-             <span  :class="{'highligh': typeHighligh==2}"> {{ titleMessage }}</span>
-              <span :class="{'highligh': typeHighligh==3}">{{titleMessagebottom}}</span>
+             <span v-html="titleMessage"></span>
+         
           </div>
         </div>
 
@@ -73,13 +72,9 @@ export default {
   props: {
     /** kiểm tra kiểu của thông báo */
     typeMessage: Number,
-    typeHighligh:{
-      default:4
-    },
+   
     /**nội dung thông báo */
-    titleMessage: String,
-    titleMessageheader: String,
-    titleMessagebottom: String,
+    titleMessage: String,   
     titleBtnYes: {
       default: "Có",
     },

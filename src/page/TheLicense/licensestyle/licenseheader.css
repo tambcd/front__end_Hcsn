@@ -42,7 +42,12 @@
 .action-btn{
     display: flex;
 }
+.icon-select{
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+
+}
 .icon-display{
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);    ;
     position: relative;
 }
 .display-icon-y{

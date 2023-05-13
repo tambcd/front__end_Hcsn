@@ -17,6 +17,9 @@
     background-color: rgba(0, 0, 0, 0.16);
 }
 
+.content{
+    padding: 32px 32px 6px 32px;
+}
 .messing-content {
     position: relative;
     background-color: #FFF;
@@ -29,9 +32,7 @@
 
 }
 
-.messing-body {
-    padding: 32px;
-}
+
 
 /* icon error */
 .icon-message .icon-error {
@@ -52,6 +53,9 @@
 .footer-error {
     align-items: center;
     justify-content: end;
+    padding-right: 10px;
+    background-color: #e5e5e5;
+    height: 50px;
 }
 
 .footer-error .btnError-close {
@@ -63,6 +67,9 @@
 
 /* cảnh báo  list btn*/
 .footer-warning {
+    padding-right: 10px;
+    height: 50px;
+    background-color: #e5e5e5;
     align-items: center;
     justify-content: end;
     flex-direction: row-reverse;
@@ -80,9 +87,13 @@
 
 /* thông báo  list btn*/
 .footer-mesage {
+    padding-right: 10px;
+    height: 50px;
     align-items: center;
     justify-content: end;
     flex-direction: row-reverse;
+    background-color: #e5e5e5;
+    column-gap: 10px;
 }
 
 .footer-mesage .footer-left {

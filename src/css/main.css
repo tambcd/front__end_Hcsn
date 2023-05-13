@@ -63,22 +63,18 @@ table , tr , th , td{
     border-color: #5DC750 !important;
     
 }
-/* .splitpanes__splitter{
-    height: 24px !important;
-}
-.default-theme.splitpanes--horizontal>.splitpanes__splitter::after{
-    height: 18px !important;
-    width: 18px !important;
-    background: url(../assets/icon/icons8-divider-18.png) no-repeat ;
-    margin-top: -4px !important;
-    background-color: transparent !important;
-
-
-}
-.default-theme.splitpanes--horizontal>.splitpanes__splitter::before{
-    height: 18px !important;
-    width:18px !important;
-    background: url(../assets/icon/icons8-divider-18.png) no-repeat ;
-    margin-top: -4px !important;
-    background-color: transparent !important;
-} */
+ /* cover css datetime thư viện */
+ .date-input {
+    width: 100% !important;
+    height: 36px !important;
+    margin-top: 8px;
+    border: none !important;
+  }
+  .mx-datepicker-popup {
+    z-index: 10000000 !important;
+  }
+  
+  .mx-table-date td,
+  .mx-table-date th {
+    text-align: center;
+  }

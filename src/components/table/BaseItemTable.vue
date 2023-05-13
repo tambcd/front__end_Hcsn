@@ -35,6 +35,7 @@
 
       }}
     </td>
+    <td>{{dataItem.active?"Đã sử dụng":"Chưa sử dụng"}}</td>
     <td class="The-actions center actions__item" style="width: 100px">
 
       <BaseTooltip position="left" tooltipText="Sửa">

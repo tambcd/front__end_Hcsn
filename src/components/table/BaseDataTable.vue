@@ -43,12 +43,12 @@
             <span>{{ item.nameColumn }} </span>
           </BaseTooltip>
           <span v-else>{{ item.nameColumn }} </span>
-          <div
+          <!-- <div
             :class="{ 'resize-column': item.isResize }"
             @mousedown="getPositionCurrent($event)"
             @mousemove="reSizeColumn($event)"
             @mouseup="noReSizeColumn()"
-          ></div>
+          ></div> -->
         </th>
       </tr>
       <tbody>
@@ -175,6 +175,7 @@
             {{ formatMoney((totalCost - totalAtrophy).toString()) }}
           </BaseTooltip>
         </td>
+        <td></td>
         <td class="The-actions center" style="width: 100px"></td>
       </tr>
     </table>

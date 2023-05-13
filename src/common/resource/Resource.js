@@ -1,4 +1,7 @@
 export  const Resource = {
+    ErrorCode :{
+        codeSame:"Mã chứng từ <b>{0}</b> đã tồn tại trong hệ thống"
+    },
     Vn_LisenceCode:"Mã chứng từ ",
     Vn_AssetZeros:"Phải chọn ít nhất một tài sản để thực hiện ghi tăng ",
     Vn_SourceCostEmp:"Nguồn kinh phí không được để trống",
@@ -71,6 +74,7 @@ export  const Resource = {
         production_year :"ngày bắt đầu sử dụng "
     },
     VN_CancelAdd:"Bạn có muốn hủy khai báo tài sản này?",
+    VN_CancelAddLicense:"Bạn có muốn hủy khai báo chứng từ này?",
     VN_CancelUpdate:"Thông tin thay đổi sẽ không được cập nhập nếu bạn không lưu. Bạn có muốn lưu các thay đổi này? "
     
 }

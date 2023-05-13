@@ -154,14 +154,14 @@ export default {
   background: transparent !important;
 }
 .btn__edit{
-    background-color: rgba(26, 164, 200, .2);
+    background-color:#d1edf4;
     width: 30px !important;
     height: 30px !important;
     margin-right: 10px !important;
     background-position:  -147px -60px !important;
 }
 .btn__nhanban{
-  background-color: rgba(26, 164, 200, .2);
+  background-color: #d1edf4;
     width: 30px !important;
     height: 30px !important;
     margin-right: 5px !important;

@@ -119,7 +119,7 @@ import {
   getByFilter,
   putlc,
 } from "@/common/api/api.js";
-import { getNowday ,convertDateTypeEnter} from "@/common/helper/format";
+import { getNowday ,convertDateTypeEnter,dateToString} from "@/common/helper/format";
 import { toast } from "vue3-toastify";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
@@ -149,6 +149,9 @@ export default {
   },
   mounted() {   
 
+    this.emitter.on("updateLicenseMessage", () => {
+        this.btnSave()
+    });
     this.emitter.on("updateListId", (data) => {
       this.listIdSelect = data;
     });
@@ -224,6 +227,8 @@ export default {
         (res) => {
           // Trường hợp thành công  gửi lên form sửa
           this.dataLicense.license = res.data;
+          this.dateUser = dateToString(new Date(res.data.license_date))
+          this.dateLicense = dateToString(new Date(res.data.increase_date))
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -319,11 +324,18 @@ export default {
         },
         (error) => {
           this.isCodeCt = true;
+          var stringError="";
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
           console.log(error.response.data);
+          error.response.data.codeError.map((code) =>{
+              if(code == MISAEnum.codeError.ErrorCodeSameCode){
+                    stringError+= Resource.ErrorCode.codeSame.replace("{0}",this.dataLicense.license.license_code)
+              }
+          })
+          if(error.response.data)
           this.$emit(
             "erroInsertLicense",
-            error.response.data.erros.join(", ").replaceAll(".", "")
+            stringError
           );
           // đóng loading
           this.emitter.emit("showLoading", false);
@@ -348,7 +360,6 @@ export default {
             (x) => !this.rootlistId.includes(x)
           );
           this.dataUpdate.license = this.dataLicense.license;
-          console.log(this.dataUpdate);
           this.putLicense();
         },
         (erro) => {
@@ -390,10 +401,14 @@ export default {
           console.log(
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
-          this.$emit(
-            "erroInsertLicense",
-            error.response.data.erros.join(", ").replaceAll(".", "")
-          );
+          var stringError = "";
+          error.response.data.codeError.map((code) =>{
+            console.log(code);
+              if(code == MISAEnum.codeError.ErrorCodeSameCode){
+                    stringError+= Resource.ErrorCode.codeSame.replace("{0}",this.dataLicense.license.license_code)
+              }
+          })
+          this.$emit("erroInsertLicense",  stringError  );
           this.emitter.emit("showLoading", false);
         }
       );
@@ -475,7 +490,7 @@ export default {
   border: 0.2px solid #1aa4c8;
 }
 .dialog-table-search {
-  margin: 0 10px;
+  padding: 0 10px;
   background-color: #ffffff;
   height: 50px;
   display: flex;

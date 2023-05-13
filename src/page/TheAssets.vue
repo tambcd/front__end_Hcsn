@@ -91,10 +91,7 @@
   />
   <dialog-message
     :typeMessage="typeMessagepp"
-    :typeHighligh="typeHighligh"
     :titleMessage="isDeleteMany"
-    :titleMessagebottom="titleMessagebottom"
-    :titleMessageheader="titleMessageheader"
     v-if="isMessageDelete"
     @btnYesMessage="deleteYes"
     @hideMessage="reLoadingDataDelete"
@@ -113,7 +110,6 @@ import {
   get,
   getById,
   deleteManyAssets,
-  deleteAssets,
 } from "@/common/api/api.js";
 import { toast } from "vue3-toastify";
 import _ from "lodash";
@@ -181,10 +177,7 @@ export default {
         idCategory: "",
       },
       typeMessagepp: 2,
-      typeHighligh: 1,
       isDeleteMany: "",
-      titleMessageheader: "",
-      titleMessagebottom: "",
       isMessageDelete: false,
       departments: [],
       assetCategorys: [],
@@ -218,18 +211,9 @@ export default {
      * xóa tài sản từ context menu
      */
     deleteContextMenu(asset) {
-      this.idDeleteContext = asset.fixed_asset_id;
-      this.typeDelete = MISAEnum.typeDelete.delete;
-      this.typeHighligh = 2;
-      this.titleMessageheader = Resource.VN_DeleteTxt + " ";
-      this.isDeleteMany =
-        "<<" +
-        asset.fixed_asset_code +
-        " - " +
-        asset.fixed_asset_name +
-        ">>" +
-        this.titleMessagebottom +
-        "  ?";
+      this.typeDelete = MISAEnum.typeDelete.delete;     
+      this.isDeleteMany =  Resource.VN_DeleteTxt + " "+ 
+      "<b> " + asset.fixed_asset_code +  " - " +  asset.fixed_asset_name + " </b>" +  "  ?";
       this.isMessageDelete = true;
     },
     /**
@@ -242,16 +226,7 @@ export default {
         "Assets",
         id,
         (res) => {
-          // Trường hợp thành công  gửi lên form sửa
-          this.titleMessageheader = Resource.VN_DeleteTxt + " ";
-          this.isDeleteMany =
-            "<<" +
-            res.data.fixed_asset_code +
-            " - " +
-            res.data.fixed_asset_name +
-            ">>" +
-            this.titleMessagebottom +
-            "  ?";
+          this.deleteContextMenu(res.data) 
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -325,24 +300,16 @@ export default {
       if (this.listIdDelete.size < 1 || !this.listIdDelete.size) {
         this.typeMessagepp = MISAEnum.typeDelete.allDelete;
         this.isDeleteMany = Resource.VN_NotDataDelete;
-        this.titleMessageheader = "";
-        this.titleMessagebottom = "";
       }
       if (this.listIdDelete.size == MISAEnum.typeDelete.allDelete) {
-        this.typeHighligh = MISAEnum.typeDelete.delete;
         this.getAssetById(Array.from(this.listIdDelete)[0]);
       }
 
       if (this.listIdDelete.size > 1) {
-        this.typeHighligh = MISAEnum.typeDelete.allDelete;
         if (this.listIdDelete.size < 10) {
-          this.titleMessageheader = "0" + this.listIdDelete.size;
-          this.isDeleteMany = Resource.VN_ManyDeleteTxt;
-          this.titleMessagebottom = "";
+          this.isDeleteMany = "<b>0" + this.listIdDelete.size +"</b>"+ Resource.VN_ManyDeleteTxt;
         } else {
-          this.titleMessageheader = this.listIdDelete.size;
-          this.isDeleteMany = Resource.VN_ManyDeleteTxt;
-          this.titleMessagebottom = "";
+          this.isDeleteMany = "<b>" + this.listIdDelete.size +"</b>"+ Resource.VN_ManyDeleteTxt;
         }
       }
       this.isMessageDelete = true;
@@ -354,31 +321,7 @@ export default {
      */
 
     deleteYes() {
-      // xóa nhiều thì mảng xóa đc cập nhập data
-      if (this.typeDelete == MISAEnum.typeDelete.delete) {
-        deleteAssets(
-          "Assets",
-          this.idDeleteContext,
-          () => {
-            toast.success(Resource.VN_DeleteSuccess, {
-              autoClose: 2000,
-              position: "bottom-right",
-            });
-            // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-            this.emitter.emit("LoadingDataDelete");
-            this.isMessageDelete = false;
-          },
-          (error) => {
-            // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-            toast.error(Resource.VN_DeleteFailure, {
-              autoClose: 2000,
-              position: "bottom-right",
-            });
-            console.log(error);
-          }
-        );
-        return;
-      } else {
+ 
         deleteManyAssets(
           "Assets",
           { data: Array.from(this.listIdDelete) },
@@ -391,15 +334,12 @@ export default {
             this.emitter.emit("LoadingDataDelete");
             this.isMessageDelete = false;
           },
-          (error) => {
-            console.log(
-              `${error.response.data.devMsg}: ${error.response.data.erros}`
-            );
+          (error) => {           
 
             this.messageDeleteError(error.response.data.erros);
           }
         );
-      }
+      
     },
 
     /**
@@ -408,26 +348,11 @@ export default {
      * created : tvTam (22/02/2023)
      */
 
-    messageDeleteError(number) {
+    messageDeleteError(titleError) {
       this.typeMessagepp = MISAEnum.typeDelete.allDelete;
-      this.typeHighligh = MISAEnum.typeDelete.allDelete;
-      if(Number(number)==1 && Array.from(this.listIdDelete).length == 1 ){
-        this.titleMessageheader = "";
-        this.isDeleteMany = Resource.deleteAssetErrorOne;
-        this.titleMessagebottom = "";
-      }
-      else {
-        if(Number(number)<10){
-
-          this.titleMessageheader = "0"+number;
-        }
-        else{
-           this.titleMessageheader = number;
-
-        }
-        this.isDeleteMany = Resource.deleteAssetError;
-        this.titleMessagebottom = "";
-      } 
+     
+        this.isDeleteMany = titleError;
+      
     },
     /**
      * Description:  cập nhập id chọn tại table

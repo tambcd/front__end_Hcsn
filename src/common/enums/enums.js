@@ -1,4 +1,20 @@
  const MISAEnum = {
+    /**Mã lỗi trả về  
+     * @ ErrorCodeSameCode =  100 : trùng mã 
+     * @ ErrorCodeEmpty = 101 : bỏ trống 
+     * @ ErrorCodelistEmpty = 102 : danh sách trống
+     * */
+    codeError:{
+      
+        // mã lỗi trùng mã 
+        
+        ErrorCodeSameCode : 100,
+       
+        // mã lỗi bỏ trống 
+        ErrorCodeEmpty : 101,
+        // Mã lỗi danh sách rỗng
+        ErrorCodelistEmpty : 102,
+    },
     typeDisplay:{
         row:1,
         column:2
@@ -13,6 +29,11 @@
         update:2 ,
         delete:3
     },
+    typeYesMessage:{
+        delete:1,
+        add:2,
+        update:3
+    },
     /**kiểu của form nhập liệu 
      * @ add =  1 : thêm
      * @ update = 2 : sửa 
@@ -26,11 +47,13 @@
     /**kiểu của form nhập liệu 
      * @ delete =  1 : xóa
      * @ erro = 2 : cảnh báo 
+     * @ update = 3 : sửa 
      * 
      * */ 
     typeMessage:{
         delete:2,
-        erro:1
+        erro:1,
+        update:3
 
     },
     /** Key combobox 

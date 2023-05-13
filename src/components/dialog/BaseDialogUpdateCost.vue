@@ -290,8 +290,9 @@ export default {
         this.isOneSource = false;
       }
       this.listError.splice(index, 1);
-
+      this.getSumCost()
     },
+    
   },
 };
 </script>
