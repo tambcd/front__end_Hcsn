@@ -325,18 +325,27 @@ export default {
         deleteManyAssets(
           "Assets",
           { data: Array.from(this.listIdDelete) },
-          () => {
-            toast.success(Resource.VN_DeleteSuccess, {
-              autoClose: 2000,
-              position: "bottom-right",
-            });
+          (res) => {
+            if(res.data.statusCode === MISAEnum.codeError.OK){
+              this.emitter.emit("LoadingDataDelete");
+              toast.success(Resource.VN_DeleteSuccess, {
+                autoClose: 2000,
+                position: "bottom-right",
+              });
+               
+               this.isMessageDelete = false;
+            }
+            else{
+               this.messageDeleteError(res.data.titleError.join(". ") + ".");
+               console.log(res.data);
+
+            }
             // chuyền thông báó xóa thành công để clear mảng xóa nhiều
-            this.emitter.emit("LoadingDataDelete");
-            this.isMessageDelete = false;
+           
           },
           (error) => {           
-
-            this.messageDeleteError(error.response.data.erros);
+            console.log(error);
+           
           }
         );
       
@@ -349,8 +358,7 @@ export default {
      */
 
     messageDeleteError(titleError) {
-      this.typeMessagepp = MISAEnum.typeDelete.allDelete;
-     
+      this.typeMessagepp = MISAEnum.typeDelete.allDelete;     
         this.isDeleteMany = titleError;
       
     },

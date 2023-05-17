@@ -30,7 +30,16 @@ body{
     
 
 }
-
+button{
+    outline: unset;
+}
+tr td:nth-child(7) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 250px;
+    padding: 0px 10px;
+}
 .backgrsvg {
     background-image: url(../assets/icon/qlts-icon.svg);
     cursor: pointer;
@@ -77,4 +86,7 @@ table , tr , th , td{
   .mx-table-date td,
   .mx-table-date th {
     text-align: center;
+  }
+  .Toastify{
+    z-index: 100000000000000000000000000;
   }

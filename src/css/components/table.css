@@ -1,4 +1,18 @@
 @import url(dataTable.css);
+.tooltipTd{
+  background-color: #353539;
+  color: #ffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0);
+  z-index: 10000000000000000000000000000;
+  position: fixed;
+  min-width: 10px;
+  max-width: 250px;
+  min-height: 10px;
+  max-height: 500px;
+  padding: 5px;
+  text-align: justify;
+  border-radius: 4px ;
+}
 .table{
     height: calc(100vh - 173px);
     background-color: #ffffff;

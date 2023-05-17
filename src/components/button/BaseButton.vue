@@ -30,20 +30,22 @@ export default {
     background-color: #fff;
 }
 
+
+.btn__dark:hover,
 .btn__dark:focus{
     border: #1aa4c8 1px solid;
-    color: #1aa4c8;
+    background: #1aa4c8;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 }
-.btn__dark:hover{
-    border: #1aa4c8 1px solid;
-    color: #1aa4c8;
+.btn__color:focus,
+.btn__color:hover {
+     border: #1aa4c8 1px solid;
+    background: #1aa4c8;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 }
-.btn__color:focus {
-    background-color: #0cc3f0 ;
-}
-.btn__color:hover{
-    background-color: #0cc3f0 ;
-}
+
 .btn__color{
     border: 1px solid #afafaf;
     color: #fff;

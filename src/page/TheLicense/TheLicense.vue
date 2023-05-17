@@ -1,7 +1,8 @@
 <template>
   <BaseDialogLicense
+    :refError="isErrorLicense"
     @updateCostAsset="updateCostAsset"
-    @erroInsertLicense="erroInsertLicense"
+    @erroInsertLicense="(mvg, isError) => erroInsertLicense(mvg, isError)"
     @closeDialogLicense="ToggleDialog()"
     :idLicenseUpdate="idLicense"
     :typeDialog="typeDialog"
@@ -41,12 +42,14 @@
             @click="showDialogLicense()"
             btnType="2"
           />
-          <div class="icon-display icon36 margin-icon">
-            <div
-              class="display-icon backgrsvg"
-              @click="openDisplaySelect()"
-              :class="{ 'display-icon': !isRow, 'icon-display-y': isRow }"
-            ></div>
+          <div class="icon-display margin-icon">
+            <div class="list-icon-display" @click="openDisplaySelect()">
+              <div
+                class="display-icon backgrsvg"
+                :class="{ 'display-icon': !isRow, 'icon-display-y': isRow }"
+              ></div>
+              <div class="select-icon backgrsvg margin-icon"></div>
+            </div>
             <div class="display-icon-y" v-if="ischangeDisplay">
               <div class="icon-y" @click="changeDisplay(2)">
                 <div class="icon-y_icon">
@@ -62,12 +65,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="icon-select icon36 margin-icon">
-            <div
-              class="select-icon backgrsvg"
-              @click="openDisplaySelect()"
-            ></div>
           </div>
         </div>
       </div>
@@ -96,20 +93,20 @@
               />
             </div>
             <div class="action-btn">
-              <div
-                v-show="isDeleteMany"
-                class="icon-display icon36 margin-icon"
-                @click="deleteLicense()"
-              >
-                <BaseTooltip position="left" tooltipText="Xóa">
+              <BaseTooltip position="down" tooltipText="Xóa nhiểu">
+                <div
+                  v-show="isDeleteMany"
+                  class="icon-display icon36 margin-icon"
+                  @click="deleteLicense()"
+                >
                   <div class="delete-icon backgrsvg box-shadowbl"></div>
-                </BaseTooltip>
-              </div>
-              <div class="icon-display icon36 margin-icon">
-                <BaseTooltip position="left" tooltipText="In">
+                </div>
+              </BaseTooltip>
+              <BaseTooltip position="down" tooltipText="In">
+                <div class="icon-display icon36 margin-icon">
                   <div class="export-icon backgrsvg box-shadowbl"></div>
-                </BaseTooltip>
-              </div>
+                </div>
+              </BaseTooltip>
               <div class="icon-select icon36 margin-icon">
                 <div class="dot-icon backgrsvg"></div>
               </div>
@@ -140,7 +137,7 @@
         </pane>
         <pane class="table-two" :size="100 - paneSize">
           <div class="header-asset-detail">
-            <div class="header-asset-detail-title">Thông tin tài sản</div>
+            <div class="header-asset-detail-title">Thông tin chi tiết</div>
             <BaseTooltip position="left" :tooltipText="textMinmax">
               <div class="maximine-btn" @click="Maximine()">
                 <div
@@ -174,7 +171,7 @@
     :typeMessage="typeMessage"
     :titleMessage="midTitleMessage"
     v-if="isMessage"
-    @btnYesMessageUpdate ="btnYesMessageUpdate"
+    @btnYesMessageUpdate="btnYesMessageUpdate"
     @btnYesMessage="deleteYes"
     @hideMessage="hideMessage"
   />
@@ -204,12 +201,13 @@ export default {
     DialogMessage,
   },
   mounted() {
-    this.emitter.on("updateListId", (data) => {
-      console.log(data);
-    });
+    // this.emitter.on("updateListId", (data) => {
+    //   console.log(data);
+    // });
   },
   data() {
     return {
+      isErrorLicense: false,
       typeYesMessage: MISAEnum.typeYesMessage.add,
       titleBtnYesMg: "Có",
       titleBtnNoMg: "Không",
@@ -219,7 +217,7 @@ export default {
       codeLicense: "",
       ischangeDisplay: false,
       isRow: true,
-      paneSize: 50,
+      paneSize: 70,
       oldpaneSize: 0,
       typeHighligh: 1,
       typeMessage: 1,
@@ -278,11 +276,10 @@ export default {
      * @created : tvt
      * @createday: 20/04/2023
      */
-    btnYesMessageUpdate(){
+    btnYesMessageUpdate() {
       this.isMessage = false;
-      this.ToggleDialog()
+      this.ToggleDialog();
       this.emitter.emit("updateLicenseMessage");
-
     },
     /**
      * Xoá chứng từ
@@ -301,9 +298,17 @@ export default {
             });
             // chuyền thông báó xóa thành công để clear mảng xóa nhiều
             this.emitter.emit("LoadingDataDelete");
-            this.listIdLisecen = this.listIdLisecen.filter(
-              (item) => !this.listIdDelete.includes(item)
-            );
+            // xoa 1 thì là mới mảng
+
+            if (this.listIdDelete.length < 2) {
+              this.listIdLisecen = this.listIdLisecen.filter(
+                (item) => item !== this.listIdDelete[0]
+              );
+            } else {
+              this.listIdLisecen = [];
+              this.listIdDelete = [];
+            }
+
             this.togglerDeletebtn();
             this.isMessageDelete = false;
           },
@@ -316,11 +321,8 @@ export default {
             console.log(error);
           }
         );
-      }
-      else{
-
-        this.ToggleDialog()
-        
+      } else {
+        this.ToggleDialog();
       }
       this.isMessage = false;
     },
@@ -335,7 +337,11 @@ export default {
         id,
         (res) => {
           this.byTxtMessage(
-            Resource.VN_DeleteLicense+ " << <b>" + res.data.license_code + "</b> >> "+  "không?",
+            Resource.VN_DeleteLicense +
+              " << <b>" +
+              res.data.license_code +
+              "</b> >> " +
+              "không?",
             MISAEnum.typeMessage.delete,
             MISAEnum.typeMessage.delete
           );
@@ -388,7 +394,7 @@ export default {
     changeDisplay(typeDislay) {
       if (MISAEnum.typeDisplay.column == typeDislay) {
         this.isRow = true;
-        this.paneSize = 50;
+        this.paneSize = 70;
       } else {
         this.isRow = false;
         this.paneSize = 100;
@@ -416,7 +422,7 @@ export default {
      */
     hideMessage() {
       this.isMessage = false;
-      this.emitter.emit("focusError");
+      this.isErrorLicense = !this.isErrorLicense;
     },
 
     /**
@@ -424,13 +430,14 @@ export default {
      * @created : tvt
      * @createday: 20/04/2023
      */
-    erroInsertLicense(data) {
+    erroInsertLicense(mvg, isError) {
+      this.isErrorLicense = isError;
       this.byTxtMessage(
-        data,
+        mvg,
         MISAEnum.typeMessage.erro,
         MISAEnum.typeMessage.erro
       );
-      this.midTitleMessage = data;
+      this.midTitleMessage = mvg;
       this.isMessage = true;
     },
     /**
@@ -452,19 +459,17 @@ export default {
     CloseDialogLicense() {
       if (this.titleDialog === Resource.typeLicensetxt.update) {
         this.byTxtMessage(
-          Resource.VN_CancelUpdate,          
+          Resource.VN_CancelUpdate,
           MISAEnum.typeMessage.update,
           MISAEnum.typeMessage.delete
         );
       } else {
         this.byTxtMessage(
-          Resource.VN_CancelAddLicense,         
+          Resource.VN_CancelAddLicense,
           MISAEnum.typeMessage.delete,
           MISAEnum.typeMessage.update
         );
       }
-      // this.ToggleDialog();
-      
     },
     /**
      * đóng form update tài sản
@@ -473,6 +478,7 @@ export default {
      */
     closeUpdateCost() {
       this.isUpdateCost = false;
+      this.isErrorLicense = !this.isErrorLicense;
     },
     /**
      * update giá tài
@@ -517,11 +523,13 @@ export default {
      * @createday: 20/04/2023
      */
     deleteLicense() {
-      this.typeYesMessage = MISAEnum.typeYesMessage.delete
+      this.titleBtnYesMg = "Có";
+      this.titleBtnNoMg = "Không";
+      this.typeYesMessage = MISAEnum.typeYesMessage.delete;
       this.listIdDelete = this.listIdLisecen;
       if (this.listIdLisecen.length === 0) {
         this.byTxtMessage(
-          Resource.VN_DeleteEmptyLicense,          
+          Resource.VN_DeleteEmptyLicense,
           MISAEnum.typeMessage.erro,
           MISAEnum.typeMessage.erro
         );
@@ -533,7 +541,7 @@ export default {
           str = "0" + this.listIdLisecen.length.toString();
         }
         this.byTxtMessage(
-          `<b>${str}</b> ` + Resource.VN_ManyDeleteLicense,         
+          `<b>${str}</b> ` + Resource.VN_ManyDeleteLicense,
           MISAEnum.typeMessage.delete,
           MISAEnum.typeMessage.erro
         );
@@ -553,8 +561,10 @@ export default {
         this.ToggleDialog();
         this.typeDialog = MISAEnum.stateDialog.update;
       } else {
+        this.titleBtnYesMg = "Có";
+        this.titleBtnNoMg = "Không";
         this.getEntityById(id);
-         this.typeYesMessage = MISAEnum.typeYesMessage.delete
+        this.typeYesMessage = MISAEnum.typeYesMessage.delete;
         this.listIdDelete = [];
         this.listIdDelete.push(id);
       }
@@ -584,6 +594,7 @@ export default {
      * @createday: 20/04/2023
      */
     selectAsset(ids) {
+      this.isErrorLicense = false;
       if (!ids) {
         return;
       }
@@ -620,9 +631,9 @@ export default {
      */
     ToggleDialog() {
       this.isShowDialogLicense = !this.isShowDialogLicense;
-      if(!this.isShowDialogLicense){
+      if (!this.isShowDialogLicense) {
         this.listId = [];
-      this.listCode = "''";
+        this.listCode = "''";
       }
     },
 
@@ -641,7 +652,6 @@ export default {
      * @@create day : 19/04/2023
      */
     showDialogLicense() {
-      
       this.typeYesMessage = MISAEnum.typeYesMessage.add;
       this.idLicense = "00000000-0000-0000-0000-000000000000";
       this.typeDialog = MISAEnum.typeMessage.erro;
@@ -656,6 +666,7 @@ export default {
      */
     OpenSelectAsset() {
       this.isShowDialogAsset = true;
+
       // this.ToggleDialog();
     },
     /**
@@ -665,6 +676,7 @@ export default {
      */
     ToggleDialogAsset() {
       this.isShowDialogAsset = false;
+      this.isErrorLicense = !this.isErrorLicense;
     },
     /**
      * Description: Tìm kiếm text
@@ -673,7 +685,6 @@ export default {
      */
     searchInput(txt) {
       this.paramApiLicense.txtSearch = txt;
-      console.log(this.paramApiLicense);
     },
   },
   watch: {
@@ -682,7 +693,7 @@ export default {
       console.log(newValue);
     },
     txtSreach: _.debounce(function (data) {
-      this.searchInput(data);
+      this.searchInput(data.trim());
     }, 700),
   },
 };

@@ -47,6 +47,7 @@
             :titleValidate="listError[index].messageValidate"
             :dataComboboxCost="costCources"
             :isSource="isOneSource"
+            :focusCost="{'focus' : index==0}"
             v-for="(item, index) in listDatacost"
             :key="index"
             :valueCost="item.costValue"
@@ -128,6 +129,9 @@ export default {
           this.listError[i].messageValidate = Resource.Vn_SourceCostEmp;
           isValidate = false;
         }
+        if (this.listDatacost[i].codeSource !== "") {
+          this.listError[i].isValidate = false;
+        } 
         if(i>0){
           for (let index = 0; index < i; index++) {
             if(this.listDatacost[i].codeSource == this.listDatacost[index].codeSource){
@@ -138,7 +142,7 @@ export default {
             
           }
         }
-        if (this.listDatacost[i].costValue == "0") {
+        if (this.listDatacost[i].costValue == "0" || this.listDatacost[i].costValue.trim() == "") {
           this.listError[i].isInputValidate = true;
           this.listError[i].messageInputValidate = Resource.Vn_CostEmp;
           isValidate = false;

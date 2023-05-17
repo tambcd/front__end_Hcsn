@@ -1,10 +1,18 @@
  const MISAEnum = {
+    typeActiontr:{
+        click:1,
+        doubleCick:2,
+        delete:3
+    },
     /**Mã lỗi trả về  
      * @ ErrorCodeSameCode =  100 : trùng mã 
      * @ ErrorCodeEmpty = 101 : bỏ trống 
      * @ ErrorCodelistEmpty = 102 : danh sách trống
+     * @ OK = 200 : thành công
      * */
     codeError:{
+        OK:200,
+        deletOK:0,
       
         // mã lỗi trùng mã 
         

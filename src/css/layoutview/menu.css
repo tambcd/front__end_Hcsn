@@ -14,6 +14,10 @@
     bottom: 0;
     left: 0;
 }
+.child-menu{
+    background-color: #2a3d53;
+    margin-top: -5px;
+}
 
 
 .menu-item__all {

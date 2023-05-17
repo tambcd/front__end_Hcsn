@@ -4,9 +4,9 @@
       <div class="title-license">Thông tin chứng từ</div>
       <div class="license-body-dialog-input">
         <div class="license-body-dialog-input-top">
-          <div class="input-license" >
+          <div class="input-license">
             <BaseInput
-              ref="codeLiscense"
+              ref="codeLicense"
               :isValide="isCodeCt"
               maxlengthBaseInput="100"
               contentInput="GT0001"
@@ -30,7 +30,7 @@
             >
             <DatePicker
               :clearable="false"
-              placeholder="dd/MM/yyyy" 
+              placeholder="dd/MM/yyyy"
               v-model:value="dateUser"
               format="DD/MM/YYYY"
               class="date-input"
@@ -73,11 +73,10 @@
       <div class="title-license">Thông tin chi tiết</div>
       <div class="dialog-table-search">
         <BaseInput
-          @keyDownbaseInput="searchInputEnter()"
           heightInput="35"
           widthInput="300px"
           :iconLeft="true"
-          contentInput="Tìm kiếm theo mã, tên tài sản"
+          contentInput="Tìm kiếm theo Mã, tên tài sản"
           @sendValueInput="
             (e) => {
               this.txtSreach = e;
@@ -119,13 +118,18 @@ import {
   getByFilter,
   putlc,
 } from "@/common/api/api.js";
-import { getNowday ,convertDateTypeEnter,dateToString} from "@/common/helper/format";
+import {
+  getNowday,
+  convertDateTypeEnter,
+  dateToString,
+} from "@/common/helper/format";
 import { toast } from "vue3-toastify";
 import Resource from "@/common/resource/Resource";
 import MISAEnum from "@/common/enums/enums";
 import _ from "lodash";
 export default {
   props: {
+    refError: { default: false },
     typeDialog: {
       default: 1,
     },
@@ -147,10 +151,15 @@ export default {
     }
     this.dataLicense.ids = this.listIds;
   },
-  mounted() {   
-
+  mounted() {
+    this.$nextTick(() => {
+      this.emitter.on("focusErroMvg", () => {
+        this.focusInputtest("codeLicense");
+      });
+    });
+    this.focusInputtest("codeLicense");
     this.emitter.on("updateLicenseMessage", () => {
-        this.btnSave()
+      this.btnSave();
     });
     this.emitter.on("updateListId", (data) => {
       this.listIdSelect = data;
@@ -158,6 +167,7 @@ export default {
   },
   data() {
     return {
+      focusInput: "firstFocus",
       isCodeCt: false,
       rootlistId: [],
       paramApiLicenseDetail: {
@@ -196,16 +206,23 @@ export default {
     };
   },
   methods: {
+    /**
+     * Description: forcus form
+     * Author: TVTam
+     * created : tvTam (22/02/2023)
+     */
+    focusInputtest(reftxt) {
+      //  goi "focus" của input
+      this.$refs[reftxt].setFocus();
+    },
     convertDateTypeEnter,
     /**
      * Description: mở form sửa nguyên giá
      * Author: TVTam
      * created : tvTam (22/02/2023)
      */
-    updateCost(id, type) {
-      if (type == MISAEnum.stateAction.update) {
+    updateCost(id) {
         this.$emit("updateCostAsset", id);
-      }
     },
     /**
      * Description: Tìm kiếm text
@@ -227,8 +244,8 @@ export default {
         (res) => {
           // Trường hợp thành công  gửi lên form sửa
           this.dataLicense.license = res.data;
-          this.dateUser = dateToString(new Date(res.data.license_date))
-          this.dateLicense = dateToString(new Date(res.data.increase_date))
+          this.dateUser = dateToString(new Date(res.data.license_date));
+          this.dateLicense = dateToString(new Date(res.data.increase_date));
         },
         (error) => {
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
@@ -280,7 +297,7 @@ export default {
         isValidate = false;
       }
       if (!isValidate) {
-        this.$emit("erroInsertLicense", txtMessageLc);
+        this.$emit("erroInsertLicense", txtMessageLc, false);
       }
       return isValidate;
     },
@@ -324,19 +341,18 @@ export default {
         },
         (error) => {
           this.isCodeCt = true;
-          var stringError="";
+          var stringError = "";
           // Trường hợp thất bại thì hiển thị toastMessage lỗi và ghi rõ lỗi xảy ra.
-          console.log(error.response.data);
-          error.response.data.codeError.map((code) =>{
-              if(code == MISAEnum.codeError.ErrorCodeSameCode){
-                    stringError+= Resource.ErrorCode.codeSame.replace("{0}",this.dataLicense.license.license_code)
-              }
-          })
-          if(error.response.data)
-          this.$emit(
-            "erroInsertLicense",
-            stringError
-          );
+          error.response.data.codeError.map((code) => {
+            if (code == MISAEnum.codeError.ErrorCodeSameCode) {
+              stringError += Resource.ErrorCode.codeSame.replace(
+                "{0}",
+                this.dataLicense.license.license_code
+              );
+            }
+          });
+          if (error.response.data)
+            this.$emit("erroInsertLicense", stringError, false);
           // đóng loading
           this.emitter.emit("showLoading", false);
         }
@@ -402,13 +418,16 @@ export default {
             `${error.response.data.devMsg}: ${error.response.data.erros}`
           );
           var stringError = "";
-          error.response.data.codeError.map((code) =>{
+          error.response.data.codeError.map((code) => {
             console.log(code);
-              if(code == MISAEnum.codeError.ErrorCodeSameCode){
-                    stringError+= Resource.ErrorCode.codeSame.replace("{0}",this.dataLicense.license.license_code)
-              }
-          })
-          this.$emit("erroInsertLicense",  stringError  );
+            if (code == MISAEnum.codeError.ErrorCodeSameCode) {
+              stringError += Resource.ErrorCode.codeSame.replace(
+                "{0}",
+                this.dataLicense.license.license_code
+              );
+            }
+          });
+          this.$emit("erroInsertLicense", stringError, false);
           this.emitter.emit("showLoading", false);
         }
       );
@@ -419,8 +438,13 @@ export default {
      * @creatday:20/04/2023
      */
     getIdItemTable(id, type) {
-      if (type === MISAEnum.stateAction.delete) this.$emit("deleteItem", id);
-      this.updateCost(id, type);
+      if (type === MISAEnum.typeActiontr.delete){
+
+        this.$emit("deleteItem", id);
+      }
+       if (type === MISAEnum.typeActiontr.doubleCick){
+           this.updateCost(id);
+       }
     },
     /**
      * mở dialog chọn tải sản
@@ -454,9 +478,15 @@ export default {
       );
     },
   },
-  watch: {    
+  watch: {
+    refError(value) {
+      if(value){
+
+        this.focusInputtest("codeLicense");
+      }
+    },
     txtSreach: _.debounce(function (data) {
-      this.searchInput(data);
+      this.searchInput(data.trim());
     }, 700),
     listCodes(value) {
       this.paramApiLicenseDetail.codes = value;
@@ -484,10 +514,12 @@ export default {
   border-radius: 4px;
   font-family: MISA__Bold;
   cursor: pointer;
+  
 }
-.btn-select:hover {
-  color: #1aa4c8;
-  border: 0.2px solid #1aa4c8;
+.btn-select:hover ,.btn-select:focus {
+  background: #1aa4c8;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 }
 .dialog-table-search {
   padding: 0 10px;

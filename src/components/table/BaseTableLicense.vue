@@ -1,4 +1,5 @@
 <template>
+
   <base-context-menu
     v-if="isContextMenu"
     :positionTop="positionContextMenuY"
@@ -77,7 +78,7 @@
         <BaseItemTableLicense
           @selectIdItemTable="
             (id, type) => {
-              getId(id, type);
+              getId(id, type,index);
             }
           "
           :keyTable="nameTable"
@@ -85,7 +86,6 @@
           :typeTable="typeTableData"
           :showClomn="bodyTable"
           @openContextMenu="(asset, x, y) => openContextMenu(asset, x, y)"
-          @click="selectItem(item[nameTable + '_id'], index)"
           :selectClick="itemId"
           :stateIsAll="listIdSelection.has(item[nameTable + '_id'])"
           @changeDataSelect="changeDataId"
@@ -281,6 +281,7 @@ export default {
     };
   },
   mounted() {
+    
     /**tải lại data khi thực hiện xóa */
     this.emitter.on("LoadingDataDelete", () => {
       this.loadDataTable(1);
@@ -303,8 +304,13 @@ export default {
      * created : tvTam (09/04/2023)
      * Lấy ra id từ item table
      */
-    getId(id, type) {
-      this.$emit("getIdByTable", id, type);
+    getId(id, type,index) {
+      if(type == MISAEnum.typeActiontr.click){
+        this.selectItem(id,index)
+      }
+      else{
+        this.$emit("getIdByTable", id, type);
+      }
     },
     /**
      * Author: TVTam
@@ -839,7 +845,7 @@ export default {
   height: 7px;
 }
 .table-base::-webkit-scrollbar-track {
-  background-color: #f4f7ff;
+  background-color: #d2d7e5;
 }
 .table-base::-webkit-scrollbar-thumb {
   background-color: #9e9e9e;

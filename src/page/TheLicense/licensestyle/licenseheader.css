@@ -42,11 +42,20 @@
 .action-btn{
     display: flex;
 }
+.list-icon-display{
+    padding: 0 6px;
+    width: 70px;
+    height: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .icon-select{
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 
 }
 .icon-display{
+    cursor: pointer;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);    ;
     position: relative;
 }

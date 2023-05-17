@@ -7,10 +7,10 @@
       class="toolbar-filter-text"
       :class="{
         'toolbar-filter-text-focus': focusInput,
-        'toolbar-filter-text-erro': (IscheckEmpty && required) || isValide,
+        'toolbar-filter-text-erro': (IscheckEmpty && required) || isValideInput,
         'hide-icon': hideIconInput,
         disabledInput: disabledInput,
-        'hide-icon-number': !hideIconInput 
+        'hide-icon-number': !hideIconInput,
       }"
       :style="{
         width: widthInput,
@@ -24,10 +24,12 @@
         v-if="iconLeft"
         @click="btnSearch()"
       ></div>
-      <input 
+      <input
+        ref="m-input"
         :maxlength="maxlengthBaseInput"
-        :step= stepInput min="0"
-         :max= maxInput
+        :step="stepInput"
+        min="0"
+        :max="maxInput"
         @keydown="keyDownInput()"
         @click="clickBinput()"
         :type="typeInput"
@@ -47,11 +49,9 @@
         @click.prevent="clickBinput()"
       ></button>
     </div>
-    <div class="erro" v-if="IscheckEmpty && required">
-      Vui lòng nhập {{ titleInput }}
-    </div>
-    <div class="erro" v-if="isValide">
-        {{ titleValidate }}
+  
+    <div class="erro" v-if="isValideInput">
+      {{ titleValidate }}
     </div>
   </div>
 </template>
@@ -61,24 +61,24 @@ import { formatMoney } from "@/common/helper/format";
 export default {
   name: "BaseInput",
   props: {
-    maxlengthBaseInput:{default:""},
-    isValide:{
-        default:false
+    maxlengthBaseInput: { default: "" },
+    isValide: {
+      default: false,
     },
-    titleValidate:{
-      default:""
+    titleValidate: {
+      default: "",
     },
-    hideIconInput:{
-      default:false
+    hideIconInput: {
+      default: false,
     },
     //
-    stepInput:{
-      default: 0.1
+    stepInput: {
+      default: 0.1,
     },
-    maxInput:{
-      default:1
+    maxInput: {
+      default: 1,
     },
-         
+
     ///kiểu input số
     iconNumber: {
       typeof: Boolean,
@@ -102,13 +102,12 @@ export default {
     //icon trái
     iconLeft: {
       typeof: Boolean,
-       default: false,
-
+      default: false,
     },
     //icon phải
     iconRight: {
       typeof: Boolean,
-       default: false,
+      default: false,
     },
     // place input
     contentInput: {
@@ -117,7 +116,7 @@ export default {
     },
     heightInput: {
       typeof: String,
-       default: "35",
+      default: "35",
     },
     // chiều rộng
     widthInput: {
@@ -147,18 +146,25 @@ export default {
       default: "",
     },
   },
-  
+
   created() {
-    if(this.money){
-      this.valueInput = this.formatMoney(String(this.valueInputFisrt).replaceAll('.',''));
+    this.isValideInput = this.isValide
+    if (this.money) {
+      this.valueInput = this.formatMoney(
+        String(this.valueInputFisrt).replaceAll(".", "")
+      );
+    } else {
+      this.valueInput = this.valueInputFisrt;
     }
-    else{
-      this.valueInput = this.valueInputFisrt
-    }    
+  },
+  mounted() {
+    
+    this.setFocus()
   },
 
   data() {
     return {
+      isValideInput:false,
       focusInput: false,
       valueInput: "",
       IscheckEmpty: false,
@@ -168,17 +174,31 @@ export default {
     /**
      * create by : MF1270
      * create day : 18/02/2023
+     * ham : set focus
+     */
+    setFocus() {
+      this.$nextTick(() => {        
+        this.$refs['m-input'].focus();
+        })
+
+    },
+    /**
+     * create by : MF1270
+     * create day : 18/02/2023
      * ham : ham click input
      */
-    clickBinput(){
-         this.$emit("clickBinput");
+    clickBinput() {
+      this.$emit("clickBinput");
     },
     /**
      * create by : MF1270
      * create day : 18/02/2023
      * ham : Đổi boder khi chọn vào input
      */
-    inputFocus() {      
+    inputFocus() {
+      
+      this.$refs['m-input'].select();
+      this.isValideInput = false
       this.focusInput = true;
       this.IscheckEmpty = false;
       if (this.valueInput.length > 3 && this.money) {
@@ -193,17 +213,15 @@ export default {
      */
     outFocus() {
       this.focusInput = false;
-      if (this.valueInput === "") {
-        this.IscheckEmpty = true;
-      } else {
-        this.IscheckEmpty = false;
-        if(this.money){
-
-          this.valueInput = this.formatMoney(this.valueInput.replaceAll('.',''));
+      
+        if (this.money) {
+          this.valueInput = this.formatMoney(
+            this.valueInput.replaceAll(".", "")
+          );
         }
-      }
+      
     },
-    
+
     /**
      * create by : MF1270
      * create day : 18/02/2023
@@ -211,8 +229,8 @@ export default {
      */
     hideBodyCombobox() {
       this.$emit("HideBodyItem");
-    },  
-   
+    },
+
     /**
      * @create by : MF1270
      * @create day : 03/03/2023
@@ -221,7 +239,7 @@ export default {
     formatMoney(dataFormat) {
       return formatMoney(dataFormat);
     },
-   
+
     /**
      * create by : MF1270
      * create day : 19/02/2023
@@ -240,6 +258,10 @@ export default {
     },
   },
   watch: {
+    isValide(value){
+      this.isValideInput = value
+    },
+    
     valueInput(value) {
       if (value === "") {
         this.IscheckEmpty = true;
@@ -249,7 +271,6 @@ export default {
     },
     valueInputFisrt(value) {
       this.valueInput = String(value);
-      
     },
   },
 };
@@ -262,8 +283,5 @@ export default {
 .mx-input {
   height: 36px !important;
 }
-.mx-input:hover,
-.mx-input:focus {
-  border-color: #5dc748 !important;
-}
+
 </style>

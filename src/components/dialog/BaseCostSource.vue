@@ -2,7 +2,7 @@
   <div class="base-cost">
     <div class="cost-source">
       <div class="cost-combobox">
-        <BaseInput 
+        <BaseInput
           v-if="!isPlus"
           valueInputFisrt="Tổng"
           disabledInput="true"
@@ -11,8 +11,10 @@
           marginInput="8px"
         />
         <TheCombobox
-        :isValideCombobox="isValidate"
-        :titleVailidateCombobox="titleValidate"
+          ref="combobox-focus"
+          :focusInputCombox="focusCost"
+          :isValideCombobox="isValidate"
+          :titleVailidateCombobox="titleValidate"
           v-else
           @selectItemCombobox="
             (data, key) => {
@@ -52,7 +54,11 @@
       <BaseTooltip position="down" tooltipText="Thêm nguồn chi phí">
         <button class="btn btnadd backgrsvg" @click="addNewItem()"></button>
       </BaseTooltip>
-      <BaseTooltip position="down" tooltipText="Bỏ nguồn chi phí" v-show="isSource">
+      <BaseTooltip
+        position="down"
+        tooltipText="Bỏ nguồn chi phí"
+        v-show="isSource"
+      >
         <button class="btn btndelete backgrsvg" @click="deleteItem()"></button>
       </BaseTooltip>
     </div>
@@ -63,12 +69,12 @@
 import TheCombobox from "../combobox/BaseCombobox.vue";
 export default {
   props: {
-
-    titleValidateCb:{default:""},
-    isValidateInputCb:{default:false},
-    titleValidate:{default:""},
-    isValidate:{default:false},
-    isSource:{default:true},
+    focusCost: { default: "" },
+    titleValidateCb: { default: "" },
+    isValidateInputCb: { default: false },
+    titleValidate: { default: "" },
+    isValidate: { default: false },
+    isSource: { default: true },
     dataComboboxCost: [],
     isPlus: {
       default: true,
@@ -92,6 +98,12 @@ export default {
       sumCost: 0,
       cost: "",
     };
+  },
+  mounted() {
+
+    this.$nextTick(() => {
+      this.$refs["combobox-focus"]?.setFocusCombobox();
+    });
   },
   methods: {
     /**
@@ -167,7 +179,6 @@ export default {
 </script>
 
 <style scoped>
-
 .btn {
   margin-left: 10px;
   border: unset;

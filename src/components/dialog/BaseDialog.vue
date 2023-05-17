@@ -84,7 +84,6 @@ export default {
   },
   mounted() {
    
-    this.$refs[this.rootFocus].querySelector(this.txtfocus).focus();
   },
 
   methods: {

@@ -9,11 +9,11 @@
     <div class="dialog-table" ref="dialog-table">
       <div class="dialog-table-search">
         <BaseInput
-          @keyDownbaseInput="searchInputEnter()"
+          refInput="search"
           heightInput="35"
           widthInput="300px"
           :iconLeft="true"
-          contentInput="Tìm kiếm theo mã, tên tài sản"
+          contentInput="Tìm kiếm theo Mã, tên tài sản"
           @sendValueInput="
             (e) => {
               this.txtSreach = e;
@@ -81,7 +81,9 @@ export default {
       },
     };
   },
-  mounted() {},
+  mounted() {
+    
+  },
   methods: {
     /**
      * Description: Tìm kiếm text
@@ -125,11 +127,10 @@ export default {
   },
   watch: {
     listCodes(value) {
-      console.log(value);
       this.paramApiLicenseDetail.codes = value;
     },
     txtSreach: _.debounce(function (data) {
-      this.searchInput(data);
+      this.searchInput(data.trim());
     }, 700),
   },
 };

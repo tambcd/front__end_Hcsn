@@ -32,7 +32,8 @@ const DataObject = {
       item_icon: "",
       itemBg: "menu-item-assets",
       path: "/",
-      heightMenu:"30px"
+      heightMenu:"30px",
+      child:true
     },
     {
       ItemID: 4,
@@ -40,7 +41,8 @@ const DataObject = {
       item_icon: "",
       itemBg: "menu-item-assets",
       path: "/assets",
-      heightMenu:"30px"
+      heightMenu:"30px",
+      child:true
     },
     {
       ItemID: 5,
@@ -48,7 +50,8 @@ const DataObject = {
       item_icon: "",
       itemBg: "menu-item-assets",
       path: "/assets",
-      heightMenu:"30px"
+      heightMenu:"30px",
+      child:true
     },
     {
       ItemID: 6,
@@ -56,7 +59,8 @@ const DataObject = {
       item_icon: "",
       itemBg: "menu-item-assets",
       path: "/assets",
-      heightMenu:"30px"
+      heightMenu:"30px",
+      child:true
     },
     {
       ItemID: 7,
@@ -64,7 +68,8 @@ const DataObject = {
       item_icon: "",
       itemBg: "menu-item-assets",
       path: "/assets",
-      heightMenu:"30px"
+      heightMenu:"30px",
+      child:"child-menu"
     },
     {
       ItemID: 8,

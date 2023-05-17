@@ -1,6 +1,7 @@
 <template>
   <div class="the__menu" :class="{ the__menu__mini: isMenuMini }">
-    <menu-item
+    <MenuItem
+      :childMenu="item.child"
       :isTypeMenu="isMenuMini"
       :heightMenu="item.heightMenu"
       v-for="item in optionMenu"

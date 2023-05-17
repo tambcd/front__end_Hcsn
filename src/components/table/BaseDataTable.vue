@@ -401,7 +401,6 @@ export default {
           ]);
         }
         if (this.numberArrowIndext >= this.listData.data.length - 1) {
-          console.log();
           this.numberArrowIndext = this.listData.data.length - 1;
         } else {
           this.numberArrowIndext++;
